@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import img1 from '../public/assets/accreditationsImg/naac.png'
-import img2 from '../public/assets/accreditationsImg/ugc.png'
-import img3 from '../public/assets/accreditationsImg/aicte.png'
+import img1 from '../public/assets/accreditationsImg/NAAC.png'
+import img2 from '../public/assets/accreditationsImg/UGC.png'
+import img3 from '../public/assets/accreditationsImg/AICTE.png'
 
 const COURSES_DATA = {
   'online-ba': {
