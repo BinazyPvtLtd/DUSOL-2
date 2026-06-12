@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Mulish:wght@400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* @import "tailwindcss"; */
 
 :root {
   --purple: #5b2a86;
@@ -2812,13 +2810,9 @@ section {
 .acc-text {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  line-height: 1.3;
-}
-
-.acc-text {
-  display: block;
   max-width: 140px; /* adjust as needed */
   line-height: 1.3;
 }

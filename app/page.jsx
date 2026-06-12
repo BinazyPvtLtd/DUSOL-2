@@ -195,16 +195,7 @@ export default function HomePage () {
                   width={60}
                   height={60}
                 />
-                <div
-                  style={{
-                    textAlign: 'center',
-                    fontFamily: 'var(--font-head)',
-                    fontWeight: 700,
-                    fontSize: '11px',
-                    color: 'var(--purple-dark)',
-                    lineHeight: 1.2
-                  }}
-                >
+                <div className='acc-text'>
                   NAAC Accredited
                   <br />
                   Grade A++
@@ -218,16 +209,7 @@ export default function HomePage () {
                   width={60}
                   height={60}
                 />
-                <div
-                  style={{
-                    textAlign: 'center',
-                    fontFamily: 'var(--font-head)',
-                    fontWeight: 700,
-                    fontSize: '11px',
-                    color: 'var(--purple-dark)',
-                    lineHeight: 1.2
-                  }}
-                >
+                <div className='acc-text'>
                   UGC + DEB
                   <br />
                   Approved
@@ -236,16 +218,7 @@ export default function HomePage () {
 
               <div className='acc-logo'>
                 <Image src={img3} alt='AICTE Approved' width={60} height={60} />
-                <div
-                  style={{
-                    textAlign: 'center',
-                    fontFamily: 'var(--font-head)',
-                    fontWeight: 700,
-                    fontSize: '11px',
-                    color: 'var(--purple-dark)',
-                    lineHeight: 1.2
-                  }}
-                >
+                <div className='acc-text'>
                   AICTE
                   <br />
                   Approved
