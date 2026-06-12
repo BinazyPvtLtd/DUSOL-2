@@ -71,7 +71,7 @@ export default function Footer() {
             <span>|</span>
             <Link href="/">Terms &amp; Conditions</Link>
           </div>
-          <div>© 2026 DOSOLCOLLEGEDRISHTI · Powered by College Drishti. All Rights Reserved.</div>
+          <div className='p-4'> © 2026 DOSOLCOLLEGEDRISHTI · Powered by College Drishti. All Rights Reserved.</div>
         </div>
       </footer>
 

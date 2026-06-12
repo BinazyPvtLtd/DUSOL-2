@@ -5,6 +5,12 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { useRef } from 'react'
+import img1 from '../../public/assets/accreditationsImg/naac.png'
+import img2 from '../../public/assets/accreditationsImg/ugc.png'
+import img3 from '../../public/assets/accreditationsImg/aicte.png'
+import img4 from '../../public/assets/accreditationsImg/deb.jpg'
+import img5 from '../../public/assets/accreditationsImg/nirf.png'
+import Image from 'next/image'
 
 const DEF_SYLLABUS = [
   {
@@ -328,6 +334,7 @@ function FaqItem ({ q, a }) {
 }
 
 function CoursesContent () {
+  const [activeTab, setActiveTab] = useState('overview')
   const searchParams = useSearchParams()
   const slug = searchParams.get('c') || 'online-bba'
   const course = COURSES[slug] || COURSES['online-bba']
@@ -341,9 +348,9 @@ function CoursesContent () {
   const scrollTo = ref => {
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
+
   return (
     <>
-      {/* PAGE HERO */}
       {/* PAGE HERO */}
       <section className='page-hero course-hero'>
         <div className='hero-inner'>
@@ -359,7 +366,7 @@ function CoursesContent () {
             <span className='tag'>{course.tag}</span>
             <h1>{course.title}</h1>
             <p>{course.intro.split('.')[0]}.</p>
-            <div className='meta-row'>
+            {/* <div className='meta-row'>
               <div className='cmeta'>
                 <svg viewBox='0 0 24 24'>
                   <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm1 14.5h-2V11h2zm0-8.5h-2V6h2z' />
@@ -385,6 +392,45 @@ function CoursesContent () {
                 <div>
                   <small>Mode</small>
                   <strong>{course.mode}</strong>
+                </div>
+              </div>
+            </div> */}
+
+            <div className='hero-badges mt-5'>
+              <div className='acc-logo'>
+                <Image
+                  src={img1}
+                  alt='NAAC Accredited'
+                  width={60}
+                  height={60}
+                />
+                <div className='acc-text'>
+                  NAAC Accredited
+                  <br />
+                  Grade A++
+                </div>
+              </div>
+
+              <div className='acc-logo'>
+                <Image
+                  src={img2}
+                  alt='UGC + DEB Approved'
+                  width={60}
+                  height={60}
+                />
+                <div className='acc-text'>
+                  UGC + DEB
+                  <br />
+                  Approved
+                </div>
+              </div>
+
+              <div className='acc-logo'>
+                <Image src={img3} alt='AICTE Approved' width={60} height={60} />
+                <div className='acc-text'>
+                  AICTE
+                  <br />
+                  Approved
                 </div>
               </div>
             </div>
@@ -446,27 +492,58 @@ function CoursesContent () {
             <div>
               <div className='ctabs'>
                 <button
-                  className='ctab active'
-                  onClick={() => scrollTo(overviewRef)}
+                  className={`ctab ${activeTab === 'overview' ? 'active' : ''}`}
+                  onClick={() => {
+                    setActiveTab('overview')
+                    scrollTo(overviewRef)
+                  }}
                 >
                   Overview
                 </button>
+
                 <button
-                  className='ctab'
-                  onClick={() => scrollTo(curriculumRef)}
+                  className={`ctab ${
+                    activeTab === 'curriculum' ? 'active' : ''
+                  }`}
+                  onClick={() => {
+                    setActiveTab('curriculum')
+                    scrollTo(curriculumRef)
+                  }}
                 >
                   Curriculum
                 </button>
-                <button className='ctab' onClick={() => scrollTo(specRef)}>
+
+                <button
+                  className={`ctab ${
+                    activeTab === 'specializations' ? 'active' : ''
+                  }`}
+                  onClick={() => {
+                    setActiveTab('specializations')
+                    scrollTo(specRef)
+                  }}
+                >
                   Specializations
                 </button>
+
                 <button
-                  className='ctab'
-                  onClick={() => scrollTo(instructorRef)}
+                  className={`ctab ${
+                    activeTab === 'instructor' ? 'active' : ''
+                  }`}
+                  onClick={() => {
+                    setActiveTab('instructor')
+                    scrollTo(instructorRef)
+                  }}
                 >
                   Instructor
                 </button>
-                <button className='ctab' onClick={() => scrollTo(faqRef)}>
+
+                <button
+                  className={`ctab ${activeTab === 'faq' ? 'active' : ''}`}
+                  onClick={() => {
+                    setActiveTab('faq')
+                    scrollTo(faqRef)
+                  }}
+                >
                   FAQ
                 </button>
               </div>
@@ -529,6 +606,7 @@ function CoursesContent () {
                   Choose a specialization in your final year to build domain
                   expertise.
                 </p>
+
                 <div className='spec-grid'>
                   {MBA_SPECS.map((sp, i) => (
                     <div key={i} className='spec-card'>
@@ -562,11 +640,11 @@ function CoursesContent () {
                         published numerous research papers in international
                         journals.
                       </p>
-                      <div className='inst-social'>
+                      {/* <div className='inst-social'>
                         <a href='#'>in</a>
                         <a href='#'>𝕏</a>
                         <a href='#'>@</a>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div>
@@ -679,38 +757,60 @@ function CoursesContent () {
             <h3>Accreditations &amp; Approvals</h3>
             <div className='accred-row'>
               <div className='acc-item'>
-                <div className='a-logo'>UGC</div>
+                <div className='a-logo'>
+                  <Image src={img1} alt='UGC Logo' width={50} height={50} />
+                </div>
                 <div>
                   <strong>UGC</strong>
-                  <small>University Grants Commission</small>
+                  <small className='acc-text'>
+                    University Grants Commission
+                  </small>
                 </div>
               </div>
+
               <div className='acc-item'>
-                <div className='a-logo'>AICTE</div>
+                <div className='a-logo'>
+                  <Image src={img2} alt='AICTE Logo' width={50} height={50} />
+                </div>
                 <div>
                   <strong>AICTE</strong>
-                  <small>All India Council for Technical Education</small>
+                  <small className='acc-text'>
+                    All India Council for Technical Education
+                  </small>
                 </div>
               </div>
+
               <div className='acc-item'>
-                <div className='a-logo'>DEB</div>
+                <div className='a-logo'>
+                  <Image src={img3} alt='DEB Logo' width={50} height={50} />
+                </div>
                 <div>
                   <strong>DEB</strong>
-                  <small>Distance Education Bureau</small>
+                  <small className='acc-text'>Distance Education Bureau</small>
                 </div>
               </div>
+
               <div className='acc-item'>
-                <div className='a-logo'>NAAC</div>
+                <div className='a-logo'>
+                  <Image src={img4} alt='NAAC Logo' width={50} height={50} />
+                </div>
                 <div>
                   <strong>NAAC</strong>
-                  <small>Quality Education Recognized</small>
+                  <small className='acc-text'>
+                    Quality Education Recognized
+                  </small>
                 </div>
               </div>
+
               <div className='acc-item'>
-                <div className='a-logo'>NIRF</div>
+                <div className='a-logo'>
+                  <Image src={img5} alt='NIRF Logo' width={50} height={50} />
+                </div>
                 <div>
                   <strong>NIRF</strong>
-                  <small>National Institutional Ranking</small>
+                  <small className='acc-text'>
+                    National Institutional Ranking
+                  </small>
                 </div>
               </div>
             </div>
