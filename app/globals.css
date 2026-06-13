@@ -33,6 +33,7 @@
 }
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 body {
   font-family: var(--font-body);
@@ -439,7 +440,7 @@ section {
 .hero h1 {
   color: #fff;
   font-size: clamp(30px, 4.4vw, 52px);
-  font-weight: 800;
+  font-weight: 600;
   margin-bottom: 18px;
 }
 .hero h1 .y {
@@ -706,6 +707,7 @@ section {
 .course-card .yr {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   background: var(--gold);
   color: var(--purple-dark);
@@ -714,7 +716,8 @@ section {
   font-size: 11px;
   padding: 4px 12px;
   border-radius: 20px;
-  margin-bottom: 16px;
+  margin: 0 auto 16px; /* centers horizontally */
+  width: 80px;
 }
 .course-card .yr::before {
   content: '';
@@ -859,7 +862,7 @@ section {
   padding: 70px 0;
 }
 .how-head {
-  text-align: left;
+  text-align: center;
   max-width: none;
   margin: 0 0 50px;
 }
@@ -2834,3 +2837,41 @@ section {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
   }
 }
+.news-scroll {
+  height: 350px;
+  overflow: hidden;
+}
+
+.news-scroll:hover {
+  animation-play-state: paused;
+}
+
+.news-scroll > * {
+  animation: newsScroll 3s linear infinite;
+}
+
+@keyframes newsScroll {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-50%);
+  }
+}
+/* podcast ui */
+/* .modal-content {
+  border: none;
+  border-radius: 12px;
+}
+
+.modal-body h2 {
+  font-size: 2.5rem;
+  color: #3f3f3f;
+}
+
+@media (max-width: 768px) {
+  .modal-body h2 {
+    font-size: 1.5rem;
+  }
+} */

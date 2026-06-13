@@ -435,10 +435,10 @@ function CoursesContent () {
               </div>
             </div>
             <div className='hero-actions'>
-              <Link href='/blogs' className='btn btn-gold'>
+              <Link href='#' className='btn btn-gold'>
                 GET FREE COUNSELLING
               </Link>
-              <Link href='/blogs' className='btn btn-outline-white'>
+              <Link href='#' className='btn btn-outline-white'>
                 DOWNLOAD BROCHURE
               </Link>
             </div>
@@ -711,7 +711,7 @@ function CoursesContent () {
                   </div>
                 </div>
                 <Link
-                  href='/blogs'
+                  href='#'
                   className='btn btn-gold btn-block'
                   style={{ marginTop: '16px' }}
                 >
@@ -834,7 +834,7 @@ function CoursesContent () {
                 </p>
               </div>
             </div>
-            <Link href='/blogs' className='btn btn-gold'>
+            <Link href='#' className='btn btn-gold'>
               GET FREE COUNSELLING →
             </Link>
           </div>

@@ -1,37 +1,27 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
-export default function LeadModal() {
-  const [open, setOpen] = useState(false)
-
+export default function LeadModal({ open, setOpen }) {
   useEffect(() => {
     const handler = (e) => {
-      const el = e.target.closest('a, button')
-      if (!el) return
-      const text = el.textContent || ''
-      if (/counsel|guidance|enquiry|callback|apply now/i.test(text) && el.classList.contains('btn')) {
-        e.preventDefault()
-        setOpen(true)
-      }
+      if (e.key === 'Escape') setOpen(false)
     }
-    document.addEventListener('click', handler)
-    return () => document.removeEventListener('click', handler)
-  }, [])
 
-  useEffect(() => {
-    const handler = (e) => { if (e.key === 'Escape') setOpen(false) }
     document.addEventListener('keydown', handler)
+
     return () => document.removeEventListener('keydown', handler)
-  }, [])
+  }, [setOpen])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
+
+    return () => {
+      document.body.style.overflow = ''
+    }
   }, [open])
 
   if (!open) return null
-
   return (
     <div className="lead-modal open" aria-hidden={!open}>
       <div className="lead-overlay" onClick={() => setOpen(false)} />

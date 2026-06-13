@@ -6,7 +6,8 @@ import Image from 'next/image'
 import img1 from '../public/assets/accreditationsImg/NAAC.png'
 import img2 from '../public/assets/accreditationsImg/UGC.png'
 import img3 from '../public/assets/accreditationsImg/AICTE.png'
-
+import PodcastUI from '../components/modal/PodcastUI'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 const COURSES_DATA = {
   'online-ba': {
     tag: 'BA',
@@ -118,6 +119,7 @@ const HOME_FAQ = [
 ]
 
 function CourseCard ({ c }) {
+  const [leadModalOpen, setLeadModalOpen] = useState(false)
   const years = c.dur.split(' ')[0]
   const fullName =
     c.title
@@ -156,6 +158,7 @@ function FaqItem ({ q, a }) {
 
 export default function HomePage () {
   const [activeTab, setActiveTab] = useState('bachelor')
+  const [showPodcastModal, setShowPodcastModal] = useState(false)
 
   const bachelorCards = [
     'online-ba',
@@ -226,17 +229,21 @@ export default function HomePage () {
               </div>
             </div>
             <div className='hero-actions'>
-              <Link href='/blogs' className='btn btn-gold'>
+              <Link href='#' className='btn btn-gold'>
                 Get 100% Free Guidance
               </Link>
-              <a href='#' className='btn btn-outline-white hero-podcast'>
+              <button
+                type='button'
+                className='btn btn-outline-white hero-podcast'
+                onClick={() => setShowPodcastModal(true)}
+              >
                 <span className='mic'>
                   <svg viewBox='0 0 24 24'>
                     <path d='M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-3.1A7 7 0 0019 11z' />
                   </svg>
                 </span>{' '}
                 Listen Podcast
-              </a>
+              </button>
             </div>
           </div>
           <div className='hero-visual'>
@@ -291,65 +298,72 @@ export default function HomePage () {
           </div>
         </div>
       </section>
-
       {/* LATEST NEWS + ABOUT */}
       <section className='news-about'>
         <div className='wrap'>
           <div className='grid'>
             <div className='card news-card'>
-              <h3>📰 Latest News</h3>
-              <div className='news-item'>
-                <div className='news-date'>
-                  <b>15</b>
-                  <span>May</span>
+              <h3>Latest News</h3>
+
+              <div className='news-scroll'>
+                <div className='news-item'>
+                  <div className='news-date'>
+                    <b>15</b>
+                    <span>May</span>
+                  </div>
+                  <div>
+                    <h4>CUET UG 2025 Admit Card Released</h4>
+                    <Link href='/blogs'>Read More →</Link>
+                  </div>
                 </div>
-                <div>
-                  <h4>CUET UG 2025 Admit Card Released</h4>
-                  <Link href='/blogs'>Read More →</Link>
+
+                <div className='news-item'>
+                  <div className='news-date'>
+                    <b>12</b>
+                    <span>May</span>
+                  </div>
+                  <div>
+                    <h4>Bihar DElEd 2025 Result Declared</h4>
+                    <Link href='/blogs'>Read More →</Link>
+                  </div>
+                </div>
+
+                <div className='news-item'>
+                  <div className='news-date'>
+                    <b>10</b>
+                    <span>May</span>
+                  </div>
+                  <div>
+                    <h4>UP Scholarship 2025 Last Date Extended</h4>
+                    <Link href='/blogs'>Read More →</Link>
+                  </div>
+                </div>
+
+                <div className='news-item'>
+                  <div className='news-date'>
+                    <b>08</b>
+                    <span>May</span>
+                  </div>
+                  <div>
+                    <h4>NEET UG 2025 Exam City Intimation Released</h4>
+                    <Link href='/blogs'>Read More →</Link>
+                  </div>
+                </div>
+
+                <div className='news-item'>
+                  <div className='news-date'>
+                    <b>05</b>
+                    <span>May</span>
+                  </div>
+                  <div>
+                    <h4>New Government College Approved in Bihar</h4>
+                    <Link href='/blogs'>Read More →</Link>
+                  </div>
                 </div>
               </div>
-              <div className='news-item'>
-                <div className='news-date'>
-                  <b>12</b>
-                  <span>May</span>
-                </div>
-                <div>
-                  <h4>Bihar DElEd 2025 Result Declared</h4>
-                  <Link href='/blogs'>Read More →</Link>
-                </div>
-              </div>
-              <div className='news-item'>
-                <div className='news-date'>
-                  <b>10</b>
-                  <span>May</span>
-                </div>
-                <div>
-                  <h4>UP Scholarship 2025 Last Date Extended</h4>
-                  <Link href='/blogs'>Read More →</Link>
-                </div>
-              </div>
-              <div className='news-item'>
-                <div className='news-date'>
-                  <b>08</b>
-                  <span>May</span>
-                </div>
-                <div>
-                  <h4>NEET UG 2025 Exam City Intimation Released</h4>
-                  <Link href='/blogs'>Read More →</Link>
-                </div>
-              </div>
-              <div className='news-item'>
-                <div className='news-date'>
-                  <b>05</b>
-                  <span>May</span>
-                </div>
-                <div>
-                  <h4>New Government College Approved in Bihar</h4>
-                  <Link href='/blogs'>Read More →</Link>
-                </div>
-              </div>
+
               <Link
-                href='/blogs'
+                href='#'
                 className='btn btn-purple btn-block'
                 style={{ marginTop: '16px' }}
               >
@@ -387,14 +401,13 @@ export default function HomePage () {
                 SOL offers an efficient and reliable path to reaching your
                 academic and professional objectives.
               </p>
-              <Link href='/blogs' className='btn btn-gold'>
+              <Link href='#' className='btn btn-gold'>
                 FREE Guidance
               </Link>
             </div>
           </div>
         </div>
       </section>
-
       {/* OUR PROGRAMS */}
       <section className='courses-sec'>
         <div className='wrap'>
@@ -437,7 +450,6 @@ export default function HomePage () {
           </div>
         </div>
       </section>
-
       {/* ELIGIBILITY */}
       <section className='eligibility'>
         <div className='wrap'>
@@ -633,14 +645,13 @@ export default function HomePage () {
                   />
                 </svg>
               </div>
-              <Link href='/blogs' className='btn btn-gold'>
+              <Link href='#' className='btn btn-gold'>
                 Get FREE Consultation ✓
               </Link>
             </div>
           </div>
         </div>
       </section>
-
       {/* WHY CHOOSE */}
       <section className='why'>
         <div className='wrap'>
@@ -690,7 +701,7 @@ export default function HomePage () {
               </svg>
             </div>
             <div>
-              <span className='eyebrow'>About Us</span>
+              {/* <span className='eyebrow'>About Us</span> */}
               <h2>Why Choose DU SOL?</h2>
               <p>
                 DU SOL has become the preferred option for students looking for
@@ -729,14 +740,13 @@ export default function HomePage () {
                 higher education easily accessible and cost-effective, with a
                 solid foundation of online and distance studying.
               </p>
-              <Link href='/blogs' className='btn btn-purple'>
+              {/* <Link href='/blogs' className='btn btn-purple'>
                 KNOW MORE ABOUT US
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
       </section>
-
       {/* HOW TO APPLY */}
       <section className='how'>
         <div className='wrap'>
@@ -818,13 +828,12 @@ export default function HomePage () {
             </div>
           </div>
           <div className='center-btn'>
-            <Link href='/blogs' className='btn btn-gold'>
+            <Link href='#' className='btn btn-gold'>
               Get 100% Free Counseling
             </Link>
           </div>
         </div>
       </section>
-
       {/* FAQ */}
       <section className='faq'>
         <div className='wrap'>
@@ -836,13 +845,17 @@ export default function HomePage () {
               <FaqItem key={i} q={q} a={a} />
             ))}
           </div>
-          <div className='center-btn'>
+          {/* <div className='center-btn'>
             <Link href='/blogs' className='btn btn-purple'>
               VIEW ALL FAQS
             </Link>
-          </div>
+          </div> */}
         </div>
       </section>
+      {/* <PodcastUI
+        show={showPodcastModal}
+        onClose={() => setShowPodcastModal(false)}
+      /> */}
     </>
   )
 }
