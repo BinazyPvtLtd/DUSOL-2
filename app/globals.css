@@ -1031,32 +1031,66 @@ section {
   gap: 34px;
   align-items: start;
 }
-.ctabs {
-  display: flex;
-  gap: 4px;
-  border-bottom: 2px solid var(--line);
-  margin-bottom: 26px;
-  flex-wrap: wrap;
-  position: sticky;
-  top: 0;
-  background: #fff;
-  z-index: 60;
-  padding-top: 0;
-  box-shadow: 0 8px 12px -10px rgba(67, 32, 95, 0.3);
+
+.course-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 34px;
+  align-items: start;
 }
+
+.ctabs {
+  position: sticky;
+  top: 74px; /* height of your .nav (74px from your CSS) */
+  z-index: 800; /* just under site-header's z-index: 900 */
+
+  /* rest stays the same */
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  gap: 4px;
+
+  background: #fff;
+  border-bottom: 2px solid var(--line);
+  box-shadow: 0 8px 12px -10px rgba(67, 32, 95, 0.3);
+
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ctabs::-webkit-scrollbar {
+  display: none;
+}
+
 .ctab {
+  flex: 0 0 auto;
+  white-space: nowrap;
+
   font-family: var(--font-head);
   font-weight: 600;
   font-size: 14px;
+
   padding: 12px 18px;
   border: none;
   background: none;
+
   color: var(--muted);
   cursor: pointer;
+
   border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  transition: 0.2s;
+  transition: all 0.2s ease;
 }
+
+.ctab.active {
+  color: var(--purple);
+  border-bottom-color: var(--purple);
+}
+.ctabs-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
 .ctab.active {
   color: var(--purple);
   border-color: var(--purple);
@@ -1072,6 +1106,7 @@ section {
   margin-top: 14px;
 }
 .cpanel h2 {
+  margin-top: 25px;
   font-size: 24px;
   margin-bottom: 16px;
   color: var(--purple-dark);
@@ -2875,3 +2910,79 @@ section {
     font-size: 1.5rem;
   }
 } */
+
+.audio-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.audio-modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 12px;
+  padding: 18px 24px 22px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.audio-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.audio-modal-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.audio-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #333;
+  line-height: 1;
+}
+
+.audio-player {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .audio-modal-content {
+    padding: 16px;
+  }
+
+  .audio-modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .audio-modal-close {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .course-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .course-layout > * {
+    min-width: 0;
+  }
+
+  .ctabs {
+    margin: 0 0px 20px;
+    padding: 0 20px;
+  }
+}

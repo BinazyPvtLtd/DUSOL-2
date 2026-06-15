@@ -158,7 +158,7 @@ function FaqItem ({ q, a }) {
 
 export default function HomePage () {
   const [activeTab, setActiveTab] = useState('bachelor')
-  const [showPodcastModal, setShowPodcastModal] = useState(false)
+  const [showModal, setShowModal] = useState(false)
 
   const bachelorCards = [
     'online-ba',
@@ -235,7 +235,7 @@ export default function HomePage () {
               <button
                 type='button'
                 className='btn btn-outline-white hero-podcast'
-                onClick={() => setShowPodcastModal(true)}
+                onClick={() => setShowModal(true)}
               >
                 <span className='mic'>
                   <svg viewBox='0 0 24 24'>
@@ -856,6 +856,12 @@ export default function HomePage () {
         show={showPodcastModal}
         onClose={() => setShowPodcastModal(false)}
       /> */}
+        <PodcastUI
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        title="Delhi University, School Of Open Learning"
+        audioSrc="/audio/sol-message.mp3"
+      />
     </>
   )
 }

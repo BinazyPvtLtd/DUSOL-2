@@ -490,64 +490,67 @@ function CoursesContent () {
         <div className='wrap'>
           <div className='course-layout'>
             <div>
-              <div className='ctabs'>
-                <button
-                  className={`ctab ${activeTab === 'overview' ? 'active' : ''}`}
-                  onClick={() => {
-                    setActiveTab('overview')
-                    scrollTo(overviewRef)
-                  }}
-                >
-                  Overview
-                </button>
+              <div className='ctabs-sticky'>
+                <div className='ctabs'>
+                  <button
+                    className={`ctab ${
+                      activeTab === 'overview' ? 'active' : ''
+                    }`}
+                    onClick={() => {
+                      setActiveTab('overview')
+                      scrollTo(overviewRef)
+                    }}
+                  >
+                    Overview
+                  </button>
 
-                <button
-                  className={`ctab ${
-                    activeTab === 'curriculum' ? 'active' : ''
-                  }`}
-                  onClick={() => {
-                    setActiveTab('curriculum')
-                    scrollTo(curriculumRef)
-                  }}
-                >
-                  Curriculum
-                </button>
+                  <button
+                    className={`ctab ${
+                      activeTab === 'curriculum' ? 'active' : ''
+                    }`}
+                    onClick={() => {
+                      setActiveTab('curriculum')
+                      scrollTo(curriculumRef)
+                    }}
+                  >
+                    Curriculum
+                  </button>
 
-                <button
-                  className={`ctab ${
-                    activeTab === 'specializations' ? 'active' : ''
-                  }`}
-                  onClick={() => {
-                    setActiveTab('specializations')
-                    scrollTo(specRef)
-                  }}
-                >
-                  Specializations
-                </button>
+                  <button
+                    className={`ctab ${
+                      activeTab === 'specializations' ? 'active' : ''
+                    }`}
+                    onClick={() => {
+                      setActiveTab('specializations')
+                      scrollTo(specRef)
+                    }}
+                  >
+                    Specializations
+                  </button>
 
-                <button
-                  className={`ctab ${
-                    activeTab === 'instructor' ? 'active' : ''
-                  }`}
-                  onClick={() => {
-                    setActiveTab('instructor')
-                    scrollTo(instructorRef)
-                  }}
-                >
-                  Instructor
-                </button>
+                  <button
+                    className={`ctab ${
+                      activeTab === 'instructor' ? 'active' : ''
+                    }`}
+                    onClick={() => {
+                      setActiveTab('instructor')
+                      scrollTo(instructorRef)
+                    }}
+                  >
+                    Instructor
+                  </button>
 
-                <button
-                  className={`ctab ${activeTab === 'faq' ? 'active' : ''}`}
-                  onClick={() => {
-                    setActiveTab('faq')
-                    scrollTo(faqRef)
-                  }}
-                >
-                  FAQ
-                </button>
+                  <button
+                    className={`ctab ${activeTab === 'faq' ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveTab('faq')
+                      scrollTo(faqRef)
+                    }}
+                  >
+                    FAQ
+                  </button>
+                </div>
               </div>
-
               <div className='cpanel' id='p-overview' ref={overviewRef}>
                 <h2>Course Overview</h2>
                 <p>{course.intro}</p>
