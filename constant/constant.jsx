@@ -49,18 +49,18 @@ export const getTenantHost = () => {
   return !subdomain || subdomain === 'www' ? 'dusol' : subdomain
 }
 
-export const getBaseUrl = () => {
-  // SSR: use default api if provided via env
-  if (typeof window === 'undefined') return DEFAULT_API
+// export const getBaseUrl = () => {
+//   // SSR: use default api if provided via env
+//   if (typeof window === 'undefined') return DEFAULT_API
 
-  const host = window.location.hostname
+//   const host = window.location.hostname
 
-  if (isLocalHost(host)) {
-    return DEFAULT_API
-  }
+//   if (isLocalHost(host)) {
+//     return DEFAULT_API
+//   }
 
-  return `https://${host}/api/v1`
-}
+//   return `https://${host}/api/v1`
+// }
 
 
 export const getStorageBaseUrl = () => {
@@ -70,8 +70,29 @@ export const getStorageBaseUrl = () => {
 
   if (isLocalHost(host)) {
     return DEFAULT_STORAGE
-    
+
   }
 
   return `https://${host}/storage`
 }
+
+
+export const getBaseUrl = () => {
+  console.log("DEFAULT_API =", DEFAULT_API);
+
+  if (typeof window === "undefined") {
+    return DEFAULT_API;
+  }
+
+  const host = window.location.hostname;
+
+  if (
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host === "0.0.0.0"
+  ) {
+    return DEFAULT_API;
+  }
+
+  return https://${host}/api/v1;
+};
