@@ -94,5 +94,5 @@ export const getBaseUrl = () => {
     return DEFAULT_API;
   }
 
-  return https://${host}/api/v1;
+  return `https://${host}/api/v1`;
 };
