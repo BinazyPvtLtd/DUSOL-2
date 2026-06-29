@@ -3,6 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import LeadModal from './LeadModal'
+import { useTenant } from '@/context/TenantContext'
+import { getStorageBaseUrl } from '@/constant/constant'
+import Image from 'next/image'
 const MENU = [
   {
     label: 'Distance Course',
@@ -177,18 +180,28 @@ export default function Header () {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openItem, setOpenItem] = useState(null)
   const [leadModalOpen, setLeadModalOpen] = useState(false)
+  const { tenant, loading } = useTenant()
+
+  if (loading) return null
 
   const closeMobile = () => {
     setMobileOpen(false)
     setOpenItem(null)
   }
-
   return (
     <>
       <header className='site-header'>
         <div className='wrap'>
           <nav className='nav'>
             <Link className='logo' href='/'>
+              {tenant?.logo && (
+                <img
+                  src={`${getStorageBaseUrl()}/${tenant.logo}`}
+                  alt='logo'
+                  width={55}
+                  height={55}
+                />
+              )}
               <span className='logo-divider'></span>
               <span className='logo-text'>
                 <strong
@@ -227,7 +240,7 @@ export default function Header () {
                 className='btn btn-gold'
                 onClick={() => setLeadModalOpen(true)}
               >
-                ENQUIRY {' '}
+                ENQUIRY{' '}
                 <svg
                   viewBox='0 0 24 24'
                   width='16'

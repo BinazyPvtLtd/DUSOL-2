@@ -2,7 +2,7 @@
 
 /* @import "tailwindcss"; */
 
-:root {
+/* :root {
   --purple: #5b2a86;
   --purple-dark: #43205f;
   --purple-darker: #341a4d;
@@ -24,8 +24,29 @@
   --maxw: 1200px;
   --font-head: 'Poppins', sans-serif;
   --font-body: 'Mulish', sans-serif;
-}
+} */
+:root {
+  /* Dynamic theme variables */
+  --primary-color: #5b2a86;
+  --secondary-color: #f7c615;
+  --accent-color: #1f8ee0;
+  --font-family: 'Poppins', sans-serif;
 
+  /* Static */
+  --bg: #f6f4f9;
+  --white: #fff;
+  --text: #23202b;
+  --muted: #6b6577;
+  --line: #e9e4ef;
+  --green: #2fae6b;
+
+  --radius: 14px;
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.07);
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.18);
+
+  --maxw: 1200px;
+}
 * {
   margin: 0;
   padding: 0;
@@ -35,13 +56,20 @@ html {
   scroll-behavior: smooth;
   overflow-x: hidden;
 }
-body {
+/* body {
   font-family: var(--font-body);
   color: var(--ink);
   background: var(--bg);
   line-height: 1.6;
   overflow-x: hidden;
+} */
+
+body {
+  font-family: var(--font-family);
+  color: var(--text);
+  background: var(--bg);
 }
+
 img {
   max-width: 100%;
   display: block;
@@ -53,7 +81,7 @@ a {
 ul {
   list-style: none;
 }
-h1,
+/* h1,
 h2,
 h3,
 h4,
@@ -61,7 +89,16 @@ h5 {
   font-family: var(--font-head);
   line-height: 1.2;
   font-weight: 700;
-  color: var(--purple-dark);
+  color: var(--primary-color);
+} */
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: var(--primary-color);
+  font-family: var(--font-family);
 }
 
 .container {
@@ -92,21 +129,39 @@ h5 {
   text-decoration: none;
 }
 .btn-gold {
-  background: var(--gold);
-  color: var(--purple-dark);
+  background: var(--secondary-color);
+  color: var(--primary-color);
 }
 .btn-gold:hover {
-  background: var(--gold-dark);
+  background: var(--secondary-color);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(247, 198, 21, 0.4);
 }
 .btn-purple {
-  background: var(--purple);
+  background: var(--primary-color);
   color: #fff;
 }
 .btn-purple:hover {
-  background: var(--purple-dark);
+  background: var(--primary-color);
   transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: var(--secondary-color);
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  opacity: 0.9;
 }
 .btn-outline-white {
   background: transparent;
@@ -115,17 +170,17 @@ h5 {
 }
 .btn-outline-white:hover {
   background: #fff;
-  color: var(--purple-dark);
+  color: var(--primary-color);
 }
 .btn-blue {
-  background: var(--purple);
+  background: var(--primary-color);
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-size: 12px;
 }
 .btn-blue:hover {
-  background: var(--purple-dark);
+  background: var(--primary-color);
 }
 .btn-block {
   width: 100%;
@@ -149,7 +204,7 @@ section {
   font-weight: 800;
   display: inline-block;
   position: relative;
-  color: var(--purple-dark);
+  color: var(--primary-color);
 }
 .sec-title.underline::after {
   content: '';
@@ -159,7 +214,7 @@ section {
   transform: translateX(-50%);
   width: 70px;
   height: 4px;
-  background: var(--gold);
+  background: var(--secondary-color);
   border-radius: 3px;
 }
 .eyebrow {
@@ -168,7 +223,7 @@ section {
   letter-spacing: 2px;
   font-size: 12px;
   text-transform: uppercase;
-  color: var(--gold-dark);
+  color: var(--secondary-color);
 }
 .sec-sub {
   color: var(--muted);
@@ -178,7 +233,7 @@ section {
 
 /* --------- Top Bar --------- */
 .topbar {
-  background: var(--purple-dark);
+  background: var(--primary-color);
   color: #efe7f5;
   font-size: 13px;
 }
@@ -210,7 +265,7 @@ section {
   font-size: 14px;
 }
 .topbar .tb-social a:hover {
-  color: var(--gold);
+  color: var(--secondary-color);
 }
 .topbar .tb-left {
   white-space: nowrap;
@@ -257,7 +312,7 @@ section {
   font-size: 15px;
   letter-spacing: 0.2px;
   text-transform: none;
-  color: var(--purple);
+  color: var(--primary-color);
   font-weight: 400;
   line-height: 1.25;
 }
@@ -287,8 +342,8 @@ section {
   transition: 0.2s;
 }
 .menu > li:hover > a {
-  color: var(--purple);
-  background: var(--purple-soft);
+  color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
 }
 .menu > li:hover > a .caret {
   transform: rotate(180deg);
@@ -307,7 +362,7 @@ section {
   visibility: hidden;
   transform: translateY(10px);
   transition: 0.22s;
-  border-top: 3px solid var(--gold);
+  border-top: 3px solid var(--secondary-color);
   z-index: 20;
 }
 .menu > li:hover > .dropdown {
@@ -333,7 +388,7 @@ section {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: var(--purple);
+  color: var(--primary-color);
   padding: 6px 10px;
   border-bottom: 1px solid var(--line);
   margin-bottom: 4px;
@@ -348,8 +403,8 @@ section {
   font-weight: 500;
 }
 .dropdown a.dd-link:hover {
-  background: var(--purple-soft);
-  color: var(--purple);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
+  color: var(--primary-color);
   padding-left: 16px;
 }
 
@@ -370,7 +425,7 @@ section {
 .burger span {
   width: 24px;
   height: 2.5px;
-  background: var(--purple);
+  background: var(--primary-color);
   border-radius: 2px;
   transition: 0.25s;
 }
@@ -385,9 +440,9 @@ section {
   position: relative;
   background: linear-gradient(
     120deg,
-    var(--purple-dark) 0%,
-    var(--purple) 55%,
-    var(--purple-light) 100%
+    var(--primary-color) 0%,
+    var(--primary-color) 55%,
+    var(--primary-color) 100%
   );
   color: #fff;
   overflow: hidden;
@@ -409,7 +464,7 @@ section {
   bottom: -30%;
   width: 55%;
   height: 170%;
-  background: var(--gold);
+  background: var(--secondary-color);
   transform: rotate(20deg);
   opacity: 0.95;
   z-index: 0;
@@ -426,8 +481,8 @@ section {
 }
 .hero-eyebrow {
   display: inline-block;
-  background: var(--gold);
-  color: var(--purple-dark);
+  background: var(--secondary-color);
+  color: var(--primary-color);
   font-family: var(--font-head);
   font-weight: 700;
   font-size: 11px;
@@ -444,7 +499,7 @@ section {
   margin-bottom: 18px;
 }
 .hero h1 .y {
-  color: var(--gold);
+  color: var(--secondary-color);
 }
 .hero p.lead {
   font-size: 16px;
@@ -476,7 +531,7 @@ section {
   font-family: var(--font-head);
   font-weight: 700;
   font-size: 11px;
-  color: var(--purple-dark);
+  color: var(--primary-color);
   line-height: 1.2;
 }
 .acc-logo img {
@@ -507,7 +562,7 @@ section {
 
 /* page hero */
 .page-hero {
-  background: var(--purple);
+  background: var(--primary-color);
   color: #fff;
   padding: 46px 0;
   position: relative;
@@ -530,15 +585,15 @@ section {
   flex-wrap: wrap;
 }
 .breadcrumb a:hover {
-  color: var(--gold);
+  color: var(--secondary-color);
 }
 .breadcrumb .sep {
-  color: var(--gold);
+  color: var(--secondary-color);
 }
 .page-hero .tag {
   display: inline-block;
-  background: var(--gold);
-  color: var(--purple-dark);
+  background: var(--secondary-color);
+  color: var(--primary-color);
   font-family: var(--font-head);
   font-weight: 700;
   font-size: 11px;
@@ -582,9 +637,9 @@ section {
   align-items: center;
   gap: 8px;
   font-size: 18px;
-  color: var(--purple);
+  color: var(--primary-color);
   padding-bottom: 14px;
-  border-bottom: 2px solid var(--gold);
+  border-bottom: 2px solid var(--secondary-color);
   margin-bottom: 8px;
 }
 .news-item {
@@ -600,7 +655,7 @@ section {
   flex: none;
   width: 48px;
   text-align: center;
-  background: var(--purple-soft);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
   border-radius: 8px;
   padding: 6px 0;
 }
@@ -608,7 +663,7 @@ section {
   display: block;
   font-family: var(--font-head);
   font-size: 18px;
-  color: var(--purple);
+  color: var(--primary-color);
 }
 .news-date span {
   font-size: 10px;
@@ -623,16 +678,16 @@ section {
 }
 .news-item a {
   font-size: 12px;
-  color: var(--purple);
+  color: var(--primary-color);
   font-weight: 600;
 }
 .news-item a:hover {
-  color: var(--gold-dark);
+  color: var(--secondary-color);
 }
 .about-block h2 {
   font-size: clamp(22px, 3vw, 30px);
   margin-bottom: 16px;
-  color: var(--purple-dark);
+  color: var(--primary-color);
 }
 .about-block p {
   color: var(--muted);
@@ -676,8 +731,8 @@ section {
   transition: 0.2s;
 }
 .tab-btn.active {
-  color: var(--purple);
-  border-color: var(--gold);
+  color: var(--primary-color);
+  border-color: var(--secondary-color);
 }
 .course-grid {
   display: grid;
@@ -699,7 +754,7 @@ section {
 .course-card:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow);
-  border-color: var(--purple-light);
+  border-color: var(--primary-color);
 }
 .course-card .btn {
   margin-top: auto;
@@ -709,8 +764,8 @@ section {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: var(--gold);
-  color: var(--purple-dark);
+  background: var(--secondary-color);
+  color: var(--primary-color);
   font-family: var(--font-head);
   font-weight: 600;
   font-size: 11px;
@@ -724,7 +779,7 @@ section {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--purple-dark);
+  background: var(--primary-color);
 }
 .course-card h3 {
   font-size: 30px;
@@ -749,8 +804,8 @@ section {
 .eligibility {
   background: linear-gradient(
     135deg,
-    var(--purple) 0%,
-    var(--purple-dark) 100%
+    var(--primary-color) 0%,
+    var(--primary-color) 100%
   );
   color: #fff;
   padding: 70px 0;
@@ -770,7 +825,7 @@ section {
   margin-bottom: 22px;
 }
 .elig-group h4 {
-  color: var(--gold);
+  color: var(--secondary-color);
   font-size: 16px;
   margin-bottom: 10px;
 }
@@ -785,7 +840,7 @@ section {
   flex: none;
   width: 18px;
   height: 18px;
-  fill: var(--gold);
+  fill: var(--secondary-color);
   margin-top: 3px;
 }
 .degree-card {
@@ -826,7 +881,7 @@ section {
   align-items: center;
 }
 .why-illus {
-  background: linear-gradient(135deg, var(--purple-soft), #fff);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary-color) 10%, white), #fff);
   border-radius: var(--radius);
   padding: 30px;
   border: 1px solid var(--line);
@@ -853,7 +908,7 @@ section {
 .why-list svg {
   width: 20px;
   height: 20px;
-  fill: var(--purple);
+  fill: var(--primary-color);
   flex: none;
 }
 
@@ -911,7 +966,7 @@ section {
 .step .s-ico svg {
   width: 28px;
   height: 28px;
-  fill: var(--purple);
+  fill: var(--primary-color);
 }
 .step h4 {
   font-size: 15px;
@@ -965,8 +1020,8 @@ section {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: var(--purple-soft);
-  color: var(--purple);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
+  color: var(--primary-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -974,7 +1029,7 @@ section {
   transition: 0.25s;
 }
 .faq-item.open .faq-q .ic {
-  background: var(--purple);
+  background: var(--primary-color);
   color: #fff;
   transform: rotate(45deg);
 }
@@ -1008,7 +1063,7 @@ section {
 .cmeta svg {
   width: 22px;
   height: 22px;
-  fill: var(--gold);
+  fill: var(--secondary-color);
 }
 .cmeta small {
   display: block;
@@ -1084,16 +1139,16 @@ section {
 }
 
 .ctab.active {
-  color: var(--purple);
-  border-bottom-color: var(--purple);
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
 }
 .ctabs-wrapper::-webkit-scrollbar {
   display: none;
 }
 
 .ctab.active {
-  color: var(--purple);
-  border-color: var(--purple);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 .cpanel {
   display: block;
@@ -1109,7 +1164,7 @@ section {
   margin-top: 25px;
   font-size: 24px;
   margin-bottom: 16px;
-  color: var(--purple-dark);
+  color: var(--primary-color);
 }
 .cpanel p {
   color: var(--muted);
@@ -1129,7 +1184,7 @@ section {
 .feature-list svg {
   width: 20px;
   height: 20px;
-  fill: var(--purple);
+  fill: var(--primary-color);
   flex: none;
   margin-top: 2px;
 }
@@ -1164,8 +1219,8 @@ section {
   cursor: pointer;
   font-family: var(--font-head);
   font-weight: 600;
-  background: var(--purple-soft);
-  color: var(--purple);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
+  color: var(--primary-color);
 }
 .sem-head .ar {
   transition: 0.25s;
@@ -1206,7 +1261,7 @@ section {
 .side-card h3 {
   font-size: 18px;
   margin-bottom: 18px;
-  color: var(--purple-dark);
+  color: var(--primary-color);
 }
 .fee-row {
   display: flex;
@@ -1221,7 +1276,7 @@ section {
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  background: var(--purple-soft);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1230,7 +1285,7 @@ section {
 .fee-row .f-ico svg {
   width: 18px;
   height: 18px;
-  fill: var(--purple);
+  fill: var(--primary-color);
 }
 .fee-row small {
   display: block;
@@ -1240,7 +1295,7 @@ section {
 .fee-row b {
   font-family: var(--font-head);
   font-size: 17px;
-  color: var(--purple);
+  color: var(--primary-color);
 }
 .detail-row {
   display: flex;
@@ -1296,15 +1351,15 @@ section {
   cursor: pointer;
 }
 .spec-card:hover {
-  background: var(--purple-soft);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
   transform: translateY(-4px);
-  border-color: var(--purple-light);
+  border-color: var(--primary-color);
 }
 .spec-card .sp-ico {
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: var(--purple-soft);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1313,7 +1368,7 @@ section {
 .spec-card .sp-ico svg {
   width: 24px;
   height: 24px;
-  fill: var(--purple);
+  fill: var(--primary-color);
 }
 .spec-card span {
   font-size: 13px;
@@ -1348,7 +1403,7 @@ section {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1363,7 +1418,7 @@ section {
   margin-bottom: 3px;
 }
 .inst-profile .role {
-  color: var(--purple);
+  color: var(--primary-color);
   font-weight: 600;
   font-size: 14px;
 }
@@ -1385,15 +1440,15 @@ section {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: var(--purple-soft);
-  color: var(--purple);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
+  color: var(--primary-color);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: 0.2s;
 }
 .inst-social a:hover {
-  background: var(--purple);
+  background: var(--primary-color);
   color: #fff;
 }
 .qual-list li {
@@ -1409,7 +1464,7 @@ section {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--purple);
+  background: var(--primary-color);
   margin-top: 7px;
   flex: none;
 }
@@ -1444,14 +1499,14 @@ section {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: var(--purple-soft);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-head);
   font-weight: 800;
   font-size: 11px;
-  color: var(--purple);
+  color: var(--primary-color);
   flex: none;
   text-align: center;
   line-height: 1;
@@ -1472,7 +1527,7 @@ section {
   padding: 50px 0;
 }
 .cta-box {
-  background: var(--purple);
+  background: var(--primary-color);
   border-radius: 18px;
   padding: 40px 44px;
   display: flex;
@@ -1512,13 +1567,13 @@ section {
 
 /* --------- BLOG PAGE --------- */
 .blog-hero {
-  background: linear-gradient(120deg, var(--purple-dark), var(--purple));
+  background: linear-gradient(120deg, var(--primary-color), var(--primary-color));
   color: #fff;
   text-align: center;
   padding: 54px 0;
 }
 .blog-hero h1 {
-  color: var(--gold);
+  color: var(--secondary-color);
   font-size: clamp(26px, 3.6vw, 40px);
   margin-bottom: 4px;
 }
@@ -1561,7 +1616,7 @@ section {
   width: 38px;
   height: 38px;
   border-radius: 8px;
-  background: var(--purple);
+  background: var(--primary-color);
   border: none;
   color: #fff;
   cursor: pointer;
@@ -1590,7 +1645,7 @@ section {
 }
 .blog-thumb {
   height: 150px;
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color));
   position: relative;
   display: flex;
   align-items: center;
@@ -1610,7 +1665,7 @@ section {
   height: 0;
   border-style: solid;
   border-width: 0 54px 54px 0;
-  border-color: transparent var(--gold) transparent transparent;
+  border-color: transparent var(--secondary-color) transparent transparent;
 }
 .blog-card .bc-body {
   padding: 18px;
@@ -1670,16 +1725,16 @@ section {
 }
 .pagination a.active,
 .pagination a:hover {
-  background: var(--purple);
+  background: var(--primary-color);
   color: #fff;
-  border-color: var(--purple);
+  border-color: var(--primary-color);
 }
 
 /* blog sidebar */
 .side-trending h3 {
   font-size: 18px;
   margin-bottom: 16px;
-  color: var(--purple-dark);
+  color: var(--primary-color);
 }
 .trend-item {
   display: flex;
@@ -1694,7 +1749,7 @@ section {
   width: 60px;
   height: 54px;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color));
   flex: none;
   display: flex;
   align-items: center;
@@ -1713,7 +1768,7 @@ section {
 }
 .trend-item a {
   font-size: 12px;
-  color: var(--purple);
+  color: var(--primary-color);
   font-weight: 600;
 }
 
@@ -1726,7 +1781,7 @@ section {
   margin-top: 22px;
 }
 .counsel-head {
-  background: linear-gradient(120deg, var(--purple), var(--purple-dark));
+  background: linear-gradient(120deg, var(--primary-color), var(--primary-color));
   color: #fff;
   padding: 18px 20px;
 }
@@ -1780,7 +1835,7 @@ section {
   padding: 40px 0 60px;
 }
 .still-box {
-  background: var(--purple);
+  background: var(--primary-color);
   color: #fff;
   border-radius: 14px;
   text-align: center;
@@ -1800,10 +1855,10 @@ section {
   font-family: var(--font-head);
   font-weight: 800;
   font-size: 24px;
-  color: var(--purple-dark);
+  color: var(--primary-color);
 }
 .still-logo span {
-  color: var(--purple);
+  color: var(--primary-color);
 }
 
 /* single blog post */
@@ -1851,7 +1906,7 @@ section {
 .post-cover {
   aspect-ratio: 1200/600;
   border-radius: 14px;
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1896,7 +1951,7 @@ section {
 .content-main h3 {
   font-size: 19px;
   margin: 20px 0 10px;
-  color: var(--purple);
+  color: var(--primary-color);
 }
 .content-main p {
   color: #444;
@@ -1927,7 +1982,7 @@ section {
   font-size: 14px;
 }
 .info-table th {
-  background: var(--purple);
+  background: var(--primary-color);
   color: #fff;
   font-family: var(--font-head);
 }
@@ -1935,15 +1990,15 @@ section {
   border: none;
 }
 .info-table tr:nth-child(even) td {
-  background: var(--purple-soft);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
 }
 
 /* --------- FOOTER --------- */
 .site-footer {
   background: linear-gradient(
     160deg,
-    var(--purple) 0%,
-    var(--purple-dark) 100%
+    var(--primary-color) 0%,
+    var(--primary-color) 100%
   );
   color: #e6dcf0;
   padding: 56px 0 0;
@@ -1975,7 +2030,7 @@ section {
   margin-bottom: 8px;
 }
 .footer-cta h3 span {
-  color: var(--gold);
+  color: var(--secondary-color);
 }
 .footer-cta p {
   font-size: 14px;
@@ -2003,7 +2058,7 @@ section {
   transition: 0.2s;
 }
 .f-social a:hover {
-  background: var(--gold);
+  background: var(--secondary-color);
 }
 .f-social a svg {
   width: 16px;
@@ -2011,7 +2066,7 @@ section {
   fill: #fff;
 }
 .f-social a:hover svg {
-  fill: var(--purple-dark);
+  fill: var(--primary-color);
 }
 .footer-col h4 {
   color: #fff;
@@ -2027,7 +2082,7 @@ section {
   bottom: 0;
   width: 34px;
   height: 3px;
-  background: var(--gold);
+  background: var(--secondary-color);
   border-radius: 2px;
 }
 .footer-col li {
@@ -2039,7 +2094,7 @@ section {
   transition: 0.2s;
 }
 .footer-col a:hover {
-  color: var(--gold);
+  color: var(--secondary-color);
   padding-left: 5px;
 }
 .footer-col ul.two-col {
@@ -2059,7 +2114,7 @@ section {
 .f-contact li svg {
   width: 16px;
   height: 16px;
-  fill: var(--gold);
+  fill: var(--secondary-color);
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -2091,7 +2146,7 @@ section {
   color: #cdbce0;
 }
 .fb-links a:hover {
-  color: var(--gold);
+  color: var(--secondary-color);
 }
 .fb-links span {
   color: rgba(255, 255, 255, 0.3);
@@ -2125,8 +2180,8 @@ section {
   color: #fff;
 }
 .float-call {
-  background: var(--gold);
-  color: var(--purple-dark);
+  background: var(--secondary-color);
+  color: var(--primary-color);
 }
 .float-cta svg {
   width: 26px;
@@ -2143,7 +2198,7 @@ section {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: var(--gold);
+  background: var(--secondary-color);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2151,7 +2206,7 @@ section {
 .hero-podcast .mic svg {
   width: 16px;
   height: 16px;
-  fill: var(--purple-dark);
+  fill: var(--primary-color);
 }
 .video-card {
   position: relative;
@@ -2169,7 +2224,7 @@ section {
   top: 12px;
   right: 12px;
   background: #fff;
-  color: var(--purple-dark);
+  color: var(--primary-color);
   font-size: 10px;
   font-weight: 700;
   padding: 4px 9px;
@@ -2200,12 +2255,12 @@ section {
   letter-spacing: 1px;
 }
 .vc-left .vc-big span {
-  color: var(--gold);
+  color: var(--secondary-color);
 }
 .vc-left .vc-tag {
   margin-top: 8px;
-  background: var(--gold);
-  color: var(--purple-dark);
+  background: var(--secondary-color);
+  color: var(--primary-color);
   font-weight: 700;
   font-size: 12px;
   padding: 4px 10px;
@@ -2325,7 +2380,7 @@ section {
 }
 .lead-box h3 {
   text-align: center;
-  color: var(--purple);
+  color: var(--primary-color);
   font-family: var(--font-head);
   font-weight: 800;
   font-size: 26px;
@@ -2358,7 +2413,7 @@ section {
 .lead-fields input:focus,
 .lead-fields select:focus {
   outline: none;
-  border-color: var(--purple);
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(91, 42, 134, 0.15);
 }
 .lead-phone {
@@ -2386,13 +2441,13 @@ section {
   flex-shrink: 0;
 }
 .lead-consent a {
-  color: var(--purple);
+  color: var(--primary-color);
 }
 .lead-submit {
   margin-top: 4px;
   width: 100%;
   padding: 14px;
-  background: var(--purple);
+  background: var(--primary-color);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -2404,7 +2459,7 @@ section {
   transition: 0.2s;
 }
 .lead-submit:hover {
-  background: var(--purple-dark);
+  background: var(--primary-color);
 }
 
 /* blog lead */
@@ -2417,7 +2472,7 @@ section {
   margin-bottom: 22px;
 }
 .blog-lead .bl-head {
-  background: var(--purple);
+  background: var(--primary-color);
   color: #fff;
   padding: 18px 20px;
   text-align: center;
@@ -2454,7 +2509,7 @@ section {
 .bl-form input:focus,
 .bl-form select:focus {
   outline: none;
-  border-color: var(--purple);
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(91, 42, 134, 0.12);
 }
 .bl-consent {
@@ -2486,7 +2541,7 @@ section {
 }
 .blog-cta-box h3 {
   font-size: 24px;
-  color: var(--purple-dark);
+  color: var(--primary-color);
   margin-bottom: 8px;
 }
 .blog-cta-box p {
@@ -2497,9 +2552,9 @@ section {
 
 /* TOC */
 .toc {
-  background: var(--purple-soft);
+  background: color-mix(in srgb, var(--primary-color) 10%, white);
   border: 1px solid var(--line);
-  border-left: 4px solid var(--purple);
+  border-left: 4px solid var(--primary-color);
   border-radius: 10px;
   padding: 18px 22px;
   margin: 0 0 26px;
@@ -2507,24 +2562,24 @@ section {
 .toc h4 {
   font-family: var(--font-head);
   font-size: 16px;
-  color: var(--purple-dark);
+  color: var(--primary-color);
   margin-bottom: 10px;
 }
 .toc ol {
   margin: 0;
   padding-left: 20px;
-  color: var(--purple);
+  color: var(--primary-color);
 }
 .toc li {
   margin-bottom: 7px;
   font-size: 14px;
 }
 .toc a {
-  color: var(--purple);
+  color: var(--primary-color);
   font-weight: 500;
 }
 .toc a:hover {
-  color: var(--gold-dark);
+  color: var(--secondary-color);
   text-decoration: underline;
 }
 
@@ -2540,15 +2595,15 @@ section {
   color: var(--muted);
 }
 .post-body .breadcrumb.dark a:hover {
-  color: var(--purple);
+  color: var(--primary-color);
 }
 .post-body .breadcrumb.dark .sep {
-  color: var(--purple-light);
+  color: var(--primary-color);
 }
 .post-title {
   font-size: clamp(27px, 3.4vw, 40px);
   font-weight: 800;
-  color: var(--purple-dark);
+  color: var(--primary-color);
   line-height: 1.18;
   margin-bottom: 10px;
 }
@@ -2630,14 +2685,14 @@ section {
     background: none;
     border: none;
     font-size: 28px;
-    color: var(--purple);
+    color: var(--primary-color);
     cursor: pointer;
   }
   .mm-logo {
     font-family: var(--font-head);
     font-weight: 800;
     font-size: 22px;
-    color: var(--purple);
+    color: var(--primary-color);
     margin-bottom: 20px;
   }
   .mm-item {
@@ -2655,7 +2710,7 @@ section {
   }
   .mm-link .mc {
     transition: 0.25s;
-    color: var(--purple);
+    color: var(--primary-color);
   }
   .mm-item.open .mm-link .mc {
     transform: rotate(180deg);
@@ -2672,13 +2727,13 @@ section {
     color: var(--muted);
   }
   .mm-sub a:hover {
-    color: var(--purple);
+    color: var(--primary-color);
   }
   .mm-sub .mm-gt {
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    color: var(--purple);
+    color: var(--primary-color);
     font-weight: 700;
     padding: 10px 14px 4px;
   }

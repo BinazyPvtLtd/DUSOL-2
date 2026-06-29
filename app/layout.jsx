@@ -1,26 +1,31 @@
 import './globals.css'
-// import TopBar from '@/components/TopBar'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import LeadModal from '@/components/LeadModal'
+import { TenantProvider } from '@/context/TenantContext'
+import { generateSEOMetadata } from './lib/seo'
 
-export const metadata = {
-  title:
-    'DU SOL Admission 2026 | Online & Distance Courses — Information by College Drishti',
-  description:
-    'DU SOL UG & PG admission 2026. Explore online and distance courses, fees, eligibility and admission updates. Information by College Drishti.'
-}
+// Next.js App Router SEO:
+// Provide server-rendered defaults that don't depend on client globals.
+// (Your HomeClient can still overwrite via generateMetaData on the home page if needed.)
+export const metadata = generateSEOMetadata({})
 
 export default function RootLayout ({ children }) {
   return (
     <html lang='en'>
       <body>
-        {/* <TopBar /> */}
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <LeadModal />
+        <TenantProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+          <LeadModal />
+        </TenantProvider>
       </body>
     </html>
   )
 }
+
+
+
+
+

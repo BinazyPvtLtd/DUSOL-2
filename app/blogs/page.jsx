@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { getBlogDataApi } from '@/api'
 
 const BLOGS = [
   {
@@ -82,86 +83,58 @@ const TRENDING = [
 function BlogCard ({ blog }) {
   return (
     <div className='blog-card'>
-      <Link
-        href={`/blog/${blog.slug}`}
-        style={{ color: 'var(--purple)', fontWeight: 600, fontSize: '12px' }}
-      >
+      <Link href={`/blog/${blog.slug}`}>
         <div className='blog-thumb'>
-          <svg viewBox='0 0 86 86' fill='none'>
-            <rect
-              x='13'
-              y='10'
-              width='60'
-              height='66'
-              rx='6'
-              fill='rgba(255,255,255,.15)'
-            />
-            <rect
-              x='21'
-              y='24'
-              width='44'
-              height='6'
-              rx='3'
-              fill='rgba(255,255,255,.5)'
-            />
-            <rect
-              x='21'
-              y='36'
-              width='44'
-              height='4'
-              rx='2'
-              fill='rgba(255,255,255,.35)'
-            />
-            <rect
-              x='21'
-              y='46'
-              width='30'
-              height='4'
-              rx='2'
-              fill='rgba(255,255,255,.25)'
-            />
-            <circle cx='67' cy='62' r='12' fill='#f7c615' />
-            <path
-              d='M62 62l3.5 3.5L72 59'
-              stroke='#43205f'
-              strokeWidth='2.5'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              fill='none'
-            />
-          </svg>
-          <div className='gold-corner'></div>
+          <img
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${blog.featured_image}`}
+            alt={blog.title}
+            className='img-fluid'
+          />
         </div>
+
         <div className='bc-body'>
           <h3>{blog.title}</h3>
-          <p>{blog.excerpt}</p>
-          {/* <div className='bc-foot'>
-            <span>{blog.date}</span>
-            <Link
-              href={`/blog/${blog.slug}`}
-              style={{
-                color: 'var(--purple)',
-                fontWeight: 600,
-                fontSize: '12px'
-              }}
-            >
-              Read More →
-            </Link>
-          </div> */}
+
+          <p>{blog.short_description}</p>
+
+          <div className='bc-foot'>
+            <span>
+              {new Date(blog.published_at).toLocaleDateString('en-IN', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+              })}
+            </span>
+
+            <span>{blog.views} Views</span>
+          </div>
         </div>
       </Link>
     </div>
   )
 }
-
 export default function BlogsPage () {
+  const [blogs, setBlogs] = useState([])
   const [query, setQuery] = useState('')
 
-  const filtered = BLOGS.filter(
-    b =>
-      b.title.toLowerCase().includes(query.toLowerCase()) ||
-      b.excerpt.toLowerCase().includes(query.toLowerCase())
+  const filtered = blogs.filter(
+    blog =>
+      blog.title.toLowerCase().includes(query.toLowerCase()) ||
+      blog.short_description.toLowerCase().includes(query.toLowerCase())
   )
+
+  useEffect(() => {
+    fetchBlogs()
+  }, [])
+
+  const fetchBlogs = async () => {
+    try {
+      const response = await getBlogDataApi()
+      setBlogs(response.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -203,9 +176,9 @@ export default function BlogsPage () {
               </div>
               <div className='blog-grid'>
                 {filtered.map(blog => (
-                  <BlogCard key={blog.slug} blog={blog} />
+                  <BlogCard key={blog.id} blog={blog} />
                 ))}
-              </div>
+              </div>  
               {filtered.length === 0 && (
                 <p
                   style={{

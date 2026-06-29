@@ -5,13 +5,13 @@ import { useParams, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { useRef } from 'react'
-import img1 from '../../public/assets/accreditationsImg/NAAC.png'
-import img2 from '../../public/assets/accreditationsImg/UGC.png'
-import img3 from '../../public/assets/accreditationsImg/AICTE.png'
-import img4 from '../../public/assets/accreditationsImg/DEB.jpg'
-import img5 from '../../public/assets/accreditationsImg/NIRF.png'
+import img1 from '../../../public/assets/accreditationsImg/NAAC.png'
+import img2 from '../../../public/assets/accreditationsImg/UGC.png'
+import img3 from '../../../public/assets/accreditationsImg/AICTE.png'
+import img4 from '../../../public/assets/accreditationsImg/DEB.jpg'
+import img5 from '../../../public/assets/accreditationsImg/NIRF.png'
 import Image from 'next/image'
-import { getCourseDataAPI } from '@/api'
+import { getCourseDataAPI, getOneCourseDataAPI } from '@/api'
 
 const DEF_SYLLABUS = [
   {
@@ -362,11 +362,13 @@ function CoursesContent () {
     try {
       const response = await getOneCourseDataAPI(slug)
 
-      setCoursedata(response.data.data)
+      setCoursedata(response.data.data?.course)
     } catch (error) {
       console.log(error)
     }
   }
+
+  console.log(courseData, 'DATA OF COURSE DATA')
 
   return (
     <>
@@ -380,7 +382,7 @@ function CoursesContent () {
               <span className='sep'>›</span>
               <Link href='/courses'>Courses</Link>
               <span className='sep'>›</span>
-              <span>{course.tag}</span>
+              <span>{courseData?.short_name}</span>{' '}
             </div>
             <span className='tag'> {courseData?.short_name}</span>
             <h1>
@@ -389,14 +391,16 @@ function CoursesContent () {
               {courseData?.short_name && `(${courseData.short_name})`}
             </h1>
             <p className='mb-8'>{courseData?.short_description}</p>{' '}
-            {/* <div className='meta-row'>
+            <div className='meta-row'>
               <div className='cmeta'>
-                <svg viewBox='0 0 24 24'>
+                {/* <svg viewBox='0 0 24 24'>
                   <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm1 14.5h-2V11h2zm0-8.5h-2V6h2z' />
-                </svg>
-                <div>
+                </svg> */}
+                {/* <div>
                   <small>Duration</small>
-                  <strong>{course.dur}</strong>
+                  <strong>
+                    {courseData?.duration} {courseData?.duration_type}
+                  </strong>
                 </div>
               </div>
               <div className='cmeta'>
@@ -405,7 +409,7 @@ function CoursesContent () {
                 </svg>
                 <div>
                   <small>Level</small>
-                  <strong>{course.level}</strong>
+                  <strong>{courseData?.course_level}</strong>
                 </div>
               </div>
               <div className='cmeta'>
@@ -414,10 +418,10 @@ function CoursesContent () {
                 </svg>
                 <div>
                   <small>Mode</small>
-                  <strong>{course.mode}</strong>
-                </div>
+                  <strong>{courseData?.study_mode}</strong>
+                </div> */}
               </div>
-            </div> */}
+            </div>
             <div className='hero-badges mt-5'>
               <div className='acc-logo'>
                 <Image
@@ -575,7 +579,13 @@ function CoursesContent () {
               </div>
               <div className='cpanel' id='p-overview' ref={overviewRef}>
                 <h2>Course Overview</h2>
-                <p>{course.intro}</p>
+                <p>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: courseData?.overview || ''
+                    }}
+                  />
+                </p>
                 <ul className='feature-list'>
                   <li>
                     <svg viewBox='0 0 24 24'>
@@ -605,7 +615,9 @@ function CoursesContent () {
                 <div className='divider'></div>
                 <div className='syllabus-head'>
                   <h2 style={{ margin: 0 }}>Curriculum / Syllabus</h2>
-                  <span className='dur'>{course.sems} Semesters</span>
+                  <span className='dur'>
+                    {courseData?.duration * 2} Semesters
+                  </span>{' '}
                 </div>
                 {DEF_SYLLABUS.slice(0, 3).map((sem, i) => (
                   <SemItem key={i} sem={sem} />
@@ -618,7 +630,9 @@ function CoursesContent () {
                   <p style={{ margin: 0, color: 'var(--muted)' }}>
                     Semester-wise breakdown of subjects and learning hours.
                   </p>
-                  <span className='dur'>{course.sems} Semesters</span>
+                  <span className='dur'>
+                    {courseData?.duration * 2} Semesters
+                  </span>{' '}
                 </div>
                 {DEF_SYLLABUS.map((sem, i) => (
                   <SemItem key={i} sem={sem} />
@@ -745,7 +759,7 @@ function CoursesContent () {
               </div>
               <div className='side-card'>
                 <h3>Course Details</h3>
-                <div className='detail-row'>
+                {/* <div className='detail-row'>
                   <span>Duration</span>
                   <span>{course.dur}</span>
                 </div>
@@ -768,6 +782,36 @@ function CoursesContent () {
                 <div className='detail-row'>
                   <span>Difficulty</span>
                   <span>Beginner</span>
+                </div> */}
+                <div className='detail-row'>
+                  <span>Duration</span>
+                  <span>
+                    {courseData?.duration} {courseData?.duration_type}
+                  </span>
+                </div>
+
+                <div className='detail-row'>
+                  <span>Level</span>
+                  <span>{courseData?.course_level}</span>
+                </div>
+
+                <div className='detail-row'>
+                  <span>Mode</span>
+                  <span>{courseData?.study_mode}</span>
+                </div>
+
+                <div className='detail-row'>
+                  <span>Language</span>
+                  <span>{courseData?.language}</span>
+                </div>
+
+                <div className='detail-row'>
+                  <span>Eligibility</span>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: courseData?.eligibility || ''
+                    }}
+                  />
                 </div>
               </div>
             </aside>

@@ -1,13 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { getBlogFaqsApi, getOneBlogDataApi } from '@/api'
+import { useParams } from 'next/navigation'
 
 const BLOG_POSTS = {
   'online-mba-in-digital-marketing': {
     slug: 'online-mba-in-digital-marketing',
-    title: 'Online MBA in Digital Marketing: Scope, Syllabus, Fees & Career Guide 2026',
-    excerpt: 'An Online MBA in Digital Marketing helps you master SEO, social media, analytics and growth strategy while you keep working.',
+    title:
+      'Online MBA in Digital Marketing: Scope, Syllabus, Fees & Career Guide 2026',
+    excerpt:
+      'An Online MBA in Digital Marketing helps you master SEO, social media, analytics and growth strategy while you keep working.',
     date: 'June 5, 2026',
     category: 'MBA',
     toc: [
@@ -18,7 +22,7 @@ const BLOG_POSTS = {
       ['Eligibility and Admission Process', '#eligibility'],
       ['Fees and Affordability', '#fees'],
       ['Career Opportunities and Salary Scope', '#career'],
-      ['Is an Online MBA in Digital Marketing Worth It?', '#worth'],
+      ['Is an Online MBA in Digital Marketing Worth It?', '#worth']
     ],
     body: `
       <p>The way brands reach customers has changed forever, and digital channels now drive most of that growth. This is exactly why an <strong>Online MBA in Digital Marketing</strong> has become one of the most in-demand postgraduate programs for working professionals, fresh graduates and entrepreneurs in 2026.</p>
@@ -77,11 +81,23 @@ const BLOG_POSTS = {
       <p>Whether you are a fresh graduate wanting to enter marketing, a working professional seeking a promotion, or an entrepreneur looking to grow your brand online — this program can accelerate your goals with flexibility and affordability.</p>
     `,
     faq: [
-      ['What is the duration of an Online MBA in Digital Marketing?', 'The program is typically 2 years (4 semesters), though some universities offer an accelerated 1-year option.'],
-      ['Is an Online MBA in Digital Marketing valid for government jobs?', 'Yes, if the university is UGC-DEB approved, the degree holds equal validity to a regular MBA for government jobs and higher studies.'],
-      ['What is the average fee for an Online MBA in Digital Marketing?', 'Fees range from ₹50,000 to ₹1,20,000 for the full program, making it significantly more affordable than a full-time campus MBA.'],
-      ['Can I pursue this program while working full time?', 'Yes, the flexible online format is designed specifically for working professionals. You can attend live sessions on weekends and access recorded lectures anytime.'],
-    ],
+      [
+        'What is the duration of an Online MBA in Digital Marketing?',
+        'The program is typically 2 years (4 semesters), though some universities offer an accelerated 1-year option.'
+      ],
+      [
+        'Is an Online MBA in Digital Marketing valid for government jobs?',
+        'Yes, if the university is UGC-DEB approved, the degree holds equal validity to a regular MBA for government jobs and higher studies.'
+      ],
+      [
+        'What is the average fee for an Online MBA in Digital Marketing?',
+        'Fees range from ₹50,000 to ₹1,20,000 for the full program, making it significantly more affordable than a full-time campus MBA.'
+      ],
+      [
+        'Can I pursue this program while working full time?',
+        'Yes, the flexible online format is designed specifically for working professionals. You can attend live sessions on weekends and access recorded lectures anytime.'
+      ]
+    ]
   },
   'dusol-admission-2026-form-filling-guide': {
     slug: 'dusol-admission-2026-form-filling-guide',
@@ -94,7 +110,7 @@ const BLOG_POSTS = {
       ['Eligibility Criteria', '#eligibility'],
       ['Documents Required', '#documents'],
       ['Step-by-Step Form Filling', '#steps'],
-      ['Fee Payment', '#payment'],
+      ['Fee Payment', '#payment']
     ],
     body: `
       <h2 id="overview">Overview of DU SOL Admission 2026</h2>
@@ -127,22 +143,32 @@ const BLOG_POSTS = {
       <p>For free step-by-step guidance on filling your DU SOL application form, get in touch with College Drishti counsellors — the service is 100% free.</p>
     `,
     faq: [
-      ['When does DU SOL admission start for 2026?', 'DU SOL admission for the 2026 session typically opens in May and the last date to apply is around 31st May 2026.'],
-      ['What is the application fee for DU SOL?', 'The application fee is approximately ₹1,000. Check the official portal for the exact and current fee.'],
-      ['Can I apply for DU SOL admission without an entrance exam?', 'Yes, DU SOL offers merit-based admission for most programs without an entrance exam.'],
-    ],
+      [
+        'When does DU SOL admission start for 2026?',
+        'DU SOL admission for the 2026 session typically opens in May and the last date to apply is around 31st May 2026.'
+      ],
+      [
+        'What is the application fee for DU SOL?',
+        'The application fee is approximately ₹1,000. Check the official portal for the exact and current fee.'
+      ],
+      [
+        'Can I apply for DU SOL admission without an entrance exam?',
+        'Yes, DU SOL offers merit-based admission for most programs without an entrance exam.'
+      ]
+    ]
   },
   'dusol-exam-pattern-explained': {
     slug: 'dusol-exam-pattern-explained',
     title: 'DU SOL Exam Pattern Explained for New Students',
-    excerpt: 'A clear breakdown of the DU SOL examination pattern, marking scheme and assignment weightage.',
+    excerpt:
+      'A clear breakdown of the DU SOL examination pattern, marking scheme and assignment weightage.',
     date: 'April 15, 2026',
     category: 'Exams',
     toc: [
       ['Overview of DU SOL Exam Pattern', '#overview'],
       ['Assignment-Based Evaluation', '#assignments'],
       ['Semester End Examination', '#exams'],
-      ['How to Prepare', '#prepare'],
+      ['How to Prepare', '#prepare']
     ],
     body: `
       <h2 id="overview">Overview of DU SOL Exam Pattern</h2>
@@ -158,21 +184,28 @@ const BLOG_POSTS = {
       <p>Focus on the self-learning material (SLM) provided by DU SOL, which is the primary resource for the exam. Supplement with reference books and previous year question papers available on the portal. Attend the personal contact program (PCP) sessions if offered for your program.</p>
     `,
     faq: [
-      ['What is the exam pattern for DU SOL?', 'DU SOL has a 70:30 pattern — 70 marks for semester-end exams and 30 marks for assignments.'],
-      ['Are DU SOL exams online or offline?', 'Semester-end exams are conducted offline (pen and paper) at designated exam centres.'],
-    ],
+      [
+        'What is the exam pattern for DU SOL?',
+        'DU SOL has a 70:30 pattern — 70 marks for semester-end exams and 30 marks for assignments.'
+      ],
+      [
+        'Are DU SOL exams online or offline?',
+        'Semester-end exams are conducted offline (pen and paper) at designated exam centres.'
+      ]
+    ]
   },
   'delhi-university-online-courses-admission-2026': {
     slug: 'delhi-university-online-courses-admission-2026',
     title: 'Delhi University Online Courses Admission 2026 Guide',
-    excerpt: 'Everything you need to know about DU online course admissions for 2026.',
+    excerpt:
+      'Everything you need to know about DU online course admissions for 2026.',
     date: 'April 14, 2026',
     category: 'Admission',
     toc: [
       ['DU Online Courses Available', '#courses'],
       ['Admission Process', '#process'],
       ['Eligibility', '#eligibility'],
-      ['Fees', '#fees'],
+      ['Fees', '#fees']
     ],
     body: `
       <h2 id="courses">DU Online Courses Available</h2>
@@ -188,9 +221,15 @@ const BLOG_POSTS = {
       <p>DU SOL is known for its affordable fee structure. UG program fees range from ₹27,999 to ₹49,999 for the full program. PG fees range from ₹17,999 to ₹99,999 depending on the course. Get a free fee comparison and counselling from College Drishti.</p>
     `,
     faq: [
-      ['Which online courses does Delhi University offer?', 'DU SOL offers BA, BCom, BBA, BMS, MA, MCom, MBA, MCA, MSc, MJMC, MLIS and MTech in online/distance mode.'],
-      ['Is DU SOL the same as Delhi University?', 'DU SOL (School of Open Learning) is a constituent institution of the University of Delhi, offering distance and online education.'],
-    ],
+      [
+        'Which online courses does Delhi University offer?',
+        'DU SOL offers BA, BCom, BBA, BMS, MA, MCom, MBA, MCA, MSc, MJMC, MLIS and MTech in online/distance mode.'
+      ],
+      [
+        'Is DU SOL the same as Delhi University?',
+        'DU SOL (School of Open Learning) is a constituent institution of the University of Delhi, offering distance and online education.'
+      ]
+    ]
   },
   'dusol-online-mba-fees-guide': {
     slug: 'dusol-online-mba-fees-guide',
@@ -202,7 +241,7 @@ const BLOG_POSTS = {
       ['DU SOL Online MBA Fee Structure', '#fees'],
       ['Fee Components', '#components'],
       ['Payment Schedule', '#schedule'],
-      ['Comparison with Other Universities', '#comparison'],
+      ['Comparison with Other Universities', '#comparison']
     ],
     body: `
       <h2 id="fees">DU SOL Online MBA Fee Structure</h2>
@@ -218,9 +257,15 @@ const BLOG_POSTS = {
       <p>Compared to other online MBA programs, DU SOL offers excellent value. While private university online MBAs can cost ₹1.5–3 lakhs, the DU SOL program at under ₹90,000 provides a University of Delhi degree with UGC-DEB recognition.</p>
     `,
     faq: [
-      ['What is the total fee for DU SOL Online MBA?', 'The total fee for the DU SOL Online MBA is approximately ₹89,999 for the full 2-year program.'],
-      ['Can I pay the fee in installments?', 'Yes, the fee is payable on a per-semester basis, making it manageable for students and working professionals.'],
-    ],
+      [
+        'What is the total fee for DU SOL Online MBA?',
+        'The total fee for the DU SOL Online MBA is approximately ₹89,999 for the full 2-year program.'
+      ],
+      [
+        'Can I pay the fee in installments?',
+        'Yes, the fee is payable on a per-semester basis, making it manageable for students and working professionals.'
+      ]
+    ]
   },
   'dusol-support-grievance-guide': {
     slug: 'dusol-support-grievance-guide',
@@ -231,7 +276,7 @@ const BLOG_POSTS = {
     toc: [
       ['DU SOL Support Channels', '#channels'],
       ['How to Raise a Grievance', '#grievance'],
-      ['Common Issues and Solutions', '#issues'],
+      ['Common Issues and Solutions', '#issues']
     ],
     body: `
       <h2 id="channels">DU SOL Support Channels</h2>
@@ -244,19 +289,23 @@ const BLOG_POSTS = {
       <p>Common issues include portal login problems, fee payment errors, study material not received, admit card issues and result discrepancies. For each of these, the portal has dedicated resolution pathways. If unresolved, escalate to the University Ombudsman.</p>
     `,
     faq: [
-      ['How long does DU SOL take to resolve grievances?', 'DU SOL typically resolves grievances within 15–30 working days. Track your complaint using the ticket number provided.'],
-    ],
+      [
+        'How long does DU SOL take to resolve grievances?',
+        'DU SOL typically resolves grievances within 15–30 working days. Track your complaint using the ticket number provided.'
+      ]
+    ]
   },
   'dusol-admission-competitive-exam-aspirants': {
     slug: 'dusol-admission-competitive-exam-aspirants',
     title: 'DU SOL Admission for Competitive Exam Aspirants',
-    excerpt: 'How DU SOL programs are ideal for students preparing for UPSC, SSC, banking exams.',
+    excerpt:
+      'How DU SOL programs are ideal for students preparing for UPSC, SSC, banking exams.',
     date: 'April 2, 2026',
     category: 'Admission',
     toc: [
       ['Why DU SOL for Competitive Exam Aspirants', '#why'],
       ['Best Programs for Aspirants', '#programs'],
-      ['Balancing Study and Preparation', '#balance'],
+      ['Balancing Study and Preparation', '#balance']
     ],
     body: `
       <h2 id="why">Why DU SOL for Competitive Exam Aspirants</h2>
@@ -269,94 +318,189 @@ const BLOG_POSTS = {
       <p>DU SOL study material covers subjects that overlap significantly with competitive exam syllabi. Studying DU SOL BA subjects like Economics, Political Science and History simultaneously builds your competitive exam knowledge. Assignments can be completed during lighter preparation periods, and semester exams require only focused preparation for a few weeks.</p>
     `,
     faq: [
-      ['Can I do DU SOL while preparing for UPSC?', 'Yes, DU SOL is one of the best options for UPSC aspirants as it provides a recognized degree with maximum flexibility for self-study.'],
-      ['Is a DU SOL degree valid for government jobs?', 'Yes, DU SOL degrees are fully recognized for government job applications as they are awarded by the University of Delhi and approved by UGC-DEB.'],
-    ],
-  },
+      [
+        'Can I do DU SOL while preparing for UPSC?',
+        'Yes, DU SOL is one of the best options for UPSC aspirants as it provides a recognized degree with maximum flexibility for self-study.'
+      ],
+      [
+        'Is a DU SOL degree valid for government jobs?',
+        'Yes, DU SOL degrees are fully recognized for government job applications as they are awarded by the University of Delhi and approved by UGC-DEB.'
+      ]
+    ]
+  }
 }
 
 const TRENDING = [
-  { slug: 'online-mba-in-digital-marketing', title: 'Online MBA in Digital Marketing: Scope, Syllabus, Fees & Career Guide 2026' },
-  { slug: 'dusol-admission-2026-form-filling-guide', title: 'DU SOL Admission 2026: Step-by-Step Form Filling Guide' },
-  { slug: 'dusol-exam-pattern-explained', title: 'DU SOL Exam Pattern Explained for New Students' },
+  {
+    slug: 'online-mba-in-digital-marketing',
+    title:
+      'Online MBA in Digital Marketing: Scope, Syllabus, Fees & Career Guide 2026'
+  },
+  {
+    slug: 'dusol-admission-2026-form-filling-guide',
+    title: 'DU SOL Admission 2026: Step-by-Step Form Filling Guide'
+  },
+  {
+    slug: 'dusol-exam-pattern-explained',
+    title: 'DU SOL Exam Pattern Explained for New Students'
+  }
 ]
 
-function FaqItem({ q, a }) {
+function FaqItem ({ q, a }) {
   const [open, setOpen] = useState(false)
   return (
     <div className={`faq-item${open ? ' open' : ''}`}>
-      <div className="faq-q" onClick={() => setOpen(!open)}>
-        {q}<span className="ic">+</span>
+      <div className='faq-q' onClick={() => setOpen(!open)}>
+        {q}
+        <span className='ic'>+</span>
       </div>
-      <div className="faq-a" style={{ maxHeight: open ? '200px' : '0' }}>
+      <div className='faq-a' style={{ maxHeight: open ? '200px' : '0' }}>
         <div>{a}</div>
       </div>
     </div>
   )
 }
 
-export default function BlogPage({ params }) {
-  const post = BLOG_POSTS[params.slug] || BLOG_POSTS['online-mba-in-digital-marketing']
+export default function BlogPage () {
+  const { slug } = useParams()
 
+  const [post, setPost] = useState(null)
+  const [toc, setToc] = useState([])
+  const [faqData, setFaqData] = useState([])
+  useEffect(() => {
+    if (slug) {
+      fetchBlog()
+    }
+  }, [slug])
+
+  const fetchBlogFaqs = async blogId => {
+    try {
+      const response = await getBlogFaqsApi(blogId)
+      setFaqData(response.data.data || [])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const fetchBlog = async () => {
+    try {
+      const response = await getOneBlogDataApi(slug)
+      const blog = response.data.data?.blog
+
+      setPost(blog)
+      // Fetch FAQs
+      fetchBlogFaqs(blog.id)
+
+      // Generate TOC
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(blog.content, 'text/html')
+
+      const headings = [...doc.querySelectorAll('h2')].map((heading, index) => {
+        const id = heading.textContent
+          .toLowerCase()
+          .replace(/[^\w\s]/g, '')
+          .replace(/\s+/g, '-')
+
+        heading.id = id
+
+        return {
+          title: heading.textContent,
+          id
+        }
+      })
+
+      setToc(headings)
+
+      // Save updated HTML with ids
+      setPost({
+        ...blog,
+        content: doc.body.innerHTML
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  if (!post) {
+    return <h3 className='text-center py-5'>Loading...</h3>
+  }
   return (
     <>
-      <section className="post-section">
-        <div className="wrap">
-          <div className="post-layout">
-            <article className="post-body">
-              <div className="breadcrumb dark">
-                <Link href="/">Home</Link>
-                <span className="sep">›</span>
-                <Link href="/blogs">Blogs</Link>
-                <span className="sep">›</span>
+      <section className='post-section'>
+        <div className='wrap'>
+          <div className='post-layout'>
+            <article className='post-body'>
+              <div className='breadcrumb dark'>
+                <Link href='/'>Home</Link>
+                <span className='sep'>›</span>
+                <Link href='/blogs'>Blogs</Link>
+                <span className='sep'>›</span>
                 <span>{post.category}</span>
               </div>
-              <h1 className="post-title">{post.title}</h1>
-              <div className="post-pub">Published on {post.date} · By College Drishti Editorial Team</div>
-              <div className="post-cover">
-                <svg viewBox="0 0 160 160" fill="none">
-                  <rect x="20" y="18" width="120" height="124" rx="10" fill="rgba(255,255,255,.15)"/>
-                  <rect x="36" y="40" width="88" height="12" rx="6" fill="rgba(255,255,255,.5)"/>
-                  <rect x="36" y="60" width="88" height="8" rx="4" fill="rgba(255,255,255,.35)"/>
-                  <rect x="36" y="76" width="60" height="8" rx="4" fill="rgba(255,255,255,.25)"/>
-                  <circle cx="118" cy="118" r="24" fill="#f7c615"/>
-                  <path d="M109 118l6 6L124 112" stroke="#43205f" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                </svg>
+              <h1 className='post-title'>{post.title}</h1>
+              <div className='post-pub'>
+                Published on{' '}
+                {new Date(post.published_at).toLocaleDateString('en-IN', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric'
+                })}
+                {' · '}
+                By {post.author_name}
+                {' · '}
+                {post.views} Views
               </div>
-
-              {post.toc && post.toc.length > 0 && (
-                <div className="toc">
+              <div className='post-cover'>
+                <img
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${post.featured_image}`}
+                  alt={post.title}
+                  className='img-fluid'
+                />
+              </div>
+              {toc.length > 0 && (
+                <div className='toc'>
                   <h4>Table of Contents</h4>
+
                   <ol>
-                    {post.toc.map(([label, href], i) => (
-                      <li key={i}><a href={href}>{label}</a></li>
+                    {toc.map(item => (
+                      <li key={item.id}>
+                        <a href={`#${item.id}`}>{item.title}</a>
+                      </li>
                     ))}
                   </ol>
                 </div>
               )}
 
-              <div dangerouslySetInnerHTML={{ __html: post.body }} />
+              <p className='mb-4'>{post.short_description}</p>
+
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: post.content
+                }}
+              />
+
+              {/* <div dangerouslySetInnerHTML={{ __html: post.body }} /> */}
             </article>
 
             <aside>
-              <div className="blog-lead">
-                <div className="bl-head">
+              <div className='blog-lead'>
+                <div className='bl-head'>
                   <h3>Book 100% Free Counseling</h3>
                   <p>Get 1-to-1 expert guidance from College Drishti</p>
                 </div>
                 <form
-                  className="bl-form"
-                  onSubmit={(e) => {
+                  className='bl-form'
+                  onSubmit={e => {
                     e.preventDefault()
                     alert('Thank you! Our counsellor will contact you shortly.')
                     e.target.reset()
                   }}
                 >
-                  <input type="text" placeholder="Enter Your Name" required />
-                  <input type="email" placeholder="Enter Your Email" required />
-                  <input type="tel" placeholder="Enter Your Number" required />
+                  <input type='text' placeholder='Enter Your Name' required />
+                  <input type='email' placeholder='Enter Your Email' required />
+                  <input type='tel' placeholder='Enter Your Number' required />
                   <select required>
-                    <option value="">Select Course</option>
+                    <option value=''>Select Course</option>
                     <option>Online MBA</option>
                     <option>Online MCA</option>
                     <option>Online BBA</option>
@@ -364,23 +508,46 @@ export default function BlogPage({ params }) {
                     <option>Online BA</option>
                     <option>Other</option>
                   </select>
-                  <label className="bl-consent">
-                    <input type="checkbox" required />
-                    {' '}I agree to receive updates via email / mobile.
+                  <label className='bl-consent'>
+                    <input type='checkbox' required /> I agree to receive
+                    updates via email / mobile.
                   </label>
-                  <button type="submit" className="btn btn-purple btn-block">SUBMIT</button>
+                  <button type='submit' className='btn btn-purple btn-block'>
+                    SUBMIT
+                  </button>
                 </form>
               </div>
-              <div className="card" style={{ padding: '22px' }}>
-                <div className="side-trending">
+              <div className='card' style={{ padding: '22px' }}>
+                <div className='side-trending'>
                   <h3>Trending Post</h3>
-                  {TRENDING.map((t) => (
-                    <div key={t.slug} className="trend-item">
-                      <div className="trend-thumb">
-                        <svg viewBox="0 0 30 30" fill="none">
-                          <rect x="4" y="3" width="22" height="24" rx="3" fill="rgba(255,255,255,.2)"/>
-                          <rect x="8" y="9" width="14" height="2.5" rx="1.2" fill="rgba(255,255,255,.6)"/>
-                          <rect x="8" y="14" width="10" height="2" rx="1" fill="rgba(255,255,255,.4)"/>
+                  {TRENDING.map(t => (
+                    <div key={t.slug} className='trend-item'>
+                      <div className='trend-thumb'>
+                        <svg viewBox='0 0 30 30' fill='none'>
+                          <rect
+                            x='4'
+                            y='3'
+                            width='22'
+                            height='24'
+                            rx='3'
+                            fill='rgba(255,255,255,.2)'
+                          />
+                          <rect
+                            x='8'
+                            y='9'
+                            width='14'
+                            height='2.5'
+                            rx='1.2'
+                            fill='rgba(255,255,255,.6)'
+                          />
+                          <rect
+                            x='8'
+                            y='14'
+                            width='10'
+                            height='2'
+                            rx='1'
+                            fill='rgba(255,255,255,.4)'
+                          />
                         </svg>
                       </div>
                       <div>
@@ -396,28 +563,48 @@ export default function BlogPage({ params }) {
         </div>
       </section>
 
-      {post.faq && post.faq.length > 0 && (
-        <section className="faq">
-          <div className="wrap">
-            <div className="sec-head">
-              <h2 className="sec-title underline">FAQs</h2>
-              <p className="sec-sub">We&apos;ve addressed the key questions to help you make a confident decision.</p>
+      {faqData.length > 0 && (
+        <section className='faq'>
+          <div className='wrap'>
+            <div className='sec-head'>
+              <h2 className='sec-title underline'>FAQs</h2>
+              <p className='sec-sub'>
+                We've addressed the key questions to help you make a confident
+                decision.
+              </p>
             </div>
-            <div className="faq-grid">
-              {post.faq.map(([q, a], i) => (
-                <FaqItem key={i} q={q} a={a} />
+
+            <div className='faq-grid'>
+              {faqData.map(item => (
+                <FaqItem
+                  key={item.id}
+                  q={item.question}
+                  a={
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.answer
+                      }}
+                    />
+                  }
+                />
               ))}
             </div>
           </div>
         </section>
       )}
 
-      <section className="blog-cta">
-        <div className="wrap">
-          <div className="blog-cta-box">
+      <section className='blog-cta'>
+        <div className='wrap'>
+          <div className='blog-cta-box'>
             <h3>Ready to Take the Next Step?</h3>
-            <p>Get personalised guidance from College Drishti experts — compare programs, check eligibility and find the right university for you. 100% free.</p>
-            <Link href="/blogs" className="btn btn-purple">GET FREE COUNSELLING</Link>
+            <p>
+              Get personalised guidance from College Drishti experts — compare
+              programs, check eligibility and find the right university for you.
+              100% free.
+            </p>
+            <Link href='/blogs' className='btn btn-purple'>
+              GET FREE COUNSELLING
+            </Link>
           </div>
         </div>
       </section>
