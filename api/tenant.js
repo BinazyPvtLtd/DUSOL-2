@@ -1,6 +1,10 @@
 import axios from "axios";
-import { getBaseUrl } from "@/constant/constant";
+import { getBaseUrl, getTenantHost } from "@/constant/constant";
 
 export const getTenantAPI = () => {
-  return axios.get(`${getBaseUrl()}/home`);
+  return axios.get(`${getBaseUrl()}/home`, {
+    headers: {
+      "X-Tenant": getTenantHost(),
+    },
+  });
 };
