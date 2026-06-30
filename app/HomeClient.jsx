@@ -328,37 +328,21 @@ export default function HomeClient ({ initialData }) {
                 <span className='vc-sub'>Complete Details</span>
               </div>
 
-              <svg
-                className='vc-figure'
-                viewBox='0 0 120 150'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <ellipse
-                  cx='60'
-                  cy='145'
-                  rx='44'
-                  ry='8'
-                  fill='rgba(0,0,0,.25)'
-                />
-                <path
-                  d='M22 150 C22 110 40 96 60 96 C80 96 98 110 98 150 Z'
-                  fill='#f7c615'
-                />
-                <path d='M44 100 h32 v18 a16 16 0 01-32 0 z' fill='#f3b9a0' />
-                <circle cx='60' cy='74' r='24' fill='#f7c6a8' />
-                <path
-                  d='M36 70 c0 -22 48 -22 48 0 c4 -2 4 -16 -8 -24 c-10 -8 -26 -6 -34 4 c-8 8 -8 16 -6 20z'
-                  fill='#3a2218'
-                />
-                <circle cx='51' cy='74' r='3' fill='#3a2218' />
-                <circle cx='69' cy='74' r='3' fill='#3a2218' />
-                <path
-                  d='M53 84 q7 5 14 0'
-                  stroke='#c98b6b'
-                  strokeWidth='2'
-                  fill='none'
-                />
-              </svg>
+              {BannerData?.hero_image ? (
+                  <img
+                    className="vc-figure"
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${BannerData.hero_image}`}
+                    alt={BannerData?.title}
+                  />
+                ) : (
+                  <svg
+                    className="vc-figure"
+                    viewBox="0 0 120 150"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {/* Existing SVG */}
+                  </svg>
+                )}
 
               <a
                 className='vc-play'
