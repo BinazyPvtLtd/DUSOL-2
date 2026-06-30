@@ -1,20 +1,18 @@
 'use client'
 
 import { AddLeadAPI } from '@/api'
-import { useTenant } from '@/context/TenantContext'
 import { useEffect, useState } from 'react'
 
-export default function LeadModal ({ open, setOpen }) {
+export default function LeadModal({ open, setOpen }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    // course: '',
+    course: '',
     state: '',
     remarks: '',
     consent: false
   })
-  const { tenant } = useTenant()
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -51,53 +49,51 @@ export default function LeadModal ({ open, setOpen }) {
     }))
   }
 
-  const buildLeadPayload = values => {
-    return {
-      name: values.name,
-      email: values.email,
-      phone: values.phone,
-      state: values.state,
-      // course: values.course,
-      remarks: values.remarks,
-      source: 'Google Ads',
-      page_url: window.location.href,
-      university_id: tenant?.id
-    }
+  const buildLeadPayload = values => ({
+    name: values.name,
+    email: values.email,
+    phone: values.phone,
+    state: values.state,
+    remarks: values.remarks,
+    source: 'Google Ads',
+    page_url: window.location.href
+  })
+
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      course: '',
+      state: '',
+      remarks: '',
+      consent: false
+    })
   }
 
   const handleSubmit = async e => {
     e.preventDefault()
 
-    if (!tenant?.id) {
-      alert('University information is not available. Please try again.')
-      return
-    }
-
     try {
       const payload = buildLeadPayload(formData)
 
       const response = await AddLeadAPI(payload)
-      
-      if (response?.success) {
-        alert('Lead submitted successfully!')
 
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          // course: '',
-          state: '',
-          remarks: '',
-          consent: false
-        })
+      if (response.data.success) {
+        alert(response.data.message)
 
+        resetForm()
         setOpen(false)
       } else {
-        alert(response?.message || 'Something went wrong.')
+        alert(response.data.message || 'Something went wrong.')
       }
     } catch (error) {
       console.error('Add Lead Error:', error)
-      alert('Failed to submit lead.')
+
+      alert(
+        error.response?.data?.message ||
+          'Failed to submit lead.'
+      )
     }
   }
 
@@ -132,7 +128,7 @@ export default function LeadModal ({ open, setOpen }) {
           />
 
           <div className='lead-phone'>
-            <select>
+            <select disabled>
               <option>IN +91</option>
             </select>
 
@@ -150,7 +146,6 @@ export default function LeadModal ({ open, setOpen }) {
             name='course'
             value={formData.course}
             onChange={handleChange}
-            required
           >
             <option value=''>Select Course</option>
             <option>BA</option>
