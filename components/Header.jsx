@@ -202,7 +202,7 @@ export default function Header () {
                   height={55}
                 />
               )}
-              <span className='logo-divider'></span>
+              {/* <span className='logo-divider'></span>
               <span className='logo-text'>
                 <strong
                   style={{
@@ -216,7 +216,7 @@ export default function Header () {
                   DU SOL
                 </strong>
                 <span className='logo-sub'>Information by College Drishti</span>
-              </span>
+              </span> */}
             </Link>
             <ul className='menu'>
               {MENU.map((m, i) => (
