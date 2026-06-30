@@ -39,6 +39,7 @@ export const getCurrentSubdomain = () => {
 
   return host.split('.')[0]
 }
+
 export const getTenantHost = () => {
   if (typeof window === 'undefined') return ''
 
@@ -62,37 +63,37 @@ export const getTenantHost = () => {
 //   return `https://${host}/api/v1`
 // }
 
-
-export const getStorageBaseUrl = () => {
-  if (typeof window === 'undefined') return DEFAULT_STORAGE
-
-  const host = window.location.hostname
-
-  if (isLocalHost(host)) {
-    return DEFAULT_STORAGE
-
-  }
-
-  return `https://${host}/storage`
-}
-
+//give data base URL
+// constant.js
 
 export const getBaseUrl = () => {
-  console.log("DEFAULT_API =", DEFAULT_API);
-
-  if (typeof window === "undefined") {
-    return DEFAULT_API;
+  // Server Side
+  if (typeof window === 'undefined') {
+    return process.env.NEXT_PUBLIC_DEFAULT_API
   }
 
-  const host = window.location.hostname;
+  const hostname = window.location.hostname
 
-  if (
-    host === "localhost" ||
-    host === "127.0.0.1" ||
-    host === "0.0.0.0"
-  ) {
-    return DEFAULT_API;
+  // Local Development
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return process.env.NEXT_PUBLIC_DEFAULT_API
   }
 
-  return `https://${host}/api/v1`;
-};
+  // Live (Subdomain Based)
+  return `${window.location.protocol}//${hostname}/api/v1`
+}
+
+export const getStorageBaseUrl = () => {
+  // Server Side
+  if (typeof window === 'undefined') {
+    return process.env.NEXT_PUBLIC_IMAGE_URL
+  }
+
+  const hostname = window.location.hostname
+
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return process.env.NEXT_PUBLIC_IMAGE_URL
+  }
+
+  return `${window.location.protocol}//${hostname}/storage`
+}

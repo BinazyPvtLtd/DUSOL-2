@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 import { getTenantAPI } from '@/api/tenant'
-import { getCurrentSubdomain, getStorageBaseUrl } from '@/constant/constant'
+import { getStorageBaseUrl } from '@/constant/constant'
 
 const TenantContext = createContext(null)
 
@@ -18,19 +18,15 @@ export const TenantProvider = ({ children }) => {
     try {
       const res = await getTenantAPI()
 
-      console.log('Tenant API:', res.data)
+      const currentTenant = res.data?.data?.university
 
-      const subdomain = getCurrentSubdomain()
-
-      const currentTenant = res.data.data.find(
-        item => item.subdomain === subdomain
-      )
+      console.log('Tenant API:', currentTenant)
 
       if (currentTenant) {
         setTenant(currentTenant)
         applyTheme(currentTenant)
       } else {
-        console.warn(`No tenant found for "${subdomain}"`)
+        console.warn('No tenant data found.')
       }
     } catch (error) {
       console.error('Failed to load tenant:', error)
@@ -40,9 +36,7 @@ export const TenantProvider = ({ children }) => {
   }
 
   const applyTheme = tenant => {
-    // SSR-safety
     if (!tenant || typeof document === 'undefined') return
-
 
     const root = document.documentElement
 
@@ -62,7 +56,7 @@ export const TenantProvider = ({ children }) => {
       tenant.accent_color?.trim() || '#10B981'
     )
 
-    // Load Google Font Dynamically
+    // Font
     if (tenant.font_family) {
       const fontId = 'tenant-font'
 
@@ -92,7 +86,7 @@ export const TenantProvider = ({ children }) => {
       document.title = tenant.name
     }
 
-    // Dynamic Favicon
+    // Favicon
     if (tenant.favicon) {
       let favicon = document.querySelector("link[rel='icon']")
 

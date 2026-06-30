@@ -11,8 +11,52 @@ import PodcastUI from '../components/modal/PodcastUI'
 import { getCoursesByLevelAPI } from '@/api'
 import LeadModal from '@/components/LeadModal'
 
-const COURSES_DATA = {
+async function fetchHomeData () {
+  let baseUrl = process.env.NEXT_PUBLIC_DEFAULT_API
 
+  try {
+    // Next.js 15
+    const headerList = await headers()
+
+    const host =
+      headerList.get('x-forwarded-host') || headerList.get('host') || ''
+
+    const hostname = host.split(':')[0]
+
+    const isLocal = ['localhost', '127.0.0.1', '0.0.0.0'].includes(hostname)
+
+    if (!isLocal && hostname) {
+      baseUrl = `https://${hostname}/api/v1`
+    }
+
+    console.log('SSR Base URL:', baseUrl)
+  } catch (err) {
+    console.log('Using default API:', baseUrl)
+  }
+
+  const response = await axios.get(`${baseUrl}/home`)
+
+  return response.data
+}
+
+export async function generateMetadata() {
+  try {
+    const homeData = await fetchHomeData();
+
+    const seo =
+      homeData?.seo ||
+      homeData?.data?.seo ||
+      homeData?.data?.university?.seo ||
+      {};
+
+    return generateSEOMetadata(seo);
+  } catch (err) {
+    return generateSEOMetadata({});
+  }
+}
+
+
+const COURSES_DATA = {
   'online-ba': {
     tag: 'BA',
     title: 'Online BA (DU SOL Bachelor of Arts)',
@@ -129,13 +173,22 @@ export default function HomeClient ({ initialData }) {
   const [openItem, setOpenItem] = useState(null)
   const [leadModalOpen, setLeadModalOpen] = useState(false)
 
-  const bachelorCards = ['online-ba', 'online-bba', 'online-bcom', 'distance-bms'].map(k => COURSES_DATA[k])
-  const masterCards = ['online-ma', 'online-mba', 'online-mcom', 'online-mca'].map(k => COURSES_DATA[k])
+  const bachelorCards = [
+    'online-ba',
+    'online-bba',
+    'online-bcom',
+    'distance-bms'
+  ].map(k => COURSES_DATA[k])
+  const masterCards = [
+    'online-ma',
+    'online-mba',
+    'online-mcom',
+    'online-mca'
+  ].map(k => COURSES_DATA[k])
 
   useEffect(() => {
     fetchCourses('UG')
   }, [])
-
 
   const fetchCourses = async level => {
     try {
@@ -170,10 +223,9 @@ export default function HomeClient ({ initialData }) {
   }
 
   // SSR-safety: guard any browser-only APIs
-  const safeWindowOpen = (url) => {
+  const safeWindowOpen = url => {
     if (typeof window !== 'undefined') window.open(url, '_blank')
   }
-
 
   const closeMobile = () => {
     setMobileOpen(false)
@@ -193,7 +245,12 @@ export default function HomeClient ({ initialData }) {
 
             <div className='hero-badges'>
               <div className='acc-logo'>
-                <Image src={img1} alt='NAAC Accredited' width={60} height={60} />
+                <Image
+                  src={img1}
+                  alt='NAAC Accredited'
+                  width={60}
+                  height={60}
+                />
                 <div className='acc-text'>
                   NAAC Accredited
                   <br />
@@ -202,7 +259,12 @@ export default function HomeClient ({ initialData }) {
               </div>
 
               <div className='acc-logo'>
-                <Image src={img2} alt='UGC + DEB Approved' width={60} height={60} />
+                <Image
+                  src={img2}
+                  alt='UGC + DEB Approved'
+                  width={60}
+                  height={60}
+                />
                 <div className='acc-text'>
                   UGC + DEB
                   <br />
@@ -271,14 +333,31 @@ export default function HomeClient ({ initialData }) {
                 viewBox='0 0 120 150'
                 xmlns='http://www.w3.org/2000/svg'
               >
-                <ellipse cx='60' cy='145' rx='44' ry='8' fill='rgba(0,0,0,.25)' />
-                <path d='M22 150 C22 110 40 96 60 96 C80 96 98 110 98 150 Z' fill='#f7c615' />
+                <ellipse
+                  cx='60'
+                  cy='145'
+                  rx='44'
+                  ry='8'
+                  fill='rgba(0,0,0,.25)'
+                />
+                <path
+                  d='M22 150 C22 110 40 96 60 96 C80 96 98 110 98 150 Z'
+                  fill='#f7c615'
+                />
                 <path d='M44 100 h32 v18 a16 16 0 01-32 0 z' fill='#f3b9a0' />
                 <circle cx='60' cy='74' r='24' fill='#f7c6a8' />
-                <path d='M36 70 c0 -22 48 -22 48 0 c4 -2 4 -16 -8 -24 c-10 -8 -26 -6 -34 4 c-8 8 -8 16 -6 20z' fill='#3a2218' />
+                <path
+                  d='M36 70 c0 -22 48 -22 48 0 c4 -2 4 -16 -8 -24 c-10 -8 -26 -6 -34 4 c-8 8 -8 16 -6 20z'
+                  fill='#3a2218'
+                />
                 <circle cx='51' cy='74' r='3' fill='#3a2218' />
                 <circle cx='69' cy='74' r='3' fill='#3a2218' />
-                <path d='M53 84 q7 5 14 0' stroke='#c98b6b' strokeWidth='2' fill='none' />
+                <path
+                  d='M53 84 q7 5 14 0'
+                  stroke='#c98b6b'
+                  strokeWidth='2'
+                  fill='none'
+                />
               </svg>
 
               <a
@@ -316,8 +395,12 @@ export default function HomeClient ({ initialData }) {
                 {NewsData.map(item => {
                   const date = new Date(item.publish_date)
 
-                  const day = date.toLocaleDateString('en-IN', { day: '2-digit' })
-                  const month = date.toLocaleDateString('en-IN', { month: 'short' })
+                  const day = date.toLocaleDateString('en-IN', {
+                    day: '2-digit'
+                  })
+                  const month = date.toLocaleDateString('en-IN', {
+                    month: 'short'
+                  })
 
                   return (
                     <div className='news-item' key={item.id}>
@@ -379,10 +462,15 @@ export default function HomeClient ({ initialData }) {
 
           <div className='intro-text'>
             <p>
-              DU SOL provides a diverse selection of academic programs for students looking for flexibility in their higher education — a great option for working professionals, exam aspirants and those with personal commitments.
+              DU SOL provides a diverse selection of academic programs for
+              students looking for flexibility in their higher education — a
+              great option for working professionals, exam aspirants and those
+              with personal commitments.
             </p>
             <p>
-              The school offers undergraduate and postgraduate programs across disciplines. Popular UG programs include BA, BCom, BBA and BMS; PG options include MA, MCom, MBA and other specialized courses.
+              The school offers undergraduate and postgraduate programs across
+              disciplines. Popular UG programs include BA, BCom, BBA and BMS; PG
+              options include MA, MCom, MBA and other specialized courses.
             </p>
           </div>
 
@@ -417,7 +505,9 @@ export default function HomeClient ({ initialData }) {
               <h2>{Eligibility?.title}</h2>
               <div
                 className='eligibility-content'
-                dangerouslySetInnerHTML={{ __html: Eligibility?.description || '' }}
+                dangerouslySetInnerHTML={{
+                  __html: Eligibility?.description || ''
+                }}
               />
             </div>
 
@@ -434,7 +524,10 @@ export default function HomeClient ({ initialData }) {
                 )}
               </div>
 
-              <Link href={Eligibility?.button_url || '#'} className='btn btn-gold'>
+              <Link
+                href={Eligibility?.button_url || '#'}
+                className='btn btn-gold'
+              >
                 {Eligibility?.button_text}
               </Link>
             </div>
@@ -483,7 +576,10 @@ export default function HomeClient ({ initialData }) {
               </ul>
 
               {WhyChooseData?.button_text && (
-                <Link href={WhyChooseData.button_url || '#'} className='btn btn-purple'>
+                <Link
+                  href={WhyChooseData.button_url || '#'}
+                  className='btn btn-purple'
+                >
                   {WhyChooseData.button_text}
                 </Link>
               )}
@@ -522,4 +618,3 @@ export default function HomeClient ({ initialData }) {
     </>
   )
 }
-

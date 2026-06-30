@@ -376,26 +376,44 @@ export default function BlogPage () {
   const fetchBlogFaqs = async blogId => {
     try {
       const response = await getBlogFaqsApi(blogId)
-      setFaqData(response.data.data || [])
+      setFaqData(response?.data?.data || [])
     } catch (error) {
-      console.log(error)
+      console.error('Failed to fetch blog FAQs:', error)
+      setFaqData([])
     }
   }
 
   const fetchBlog = async () => {
+    let blog = null
+
+    // Fetch blog
     try {
       const response = await getOneBlogDataApi(slug)
-      const blog = response.data.data?.blog
+      blog = response?.data?.data?.blog
+
+      if (!blog) {
+        return
+      }
 
       setPost(blog)
-      // Fetch FAQs
-      fetchBlogFaqs(blog.id)
+    } catch (error) {
+      console.error('Failed to fetch blog:', error)
+      return
+    }
 
-      // Generate TOC
+    // Fetch FAQs
+    try {
+      await fetchBlogFaqs(blog.id)
+    } catch (error) {
+      console.error('Error while fetching FAQs:', error)
+    }
+
+    // Generate TOC
+    try {
       const parser = new DOMParser()
-      const doc = parser.parseFromString(blog.content, 'text/html')
+      const doc = parser.parseFromString(blog.content || '', 'text/html')
 
-      const headings = [...doc.querySelectorAll('h2')].map((heading, index) => {
+      const headings = [...doc.querySelectorAll('h2')].map(heading => {
         const id = heading.textContent
           .toLowerCase()
           .replace(/[^\w\s]/g, '')
@@ -411,16 +429,14 @@ export default function BlogPage () {
 
       setToc(headings)
 
-      // Save updated HTML with ids
       setPost({
         ...blog,
         content: doc.body.innerHTML
       })
     } catch (error) {
-      console.log(error)
+      console.error('Failed to generate table of contents:', error)
     }
   }
-
   if (!post) {
     return <h3 className='text-center py-5'>Loading...</h3>
   }
