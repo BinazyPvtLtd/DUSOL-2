@@ -1,9 +1,6 @@
-// src/api/tenant.js
-
 import axios from "axios";
-
-const API = process.env.NEXT_PUBLIC_DEFAULT_API;
+import { getBaseUrl } from "@/constant/constant";
 
 export const getTenantAPI = () => {
-    return axios.get(`${API}/home`);
+  return axios.get(`${getBaseUrl()}/home`);
 };
