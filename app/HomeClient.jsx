@@ -10,6 +10,7 @@ import PodcastUI from '../components/modal/PodcastUI'
 
 import { getCoursesByLevelAPI } from '@/api'
 import LeadModal from '@/components/LeadModal'
+import { getYoutubeThumbnail } from '@/helperFunction/Helper'
 
 async function fetchHomeData () {
   let baseUrl = process.env.NEXT_PUBLIC_DEFAULT_API
@@ -39,22 +40,21 @@ async function fetchHomeData () {
   return response.data
 }
 
-export async function generateMetadata() {
+export async function generateMetadata () {
   try {
-    const homeData = await fetchHomeData();
+    const homeData = await fetchHomeData()
 
     const seo =
       homeData?.seo ||
       homeData?.data?.seo ||
       homeData?.data?.university?.seo ||
-      {};
+      {}
 
-    return generateSEOMetadata(seo);
+    return generateSEOMetadata(seo)
   } catch (err) {
-    return generateSEOMetadata({});
+    return generateSEOMetadata({})
   }
 }
-
 
 const COURSES_DATA = {
   'online-ba': {
@@ -227,6 +227,8 @@ export default function HomeClient ({ initialData }) {
     if (typeof window !== 'undefined') window.open(url, '_blank')
   }
 
+  const thumbnail = getYoutubeThumbnail(BannerData?.video_url)
+
   const closeMobile = () => {
     setMobileOpen(false)
     setOpenItem(null)
@@ -297,27 +299,22 @@ export default function HomeClient ({ initialData }) {
               <button
                 type='button'
                 className='btn btn-outline-white hero-podcast'
-                onClick={() => {
-                  if (BannerData?.video_url) {
-                    window.open(BannerData.video_url, '_blank')
-                  } else {
-                    setShowModal(true)
-                  }
-                }}
+                onClick={() => setShowModal(true)}
               >
                 <span className='mic'>
                   <svg viewBox='0 0 24 24'>
                     <path d='M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-3.1A7 7 0 0019 11z' />
                   </svg>
                 </span>
-                {BannerData?.secondary_button_text || 'Explore Courses'}
+
+                {BannerData?.secondary_button_text || 'Listen Podcast'}
               </button>
             </div>
           </div>
 
           <div className='hero-visual'>
-            <div className='video-card'>
-              <span className='vc-du'>🎓 Delhi University</span>
+            {/* <div className='video-card'>
+            <span className='vc-du'>🎓 Delhi University</span>
 
               <div className='vc-left'>
                 <span className='vc-small'>All About</span>
@@ -326,9 +323,9 @@ export default function HomeClient ({ initialData }) {
                 </span>
                 <span className='vc-tag'>Online &amp; Distance Courses</span>
                 <span className='vc-sub'>Complete Details</span>
-              </div>
+              </div> 
 
-              {BannerData?.hero_image ? (
+               {BannerData?.hero_image ? (
                   <img
                     className="vc-figure"
                     src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${BannerData.hero_image}`}
@@ -341,8 +338,36 @@ export default function HomeClient ({ initialData }) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     {/* Existing SVG */}
-                  </svg>
-                )}
+            {/* </svg>
+                )} 
+
+              <a
+                className='vc-play'
+                href={BannerData?.video_url}
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label='Play Video'
+              >
+                <svg viewBox='0 0 24 24'>
+                  <path d='M8 5v14l11-7z' />
+                </svg>
+              </a>
+
+              <a
+                href={BannerData?.video_url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='vc-watch'
+              >
+                Watch On YouTube
+              </a>
+            </div> */}
+            <div className='video-card'>
+              <img
+                src={thumbnail}
+                alt='Video Thumbnail'
+                className='video-thumbnail'
+              />
 
               <a
                 className='vc-play'
@@ -419,20 +444,30 @@ export default function HomeClient ({ initialData }) {
             </div>
 
             <div className='about-block'>
-              <h2>{AboutUs?.title}</h2>
+              <h2>
+                {AboutUs?.title}-{AboutUs.subtitle}
+              </h2>
 
-              {AboutUs?.subtitle && (
-                <h6 className='about-subtitle'>{AboutUs.subtitle}</h6>
-              )}
+              {/* {AboutUs?.subtitle && (
+                <h2 className='about-subtitle'></h2>
+              )} */}
 
               <div
                 className='about-description'
                 dangerouslySetInnerHTML={{ __html: AboutUs?.description || '' }}
               />
 
-              <Link href='/apply-now' className='btn btn-gold'>
+              <button
+                type='button'
+                className='btn btn-gold'
+                onClick={() => {
+                  closeMobile()
+                  setLeadModalOpen(true)
+                }}
+              >
+                {' '}
                 FREE Guidance
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -561,7 +596,8 @@ export default function HomeClient ({ initialData }) {
 
               {WhyChooseData?.button_text && (
                 <Link
-                  href={WhyChooseData.button_url || '#'}
+                  // href={WhyChooseData.button_url || '#'}
+                  href='/course'
                   className='btn btn-purple'
                 >
                   {WhyChooseData.button_text}
