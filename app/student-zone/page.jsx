@@ -3,6 +3,7 @@
 import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { AddLeadAPI } from '@/api'
 
 const SZ = {
   'dusol-admission': {
@@ -25,7 +26,7 @@ const SZ = {
         <li>Aadhaar / ID proof</li>
         <li>Category certificate (if applicable)</li>
       </ul>
-    `,
+    `
   },
   'dusol-courses-fees': {
     title: 'DU SOL Courses & Fees 2026',
@@ -40,10 +41,10 @@ const SZ = {
         ['MA', '2 Years', '₹19,999'],
         ['MCom', '2 Years', '₹24,999'],
         ['MBA', '2 Years', '₹89,999'],
-        ['MCA', '2 Years', '₹79,999'],
-      ],
+        ['MCA', '2 Years', '₹79,999']
+      ]
     },
-    body: `<p>DU SOL is known for its affordable fee structure. Fees vary by program and are payable per year or per semester. Below is an indicative fee list — exact fees are confirmed at the time of admission.</p>`,
+    body: `<p>DU SOL is known for its affordable fee structure. Fees vary by program and are payable per year or per semester. Below is an indicative fee list — exact fees are confirmed at the time of admission.</p>`
   },
   'dusol-hall-ticket': {
     title: 'DU SOL Hall Ticket / Admit Card',
@@ -57,7 +58,7 @@ const SZ = {
         <li>Go to the "Admit Card" section.</li>
         <li>Download and print the hall ticket along with a valid photo ID.</li>
       </ul>
-    `,
+    `
   },
   'du-sol-study-material': {
     title: 'DU SOL Study Material',
@@ -71,7 +72,7 @@ const SZ = {
         <li>Download subject-wise PDFs and reference material.</li>
         <li>Printed material is dispatched to your registered address where applicable.</li>
       </ul>
-    `,
+    `
   },
   'dusol-result': {
     title: 'DU SOL Result 2026',
@@ -85,7 +86,7 @@ const SZ = {
         <li>Enter your roll number / exam roll number.</li>
         <li>View and download your result / mark sheet.</li>
       </ul>
-    `,
+    `
   },
   'du-sol-library-portal': {
     title: 'DU SOL Library Portal',
@@ -99,7 +100,7 @@ const SZ = {
         <li>Research journals and periodicals</li>
         <li>24x7 online access with student login</li>
       </ul>
-    `,
+    `
   },
   'du-sol-assignment-status': {
     title: 'DU SOL Assignment Status',
@@ -113,7 +114,7 @@ const SZ = {
         <li>View submitted, pending and evaluated assignments.</li>
         <li>Download submission receipts for your records.</li>
       </ul>
-    `,
+    `
   },
   'dusol-alternative-universities': {
     title: 'DU SOL Alternative Universities',
@@ -125,11 +126,11 @@ const SZ = {
         ['IGNOU', 'Distance / Online', 'A++'],
         ['Manipal University Online', 'Online', 'A+'],
         ['LPU Online', 'Online', 'A++'],
-        ['NMIMS Distance', 'Distance', 'A+'],
-      ],
+        ['NMIMS Distance', 'Distance', 'A+']
+      ]
     },
-    body: `<p>If you are exploring options beyond DU SOL, several UGC-DEB approved universities offer flexible online and distance programs. Compare recognition, fees and specializations before choosing. Get free guidance from College Drishti to pick the right fit.</p>`,
-  },
+    body: `<p>If you are exploring options beyond DU SOL, several UGC-DEB approved universities offer flexible online and distance programs. Compare recognition, fees and specializations before choosing. Get free guidance from College Drishti to pick the right fit.</p>`
+  }
 }
 
 const SZ_LINKS = [
@@ -140,24 +141,84 @@ const SZ_LINKS = [
   ['DUSOL Result', 'dusol-result'],
   ['DU SOL Library Portal', 'du-sol-library-portal'],
   ['DU SOL Assignment Status', 'du-sol-assignment-status'],
-  ['DUSOL Alternative Universities', 'dusol-alternative-universities'],
+  ['DUSOL Alternative Universities', 'dusol-alternative-universities']
 ]
 
-function StudentZoneContent() {
+function StudentZoneContent () {
   const searchParams = useSearchParams()
   const pageKey = searchParams.get('p') || 'dusol-admission'
   const page = SZ[pageKey] || SZ['dusol-admission']
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    state: '',
+    remarks: '',
+    consent: false
+  })
 
+  const handleChange = e => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const buildLeadPayload = values => ({
+    name: values.name,
+    email: values.email,
+    phone: values.phone,
+    state: values.state,
+    remarks: values.remarks || '',
+    source: 'Google Ads',
+    page_url: window.location.href
+  })
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    if (!formData.consent) {
+      alert('Please provide your consent.')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const payload = buildLeadPayload(formData)
+      const response = await AddLeadAPI(payload)
+
+      if (response.data.success) {
+        alert(response.data.message)
+        resetForm()
+      } else {
+        alert(response.data.message || 'Something went wrong.')
+      }
+    } catch (error) {
+      console.error('Add Lead Error:', error)
+      alert(error.response?.data?.message || 'Failed to submit lead.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      state: '',
+      remarks: '',
+      consent: false
+    })
+  }
   return (
     <>
       {/* PAGE HERO */}
-      <section className="page-hero">
-        <div className="wrap">
-          <div className="breadcrumb">
-            <Link href="/">Home</Link>
-            <span className="sep">›</span>
+      <section className='page-hero'>
+        <div className='wrap'>
+          <div className='breadcrumb'>
+            <Link href='/'>Home</Link>
+            <span className='sep'>›</span>
             <span>Student Zone</span>
-            <span className="sep">›</span>
+            <span className='sep'>›</span>
             <span>{page.title}</span>
           </div>
           <h1>{page.title}</h1>
@@ -166,12 +227,12 @@ function StudentZoneContent() {
       </section>
 
       {/* CONTENT */}
-      <section className="content-page">
-        <div className="wrap">
-          <div className="content-layout">
-            <div className="content-main">
+      <section className='content-page'>
+        <div className='wrap'>
+          <div className='content-layout'>
+            <div className='content-main'>
               {page.table && (
-                <table className="info-table">
+                <table className='info-table'>
                   <thead>
                     <tr>
                       {page.table.head.map((h, i) => (
@@ -193,49 +254,109 @@ function StudentZoneContent() {
               <div dangerouslySetInnerHTML={{ __html: page.body }} />
             </div>
             <aside>
-              <div className="counsel-card">
-                <div className="counsel-head">
+              <div className='counsel-card'>
+                <div className='counsel-head'>
                   <h3>Book 100% Free Counseling</h3>
                   <p>Get 1 to 1 Expert Guidance from DU SOL</p>
                 </div>
-                <div className="counsel-body">
-                  <input type="text" placeholder="Enter Your Name" />
-                  <input type="email" placeholder="Enter Your Email" />
-                  <input type="tel" placeholder="🇮🇳 Enter Your Number" />
-                  <select>
-                    <option>Select Course</option>
+                <form className='counsel-body' onSubmit={handleSubmit}>
+                  <input
+                    type='text'
+                    name='name'
+                    placeholder='Enter Your Name'
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+
+                  <input
+                    type='email'
+                    name='email'
+                    placeholder='Enter Your Email'
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+
+                  <input
+                    type='tel'
+                    name='phone'
+                    placeholder='🇮🇳 Enter Your Number'
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                  />
+
+                  <select
+                    name='course'
+                    value={formData.course}
+                    onChange={handleChange}
+                  >
+                    <option value=''>Select Course</option>
                     <option>BA</option>
-                    <option>BCom</option>
                     <option>BBA</option>
-                    <option>MBA</option>
+                    <option>BCom</option>
+                    <option>BMS</option>
                     <option>MA</option>
+                    <option>MBA</option>
+                    <option>MCom</option>
+                    <option>MCA</option>
+                    <option>MLIS</option>
+                    <option>MSc</option>
                   </select>
-                  <select>
-                    <option>Select State</option>
+
+                  <select
+                    name='state'
+                    value={formData.state}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value=''>Select State</option>
                     <option>Delhi</option>
                     <option>Bihar</option>
-                    <option>Haryana</option>
                     <option>Uttar Pradesh</option>
+                    <option>Haryana</option>
+                    <option>Punjab</option>
+                    <option>Rajasthan</option>
+                    <option>Madhya Pradesh</option>
+                    <option>Maharashtra</option>
+                    <option>West Bengal</option>
+                    <option>Other</option>
                   </select>
-                  <p className="consent">I authorise DU SOL to contact me with updates via SMS / Email / WhatsApp.</p>
+
+                  <label className='consent'>
+                    <input
+                      type='checkbox'
+                      name='consent'
+                      checked={formData.consent}
+                      onChange={handleChange}
+                      required
+                    />
+                    <span>
+                      I authorise DU SOL to contact me with updates via
+                      SMS/Email/WhatsApp.
+                    </span>
+                  </label>
+
                   <button
-                    className="btn btn-purple btn-block"
-                    onClick={() => alert('Thank you! Our counsellor will contact you soon.')}
+                    type='submit'
+                    className='btn btn-purple btn-block'
+                    disabled={loading}
                   >
-                    SUBMIT
+                    {loading ? 'Submitting...' : 'SUBMIT'}
                   </button>
-                </div>
+                </form>
               </div>
-              <div className="side-card" style={{ marginTop: '22px' }}>
+              <div className='side-card' style={{ marginTop: '22px' }}>
                 <h3>Student Zone Links</h3>
-                <ul className="qual-list">
+                <ul className='qual-list'>
                   {SZ_LINKS.map(([label, slug]) => (
                     <li key={slug}>
                       <Link
                         href={`/student-zone?p=${slug}`}
                         style={{
                           color: pageKey === slug ? 'var(--purple)' : 'inherit',
-                          fontWeight: pageKey === slug ? 700 : 500,
+                          fontWeight: pageKey === slug ? 700 : 500
                         }}
                       >
                         {label}
@@ -252,9 +373,13 @@ function StudentZoneContent() {
   )
 }
 
-export default function StudentZonePage() {
+export default function StudentZonePage () {
   return (
-    <Suspense fallback={<div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
+      }
+    >
       <StudentZoneContent />
     </Suspense>
   )

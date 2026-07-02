@@ -1,60 +1,17 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useEffect, useState, useRef } from 'react'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { Suspense } from 'react'
-import { useRef } from 'react'
 import img1 from '../../../public/assets/accreditationsImg/NAAC.png'
 import img2 from '../../../public/assets/accreditationsImg/UGC.png'
 import img3 from '../../../public/assets/accreditationsImg/AICTE.png'
 import img4 from '../../../public/assets/accreditationsImg/DEB.jpg'
 import img5 from '../../../public/assets/accreditationsImg/NIRF.png'
 import Image from 'next/image'
-
-import { AddLeadAPI, getCourseDataAPI, getOneCourseDataAPI } from '@/api'
-
-const DEF_SYLLABUS = [
-  {
-    sem: 'Semester 1',
-    subjects: [
-      ['Principles of the Discipline', '20 Hours'],
-      ['Foundation Course', '18 Hours'],
-      ['Communication Skills', '18 Hours']
-    ]
-  },
-  {
-    sem: 'Semester 2',
-    subjects: [
-      ['Core Subject I', '20 Hours'],
-      ['Core Subject II', '18 Hours'],
-      ['Environmental Studies', '16 Hours']
-    ]
-  },
-  {
-    sem: 'Semester 3',
-    subjects: [
-      ['Specialization Paper I', '20 Hours'],
-      ['Specialization Paper II', '18 Hours'],
-      ['Skill Enhancement', '16 Hours']
-    ]
-  }
-]
-
-const DEF_FAQ = [
-  [
-    'What is DU SOL?',
-    'DU SOL (School of Open Learning) is a distance and online education institution under the University of Delhi that offers UG and PG programs.'
-  ],
-  [
-    'What are the eligibility criteria?',
-    "Eligibility depends on the program — generally 10+2 for UG courses and a bachelor's degree for PG courses from a recognized board or university."
-  ],
-  [
-    'How can I apply for DU SOL programs?',
-    'You can apply online by filling out the application form, uploading documents and completing the admission process through the official portal, with free guidance from College Drishti.'
-  ]
-]
+import { AddLeadAPI, getOneSpecializationAPI } from '@/api'
+import { generateSEOMetadata } from '@/app/lib/seo'
 
 const COURSES = {
   'distance-ba': {
@@ -354,15 +311,48 @@ function FaqItem ({ q, a }) {
   )
 }
 
-function CoursesContent () {
+function applySeoToDocument (seo = {}) {
+  if (typeof document === 'undefined') return
+
+  const { title, description } = seo
+
+  if (title) document.title = title
+
+  if (description) {
+    const meta = document.querySelector('meta[name="description"]')
+    if (meta) meta.setAttribute('content', description)
+    else {
+      const m = document.createElement('meta')
+      m.setAttribute('name', 'description')
+      m.setAttribute('content', description)
+      document.head.appendChild(m)
+    }
+  }
+
+  // canonical
+  const canonicalUrl = seo?.alternates?.canonical
+  if (canonicalUrl) {
+    let link = document.querySelector('link[rel="canonical"]')
+    if (!link) {
+      link = document.createElement('link')
+      link.setAttribute('rel', 'canonical')
+      document.head.appendChild(link)
+    }
+    link.setAttribute('href', canonicalUrl)
+  }
+}
+
+function SpecializationContent ({ slug: slugProp }) {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(null)
   const [loading, setLoading] = useState(false)
   const [showEligibility, setShowEligibility] = useState(false)
-  // const searchParams = useSearchParams()
-  const { slug } = useParams()
-  // const slug = searchParams.get('c') || 'online-bba'
+
+  const params = useParams()
+  const slug = slugProp || params?.slug
+
   const course = COURSES[slug] || COURSES['online-bba']
+
   // refs for each panel
   const overviewRef = useRef(null)
   const curriculumRef = useRef(null)
@@ -375,20 +365,31 @@ function CoursesContent () {
   }
 
   useEffect(() => {
-    if (slug) {
-      fetchCourseData(slug)
-    }
+    if (!slug) return
+
+    ;(async () => {
+      try {
+        const response = await getOneSpecializationAPI(slug)
+        const payloadCourse = response?.data?.data?.specialization;
+
+        console.log('Specialization API Response:', response)
+        setCoursedata(payloadCourse)
+
+        // Apply SEO client-side using same helper
+        const seoSource =
+          payloadCourse?.seo ||
+          response?.data?.seo ||
+          response?.data?.data?.seo ||
+          response?.data?.data?.university?.seo ||
+          {}
+
+        const seo = generateSEOMetadata(seoSource)
+        applySeoToDocument(seo)
+      } catch (e) {
+        console.log(e)
+      }
+    })()
   }, [slug])
-
-  const fetchCourseData = async slug => {
-    try {
-      const response = await getOneCourseDataAPI(slug)
-
-      setCoursedata(response.data.data?.course)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   const [formData, setFormData] = useState({
     name: '',
@@ -429,19 +430,18 @@ function CoursesContent () {
 
       if (response.data.success) {
         alert(response.data.message)
-
         resetForm()
       } else {
         alert(response.data.message || 'Something went wrong.')
       }
     } catch (error) {
       console.error('Add Lead Error:', error)
-
       alert(error.response?.data?.message || 'Failed to submit lead.')
     } finally {
       setLoading(false)
     }
   }
+
   const resetForm = () => {
     setFormData({
       name: '',
@@ -466,24 +466,20 @@ function CoursesContent () {
   const feeItems = courseData?.fee_structures?.[0]?.items || []
 
   const applicationFee = feeItems.find(item => item.title === 'Application Fee')
-
   const courseFee = feeItems.find(item => item.title === 'Course Fee (Total)')
-
   const examinationFee = feeItems.find(
     item => item.title === 'Examination Fee (Per Year)'
   )
 
-  console.log('fee items:', feeItems)
-  console.log('applicationFee:', applicationFee)
-  console.log('courseFee:', courseFee)
-  console.log('examinationFee:', examinationFee)
+  if (!courseData) {
+    return <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
+  }
 
   return (
     <>
       {/* PAGE HERO */}
       <section className='page-hero course-hero'>
         <div className='hero-inner'>
-          {/* LEFT — Course Info */}
           <div className='wrap'>
             <div className='breadcrumb'>
               <Link href='/'>Home</Link>
@@ -499,45 +495,10 @@ function CoursesContent () {
               {courseData?.short_name && `(${courseData.short_name})`}
             </h1>
             <p className='mb-8'>{courseData?.short_description}</p>{' '}
-            <div className='meta-row'>
-              <div className='cmeta'>
-                {/* <svg viewBox='0 0 24 24'>
-                  <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm1 14.5h-2V11h2zm0-8.5h-2V6h2z' />
-                </svg> */}
-                {/* <div>
-                  <small>Duration</small>
-                  <strong>
-                    {courseData?.duration} {courseData?.duration_type}
-                  </strong>
-                </div>
-              </div>
-              <div className='cmeta'>
-                <svg viewBox='0 0 24 24'>
-                  <path d='M12 3L1 9l11 6 9-4.9V17h2V9zm0 13.2L4.5 12 12 7.8l7.5 4.2z' />
-                </svg>
-                <div>
-                  <small>Level</small>
-                  <strong>{courseData?.course_level}</strong>
-                </div>
-              </div>
-              <div className='cmeta'>
-                <svg viewBox='0 0 24 24'>
-                  <path d='M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2z' />
-                </svg>
-                <div>
-                  <small>Mode</small>
-                  <strong>{courseData?.study_mode}</strong>
-                </div> */}
-              </div>
-            </div>
+
             <div className='hero-badges mt-5'>
               <div className='acc-logo'>
-                <Image
-                  src={img1}
-                  alt='NAAC Accredited'
-                  width={60}
-                  height={60}
-                />
+                <Image src={img1} alt='NAAC Accredited' width={60} height={60} />
                 <div className='acc-text'>
                   NAAC Accredited
                   <br />
@@ -546,12 +507,7 @@ function CoursesContent () {
               </div>
 
               <div className='acc-logo'>
-                <Image
-                  src={img2}
-                  alt='UGC + DEB Approved'
-                  width={60}
-                  height={60}
-                />
+                <Image src={img2} alt='UGC + DEB Approved' width={60} height={60} />
                 <div className='acc-text'>
                   UGC + DEB
                   <br />
@@ -568,6 +524,7 @@ function CoursesContent () {
                 </div>
               </div>
             </div>
+
             <div className='hero-actions'>
               <Link href='#' className='btn btn-gold'>
                 GET FREE COUNSELLING
@@ -612,11 +569,7 @@ function CoursesContent () {
                 required
               />
 
-              <select
-                name='course'
-                value={formData.course}
-                onChange={handleChange}
-              >
+              <select name='course' value={formData.course} onChange={handleChange}>
                 <option value=''>Select Course</option>
                 <option>BA</option>
                 <option>BBA</option>
@@ -630,12 +583,7 @@ function CoursesContent () {
                 <option>MSc</option>
               </select>
 
-              <select
-                name='state'
-                value={formData.state}
-                onChange={handleChange}
-                required
-              >
+              <select name='state' value={formData.state} onChange={handleChange} required>
                 <option value=''>Select State</option>
                 <option>Delhi</option>
                 <option>Bihar</option>
@@ -658,8 +606,7 @@ function CoursesContent () {
                   required
                 />
                 <span>
-                  I authorise DU SOL to contact me with updates via
-                  SMS/Email/WhatsApp.
+                  I authorise DU SOL to contact me with updates via SMS/Email/WhatsApp.
                 </span>
               </label>
 
@@ -674,6 +621,7 @@ function CoursesContent () {
           </div>
         </div>
       </section>
+
       {/* BODY */}
       <section className='course-body'>
         <div className='wrap'>
@@ -682,9 +630,7 @@ function CoursesContent () {
               <div className='ctabs-sticky'>
                 <div className='ctabs'>
                   <button
-                    className={`ctab ${
-                      activeTab === 'overview' ? 'active' : ''
-                    }`}
+                    className={`ctab ${activeTab === 'overview' ? 'active' : ''}`}
                     onClick={() => {
                       setActiveTab('overview')
                       scrollTo(overviewRef)
@@ -694,9 +640,7 @@ function CoursesContent () {
                   </button>
 
                   <button
-                    className={`ctab ${
-                      activeTab === 'curriculum' ? 'active' : ''
-                    }`}
+                    className={`ctab ${activeTab === 'curriculum' ? 'active' : ''}`}
                     onClick={() => {
                       setActiveTab('curriculum')
                       scrollTo(curriculumRef)
@@ -706,9 +650,7 @@ function CoursesContent () {
                   </button>
 
                   <button
-                    className={`ctab ${
-                      activeTab === 'specializations' ? 'active' : ''
-                    }`}
+                    className={`ctab ${activeTab === 'specializations' ? 'active' : ''}`}
                     onClick={() => {
                       setActiveTab('specializations')
                       scrollTo(specRef)
@@ -718,9 +660,7 @@ function CoursesContent () {
                   </button>
 
                   <button
-                    className={`ctab ${
-                      activeTab === 'instructor' ? 'active' : ''
-                    }`}
+                    className={`ctab ${activeTab === 'instructor' ? 'active' : ''}`}
                     onClick={() => {
                       setActiveTab('instructor')
                       scrollTo(instructorRef)
@@ -740,6 +680,7 @@ function CoursesContent () {
                   </button>
                 </div>
               </div>
+
               <div className='cpanel' id='p-overview' ref={overviewRef}>
                 <h2>Course Overview</h2>
                 <p>
@@ -753,32 +694,28 @@ function CoursesContent () {
                   <li>
                     <svg viewBox='0 0 24 24'>
                       <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}
-                    Industry-relevant curriculum
+                    </svg>{' '}Industry-relevant curriculum
                   </li>
                   <li>
                     <svg viewBox='0 0 24 24'>
                       <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}
-                    Experienced faculty &amp; mentors
+                    </svg>{' '}Experienced faculty &amp; mentors
                   </li>
                   <li>
                     <svg viewBox='0 0 24 24'>
                       <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}
-                    Live projects &amp; case studies
+                    </svg>{' '}Live projects &amp; case studies
                   </li>
                   <li>
                     <svg viewBox='0 0 24 24'>
                       <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}
-                    Internship &amp; placement support
+                    </svg>{' '}Internship &amp; placement support
                   </li>
                 </ul>
+
                 <div className='divider'></div>
                 <div className='syllabus-head'>
                   <h2 style={{ margin: 0 }}>Curriculum / Syllabus</h2>
-
                   <span className='dur'>{syllabusData.length} Semesters</span>
                 </div>
 
@@ -786,14 +723,13 @@ function CoursesContent () {
                   <SemItem key={index} sem={sem} />
                 ))}
               </div>
+
               <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
                 <h2>Detailed Syllabus</h2>
-
                 <div className='syllabus-head'>
                   <p style={{ margin: 0, color: 'var(--muted)' }}>
                     Semester-wise breakdown of subjects and learning hours.
                   </p>
-
                   <span className='dur'>{syllabusData.length} Semesters</span>
                 </div>
 
@@ -804,25 +740,18 @@ function CoursesContent () {
 
               <div className='cpanel' id='p-spec' ref={specRef}>
                 <h2>Specializations</h2>
-                <p>
-                  Choose a specialization in your final year to build domain
-                  expertise.
-                </p>
+                <p>Choose a specialization in your final year to build domain expertise.</p>
 
                 <div className='spec-grid'>
-                  {courseData?.specializations?.map(sp => (
-                    <Link
-                      key={sp.id}
-                      href={`/specialization/${sp.slug}`}
-                      className='spec-card'
-                    >
+                  {(courseData?.specializations || []).map(sp => (
+                    <div key={sp.id} className='spec-card'>
                       <div className='sp-ico'>
                         <svg viewBox='0 0 24 24'>
-                          <path d='M12 2a10 10 0 1010 10A10 10 0012 2z' />
+                          <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2z' />
                         </svg>
                       </div>
                       <span>{sp.name}</span>
-                    </Link>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -834,33 +763,18 @@ function CoursesContent () {
                     <div className='inst-avatar'>RK</div>
                     <div>
                       <h3>Dr. Rajesh Kumar</h3>
-                      <div className='role'>
-                        Professor &amp; Head of Management Studies
-                      </div>
-                      <div className='exp'>
-                        15+ Years of Teaching Experience
-                      </div>
+                      <div className='role'>Professor &amp; Head of Management Studies</div>
+                      <div className='exp'>15+ Years of Teaching Experience</div>
                       <p>
-                        Dr. Rajesh Kumar is an expert in Business Strategy and
-                        Marketing Management. He has authored 8+ books and
-                        published numerous research papers in international
-                        journals.
+                        Dr. Rajesh Kumar is an expert in Business Strategy and Marketing Management.
+                        He has authored 8+ books and published numerous research papers in international journals.
                       </p>
-                      {/* <div className='inst-social'>
-                        <a href='#'>in</a>
-                        <a href='#'>𝕏</a>
-                        <a href='#'>@</a>
-                      </div> */}
                     </div>
                   </div>
                   <div>
-                    <h3 style={{ fontSize: '16px', marginBottom: '12px' }}>
-                      Key Qualifications
-                    </h3>
+                    <h3 style={{ fontSize: '16px', marginBottom: '12px' }}>Key Qualifications</h3>
                     <ul className='qual-list'>
-                      <li>
-                        Ph.D. in Business Administration, Delhi University
-                      </li>
+                      <li>Ph.D. in Business Administration, Delhi University</li>
                       <li>MBA, Indian Institute of Management (IIM)</li>
                       <li>Certified Management Consultant (CMC)</li>
                       <li>Researcher &amp; Published Author</li>
@@ -873,7 +787,7 @@ function CoursesContent () {
                 <h2>Frequently Asked Questions</h2>
                 <div style={{ marginTop: '14px' }}>
                   <div className='faq-list'>
-                    {courseData?.faqs?.map(faq => (
+                    {(courseData?.faqs || []).map(faq => (
                       <FaqItem key={faq.id} q={faq.question} a={faq.answer} />
                     ))}
                   </div>
@@ -922,40 +836,14 @@ function CoursesContent () {
                   </div>
                 </div>
 
-                <Link
-                  href='#'
-                  className='btn btn-gold btn-block'
-                  style={{ marginTop: '16px' }}
-                >
+                <Link href='#' className='btn btn-gold btn-block' style={{ marginTop: '16px' }}>
                   GET FREE COUNSELLING
                 </Link>
               </div>
+
               <div className='side-card'>
                 <h3>Course Details</h3>
-                {/* <div className='detail-row'>
-                  <span>Duration</span>
-                  <span>{course.dur}</span>
-                </div>
-                <div className='detail-row'>
-                  <span>Level</span>
-                  <span>{course.level}</span>
-                </div>
-                <div className='detail-row'>
-                  <span>Mode</span>
-                  <span>{course.mode}</span>
-                </div>
-                <div className='detail-row'>
-                  <span>Language</span>
-                  <span>English</span>
-                </div>
-                <div className='detail-row'>
-                  <span>Eligibility</span>
-                  <span>{course.elig}</span>
-                </div>
-                <div className='detail-row'>
-                  <span>Difficulty</span>
-                  <span>Beginner</span>
-                </div> */}
+
                 <div className='detail-row'>
                   <span>Duration</span>
                   <span>
@@ -975,15 +863,10 @@ function CoursesContent () {
 
                 <div className='detail-row'>
                   <span>Eligibility</span>
-
                   <div className='eligibility-content'>
                     <div
-                      className={`eligibility-text ${
-                        showEligibility ? '' : 'eligibility-clamp'
-                      }`}
-                      dangerouslySetInnerHTML={{
-                        __html: courseData?.eligibility || ''
-                      }}
+                      className={`eligibility-text ${showEligibility ? '' : 'eligibility-clamp'}`}
+                      dangerouslySetInnerHTML={{ __html: courseData?.eligibility || '' }}
                     />
 
                     {courseData?.eligibility && (
@@ -1015,9 +898,7 @@ function CoursesContent () {
                 </div>
                 <div>
                   <strong>UGC</strong>
-                  <small className='acc-text'>
-                    University Grants Commission
-                  </small>
+                  <small className='acc-text'>University Grants Commission</small>
                 </div>
               </div>
 
@@ -1027,9 +908,7 @@ function CoursesContent () {
                 </div>
                 <div>
                   <strong>AICTE</strong>
-                  <small className='acc-text'>
-                    All India Council for Technical Education
-                  </small>
+                  <small className='acc-text'>All India Council for Technical Education</small>
                 </div>
               </div>
 
@@ -1049,9 +928,7 @@ function CoursesContent () {
                 </div>
                 <div>
                   <strong>NAAC</strong>
-                  <small className='acc-text'>
-                    Quality Education Recognized
-                  </small>
+                  <small className='acc-text'>Quality Education Recognized</small>
                 </div>
               </div>
 
@@ -1061,9 +938,7 @@ function CoursesContent () {
                 </div>
                 <div>
                   <strong>NIRF</strong>
-                  <small className='acc-text'>
-                    National Institutional Ranking
-                  </small>
+                  <small className='acc-text'>National Institutional Ranking</small>
                 </div>
               </div>
             </div>
@@ -1081,10 +956,7 @@ function CoursesContent () {
               </svg>
               <div>
                 <h2>Ready to Start Your Journey?</h2>
-                <p>
-                  Join thousands of students who are building their future with
-                  DOSOLCOLLEGEDRISHTI.
-                </p>
+                <p>Join thousands of students who are building their future with DOSOLCOLLEGEDRISHTI.</p>
               </div>
             </div>
             <Link href='#' className='btn btn-gold'>
@@ -1097,14 +969,13 @@ function CoursesContent () {
   )
 }
 
-export default function CoursesPage () {
+export default function SpecializationClient ({ slug }) {
   return (
     <Suspense
-      fallback={
-        <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
-      }
+      fallback={<div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>}
     >
-      <CoursesContent />
+      <SpecializationContent slug={slug} />
     </Suspense>
   )
 }
+

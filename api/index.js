@@ -23,7 +23,6 @@ export const getHomePageDataAPI = async () => {
   }
 }
 
-
 export const getUniversityDataAPI = async () => {
   return await axios.get(`${getBaseUrl()}/universities/`)
 }
@@ -38,6 +37,10 @@ export const getOneCourseDataAPI = async slug => {
 
 export const getCoursesByLevelAPI = async level => {
   return await axios.get(`${getBaseUrl()}/courses?level=${level}`)
+}
+
+export const getOneSpecializationAPI = async slug => {
+  return await axios.get(`${getBaseUrl()}/specializations/${slug}`)
 }
 
 export const getBlogDataApi = async () => {
