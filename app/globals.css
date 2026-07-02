@@ -3307,6 +3307,11 @@ section {
 
 .eligibility-content {
   flex: 1;
+  color: #fff;
+}
+
+.eligibility-content h3 {
+  color: #fff;
 }
 
 .eligibility-text {
