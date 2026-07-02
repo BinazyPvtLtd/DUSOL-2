@@ -58,40 +58,29 @@ const MENU = [
       }
     ]
   },
+
   {
     label: 'MBA Specialization',
     type: 'single',
     items: [
       [
         'MBA in Information Technology',
-        '/courses?c=online-mba&s=information-technology'
+        '/specialization/information-technology'
       ],
-      [
-        'MBA in Business Analytics',
-        '/courses?c=online-mba&s=business-analytics'
-      ],
+      ['MBA in Business Analytics', '/specialization/business-analytics'],
       [
         'MBA in Hospital Administration Management',
-        '/courses?c=online-mba&s=hospital-administration-management'
+        '/specialization/hospital-administration-management'
       ],
       [
         'MBA in International Trade Management',
-        '/courses?c=online-mba&s=international-trade-management'
+        '/specialization/international-trade-management'
       ],
-      ['MBA in Rural Management', '/courses?c=online-mba&s=rural-management'],
-      ['MBA in Retail Management', '/courses?c=online-mba&s=retail-management'],
-      [
-        'MBA in Business Management',
-        '/courses?c=online-mba&s=business-management'
-      ],
-      [
-        'MBA in Project Management',
-        '/courses?c=online-mba&s=project-management'
-      ],
-      [
-        'MBA in Marketing Management',
-        '/courses?c=online-mba&s=marketing-management'
-      ]
+      ['MBA in Rural Management', '/specialization/rural-management'],
+      ['MBA in Retail Management', '/specialization/retail-management'],
+      ['MBA in Business Management', '/specialization/business-management'],
+      ['MBA in Project Management', '/specialization/project-management'],
+      ['MBA in Marketing Management', '/specialization/marketing-management']
     ]
   },
   {

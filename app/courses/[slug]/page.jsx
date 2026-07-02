@@ -11,7 +11,7 @@ import img3 from '../../../public/assets/accreditationsImg/AICTE.png'
 import img4 from '../../../public/assets/accreditationsImg/DEB.jpg'
 import img5 from '../../../public/assets/accreditationsImg/NIRF.png'
 import Image from 'next/image'
-import { getCourseDataAPI, getOneCourseDataAPI } from '@/api'
+import { AddLeadAPI, getCourseDataAPI, getOneCourseDataAPI } from '@/api'
 
 const DEF_SYLLABUS = [
   {
@@ -298,22 +298,33 @@ const MBA_SPECS = [
   { name: 'Marketing Management', ico: '📈' }
 ]
 
-function SemItem ({ sem }) {
+const SemItem = ({ sem }) => {
   const [open, setOpen] = useState(false)
 
   return (
     <div className={`sem${open ? ' open' : ''}`}>
       <div className='sem-head' onClick={() => setOpen(!open)}>
-        <span>{sem.sem}</span>
+        <span>{sem?.sem}</span>
         <span className='ar'>▾</span>
       </div>
-      <div className='sem-body' style={{ maxHeight: open ? '400px' : '0' }}>
-        {sem.subjects.map(([subj, hrs], si) => (
-          <div key={si} className='subj'>
-            <span>{subj}</span>
-            <span>{hrs}</span>
+
+      <div className='sem-body' style={{ maxHeight: open ? '500px' : '0' }}>
+        {sem.description && (
+          <p style={{ marginBottom: 12 }}>{sem.description}</p>
+        )}
+
+        {sem.subjects?.length > 0 ? (
+          sem.subjects.map((subject, index) => (
+            <div key={index} className='subj'>
+              <span>{subject[0]}</span>
+              <span>{subject[1]}</span>
+            </div>
+          ))
+        ) : (
+          <div className='subj'>
+            <span>No subjects available</span>
           </div>
-        ))}
+        )}
       </div>
     </div>
   )
@@ -321,14 +332,22 @@ function SemItem ({ sem }) {
 
 function FaqItem ({ q, a }) {
   const [open, setOpen] = useState(false)
+  const contentRef = useRef(null)
+
   return (
     <div className={`faq-item${open ? ' open' : ''}`}>
       <div className='faq-q' onClick={() => setOpen(!open)}>
         {q}
-        <span className='ic'>+</span>
+        <span className='ic'>{open ? '−' : '+'}</span>
       </div>
-      <div className='faq-a' style={{ maxHeight: open ? '200px' : '0' }}>
-        <div>{a}</div>
+
+      <div
+        className='faq-a'
+        style={{
+          maxHeight: open ? `${contentRef.current?.scrollHeight || 0}px` : '0px'
+        }}
+      >
+        <div ref={contentRef} dangerouslySetInnerHTML={{ __html: a || '' }} />
       </div>
     </div>
   )
@@ -337,6 +356,8 @@ function FaqItem ({ q, a }) {
 function CoursesContent () {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [showEligibility, setShowEligibility] = useState(false)
   // const searchParams = useSearchParams()
   const { slug } = useParams()
   // const slug = searchParams.get('c') || 'online-bba'
@@ -368,7 +389,93 @@ function CoursesContent () {
     }
   }
 
-  console.log(courseData, 'DATA OF COURSE DATA')
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    state: '',
+    remarks: '',
+    consent: false
+  })
+
+  const handleChange = e => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const buildLeadPayload = values => ({
+    name: values.name,
+    email: values.email,
+    phone: values.phone,
+    state: values.state,
+    remarks: values.remarks || '',
+    source: 'Google Ads',
+    page_url: window.location.href
+  })
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    if (!formData.consent) {
+      alert('Please provide your consent.')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const payload = buildLeadPayload(formData)
+      const response = await AddLeadAPI(payload)
+
+      if (response.data.success) {
+        alert(response.data.message)
+
+        resetForm()
+      } else {
+        alert(response.data.message || 'Something went wrong.')
+      }
+    } catch (error) {
+      console.error('Add Lead Error:', error)
+
+      alert(error.response?.data?.message || 'Failed to submit lead.')
+    } finally {
+      setLoading(false)
+    }
+  }
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      state: '',
+      remarks: '',
+      consent: false
+    })
+  }
+
+  const syllabusData =
+    courseData?.curricula?.[0]?.semesters?.map(semester => ({
+      sem: semester.title,
+      subjects:
+        semester.subjects?.map(subject => [
+          `${subject.subject_code} - ${subject.subject_name}`,
+          `${subject.credits} Credits`
+        ]) || []
+    })) || []
+
+  const feeItems = courseData?.fee_structures?.[0]?.items || []
+
+  const applicationFee = feeItems.find(item => item.title === 'Application Fee')
+
+  const courseFee = feeItems.find(item => item.title === 'Course Fee (Total)')
+
+  const examinationFee = feeItems.find(
+    item => item.title === 'Examination Fee (Per Year)'
+  )
+
+  console.log('fee items:', feeItems)
+  console.log('applicationFee:', applicationFee)
+  console.log('courseFee:', courseFee)
+  console.log('examinationFee:', examinationFee)
 
   return (
     <>
@@ -476,38 +583,93 @@ function CoursesContent () {
               <h3>Book 100% Free Counseling</h3>
               <p>Get 1 to 1 Expert Guidance from DU SOL</p>
             </div>
-            <div className='counsel-body'>
-              <input type='text' placeholder='Enter Your Name' />
-              <input type='email' placeholder='Enter Your Email' />
-              <input type='tel' placeholder='🇮🇳 Enter Your Number' />
-              <select>
-                <option>Select Course</option>
+            <form className='counsel-body' onSubmit={handleSubmit}>
+              <input
+                type='text'
+                name='name'
+                placeholder='Enter Your Name'
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+
+              <input
+                type='email'
+                name='email'
+                placeholder='Enter Your Email'
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+
+              <input
+                type='tel'
+                name='phone'
+                placeholder='🇮🇳 Enter Your Number'
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+
+              <select
+                name='course'
+                value={formData.course}
+                onChange={handleChange}
+              >
+                <option value=''>Select Course</option>
                 <option>BA</option>
-                <option>BCom</option>
                 <option>BBA</option>
-                <option>MBA</option>
+                <option>BCom</option>
+                <option>BMS</option>
                 <option>MA</option>
+                <option>MBA</option>
+                <option>MCom</option>
+                <option>MCA</option>
+                <option>MLIS</option>
+                <option>MSc</option>
               </select>
-              <select>
-                <option>Select State</option>
+
+              <select
+                name='state'
+                value={formData.state}
+                onChange={handleChange}
+                required
+              >
+                <option value=''>Select State</option>
                 <option>Delhi</option>
                 <option>Bihar</option>
-                <option>Haryana</option>
                 <option>Uttar Pradesh</option>
+                <option>Haryana</option>
+                <option>Punjab</option>
+                <option>Rajasthan</option>
+                <option>Madhya Pradesh</option>
+                <option>Maharashtra</option>
+                <option>West Bengal</option>
+                <option>Other</option>
               </select>
-              <div className='consent'>
-                I authorise DU SOL to contact me with updates via
-                SMS/Email/WhatsApp.
-              </div>
+
+              <label className='consent'>
+                <input
+                  type='checkbox'
+                  name='consent'
+                  checked={formData.consent}
+                  onChange={handleChange}
+                  required
+                />
+                <span>
+                  I authorise DU SOL to contact me with updates via
+                  SMS/Email/WhatsApp.
+                </span>
+              </label>
+
               <button
+                type='submit'
                 className='btn btn-purple btn-block'
-                onClick={() =>
-                  alert('Thank you! Our counsellor will contact you soon.')
-                }
+                disabled={loading}
               >
-                SUBMIT
+                {loading ? 'Submitting...' : 'SUBMIT'}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </section>
@@ -615,27 +777,27 @@ function CoursesContent () {
                 <div className='divider'></div>
                 <div className='syllabus-head'>
                   <h2 style={{ margin: 0 }}>Curriculum / Syllabus</h2>
-                  <span className='dur'>
-                    {courseData?.duration * 2} Semesters
-                  </span>{' '}
+
+                  <span className='dur'>{syllabusData.length} Semesters</span>
                 </div>
-                {DEF_SYLLABUS.slice(0, 3).map((sem, i) => (
-                  <SemItem key={i} sem={sem} />
+
+                {syllabusData.slice(0, 3).map((sem, index) => (
+                  <SemItem key={index} sem={sem} />
                 ))}
               </div>
-
               <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
                 <h2>Detailed Syllabus</h2>
+
                 <div className='syllabus-head'>
                   <p style={{ margin: 0, color: 'var(--muted)' }}>
                     Semester-wise breakdown of subjects and learning hours.
                   </p>
-                  <span className='dur'>
-                    {courseData?.duration * 2} Semesters
-                  </span>{' '}
+
+                  <span className='dur'>{syllabusData.length} Semesters</span>
                 </div>
-                {DEF_SYLLABUS.map((sem, i) => (
-                  <SemItem key={i} sem={sem} />
+
+                {syllabusData.map((sem, index) => (
+                  <SemItem key={index} sem={sem} />
                 ))}
               </div>
 
@@ -647,8 +809,8 @@ function CoursesContent () {
                 </p>
 
                 <div className='spec-grid'>
-                  {MBA_SPECS.map((sp, i) => (
-                    <div key={i} className='spec-card'>
+                  {courseData?.specializations?.map(sp => (
+                    <div key={sp.id} className='spec-card'>
                       <div className='sp-ico'>
                         <svg viewBox='0 0 24 24'>
                           <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2z' />
@@ -705,9 +867,11 @@ function CoursesContent () {
               <div className='cpanel' id='p-faq' ref={faqRef}>
                 <h2>Frequently Asked Questions</h2>
                 <div style={{ marginTop: '14px' }}>
-                  {DEF_FAQ.map(([q, a], i) => (
-                    <FaqItem key={i} q={q} a={a} />
-                  ))}
+                  <div className='faq-list'>
+                    {courseData?.faqs?.map(faq => (
+                      <FaqItem key={faq.id} q={faq.question} a={faq.answer} />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -716,6 +880,7 @@ function CoursesContent () {
             <aside>
               <div className='side-card'>
                 <h3>Fee Structure</h3>
+
                 <div className='fee-row'>
                   <div className='f-ico'>
                     <svg viewBox='0 0 24 24'>
@@ -724,9 +889,10 @@ function CoursesContent () {
                   </div>
                   <div>
                     <small>Application Fee</small>
-                    <b>₹{course.fees[0]}</b>
+                    <b>₹{applicationFee?.amount || '-'}</b>
                   </div>
                 </div>
+
                 <div className='fee-row'>
                   <div className='f-ico'>
                     <svg viewBox='0 0 24 24'>
@@ -735,9 +901,10 @@ function CoursesContent () {
                   </div>
                   <div>
                     <small>Course Fee (Total)</small>
-                    <b>₹{course.fees[1]}</b>
+                    <b>₹{courseFee?.amount || '-'}</b>
                   </div>
                 </div>
+
                 <div className='fee-row'>
                   <div className='f-ico'>
                     <svg viewBox='0 0 24 24'>
@@ -746,9 +913,10 @@ function CoursesContent () {
                   </div>
                   <div>
                     <small>Examination Fee (Per Year)</small>
-                    <b>₹{course.fees[2]}</b>
+                    <b>₹{examinationFee?.amount || '-'}</b>
                   </div>
                 </div>
+
                 <Link
                   href='#'
                   className='btn btn-gold btn-block'
@@ -801,17 +969,28 @@ function CoursesContent () {
                 </div>
 
                 <div className='detail-row'>
-                  <span>Language</span>
-                  <span>{courseData?.language}</span>
-                </div>
-
-                <div className='detail-row'>
                   <span>Eligibility</span>
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: courseData?.eligibility || ''
-                    }}
-                  />
+
+                  <div className='eligibility-content'>
+                    <div
+                      className={`eligibility-text ${
+                        showEligibility ? '' : 'eligibility-clamp'
+                      }`}
+                      dangerouslySetInnerHTML={{
+                        __html: courseData?.eligibility || ''
+                      }}
+                    />
+
+                    {courseData?.eligibility && (
+                      <button
+                        type='button'
+                        className='read-more-btn'
+                        onClick={() => setShowEligibility(!showEligibility)}
+                      >
+                        {showEligibility ? 'Read Less' : 'Read More'}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </aside>

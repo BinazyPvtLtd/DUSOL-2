@@ -20,8 +20,6 @@ export const TenantProvider = ({ children }) => {
 
       const currentTenant = res.data?.data?.university
 
-      console.log('Tenant API:', currentTenant)
-
       if (currentTenant) {
         setTenant(currentTenant)
         applyTheme(currentTenant)
@@ -43,17 +41,17 @@ export const TenantProvider = ({ children }) => {
     // Theme Colors
     root.style.setProperty(
       '--primary-color',
-      tenant.primary_color?.trim() || '#5b2a86'
+      tenant.primary_color?.trim()
     )
 
     root.style.setProperty(
       '--secondary-color',
-      tenant.secondary_color?.trim() || '#f7c615'
+      tenant.secondary_color?.trim()
     )
 
     root.style.setProperty(
       '--accent-color',
-      tenant.accent_color?.trim() || '#10B981'
+      tenant.accent_color?.trim()
     )
 
     // Font

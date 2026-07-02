@@ -30,7 +30,6 @@ async function fetchHomeData () {
       baseUrl = `https://${hostname}/api/v1`
     }
 
-    console.log('SSR Base URL:', baseUrl)
   } catch (err) {
     console.log('Using default API:', baseUrl)
   }
@@ -445,7 +444,7 @@ export default function HomeClient ({ initialData }) {
 
             <div className='about-block'>
               <h2>
-                {AboutUs?.title}-{AboutUs.subtitle}
+                {AboutUs?.subtitle}-{AboutUs.title}
               </h2>
 
               {/* {AboutUs?.subtitle && (
@@ -480,7 +479,7 @@ export default function HomeClient ({ initialData }) {
           </div>
 
           <div className='intro-text'>
-            <p>
+            {/* <p>
               DU SOL provides a diverse selection of academic programs for
               students looking for flexibility in their higher education — a
               great option for working professionals, exam aspirants and those
@@ -490,8 +489,13 @@ export default function HomeClient ({ initialData }) {
               The school offers undergraduate and postgraduate programs across
               disciplines. Popular UG programs include BA, BCom, BBA and BMS; PG
               options include MA, MCom, MBA and other specialized courses.
-            </p>
-          </div>
+            </p> */}
+              <div
+                className='eligibility-content'
+                dangerouslySetInnerHTML={{
+                  __html: AboutUs?.description || ''
+                }}
+              />          </div>
 
           <div className='tabs'>
             <button
