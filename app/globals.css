@@ -3307,12 +3307,12 @@ section {
 
 .eligibility-content {
   flex: 1;
-  color: #fff;
+  /* color: #fff; */
 }
-
+/* 
 .eligibility-content h3 {
   color: #fff;
-}
+} */
 
 .eligibility-text {
   font-weight: 600; /* or 700 for more boldness */
