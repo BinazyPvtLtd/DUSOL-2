@@ -631,7 +631,11 @@ export default function HomeClient ({ initialData }) {
         show={showModal}
         onClose={() => setShowModal(false)}
         title='Delhi University, School Of Open Learning'
-        audioSrc='/audio/sol-message.mp3'
+        audioSrc={
+          BannerData?.podcast_audio
+            ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${BannerData.podcast_audio}`
+            : ''
+        }
       />
 
       <LeadModal
