@@ -749,7 +749,7 @@ function CoursesContent () {
                     }}
                   />
                 </p>
-                <ul className='feature-list'>
+                {/* <ul className='feature-list'>
                   <li>
                     <svg viewBox='0 0 24 24'>
                       <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
@@ -774,7 +774,7 @@ function CoursesContent () {
                     </svg>{' '}
                     Internship &amp; placement support
                   </li>
-                </ul>
+                </ul> */}
                 <div className='divider'></div>
                 <div className='syllabus-head'>
                   <h2 style={{ margin: 0 }}>Curriculum / Syllabus</h2>

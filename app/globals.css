@@ -845,29 +845,24 @@ section {
 .degree-card {
   text-align: center;
 }
+
 .degree-frame {
-  background: #fff;
+  background: transparent; /* or remove this */
   border-radius: 12px;
-  padding: 18px;
+  overflow: hidden;
   box-shadow: var(--shadow-lg);
   position: relative;
   margin-bottom: 18px;
-}
-.degree-frame .sample-mark {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-head);
-  font-weight: 800;
-  font-size: 46px;
-  color: rgba(91, 42, 134, 0.12);
-  transform: rotate(-18deg);
-  letter-spacing: 6px;
-  pointer-events: none;
+  padding: 0; /* Remove the white space */
 }
 
+.degree-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+}
 /* --------- WHY CHOOSE --------- */
 .why {
   background: #fff;
@@ -3305,14 +3300,10 @@ section {
   font-weight: 600;
 }
 
-.eligibility-content {
-  flex: 1;
-  /* color: #fff; */
+.eligibility-content,
+.eligibility-content * {
+  color: #fff !important;
 }
-/* 
-.eligibility-content h3 {
-  color: #fff;
-} */
 
 .eligibility-text {
   font-weight: 600; /* or 700 for more boldness */

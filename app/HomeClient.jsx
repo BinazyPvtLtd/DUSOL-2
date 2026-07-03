@@ -29,7 +29,6 @@ async function fetchHomeData () {
     if (!isLocal && hostname) {
       baseUrl = `https://${hostname}/api/v1`
     }
-
   } catch (err) {
     console.log('Using default API:', baseUrl)
   }
@@ -433,13 +432,13 @@ export default function HomeClient ({ initialData }) {
                 })}
               </div>
 
-              <Link
+              {/* <Link
                 href='/news'
                 className='btn btn-purple btn-block'
                 style={{ marginTop: '16px' }}
               >
                 VIEW ALL NEWS
-              </Link>
+              </Link> */}
             </div>
 
             <div className='about-block'>
@@ -490,12 +489,13 @@ export default function HomeClient ({ initialData }) {
               disciplines. Popular UG programs include BA, BCom, BBA and BMS; PG
               options include MA, MCom, MBA and other specialized courses.
             </p> */}
-              <div
-                className='eligibility-content'
-                dangerouslySetInnerHTML={{
-                  __html: AboutUs?.description || ''
-                }}
-              />          </div>
+            <div
+              className='eligibility-content'
+              dangerouslySetInnerHTML={{
+                __html: AboutUs?.description || ''
+              }}
+            />{' '}
+          </div>
 
           <div className='tabs'>
             <button
@@ -561,7 +561,8 @@ export default function HomeClient ({ initialData }) {
       <section className='why'>
         <div className='wrap'>
           <div className='grid'>
-            <div className='why-illus'>
+            {/* <div className='why-illus'> */}
+            <div className=''>
               {WhyChooseData?.image && (
                 <img
                   src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${WhyChooseData.image}`}
