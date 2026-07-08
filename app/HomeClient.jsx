@@ -54,72 +54,7 @@ export async function generateMetadata() {
   }
 }
 
-const COURSES_DATA = {
-  'online-ba': {
-    tag: 'BA',
-    title: 'Online BA (DU SOL Bachelor of Arts)',
-    dur: '3 Years',
-    intro:
-      'The Online BA program offers flexible, accessible humanities education from the University of Delhi School of Open Learning. Study at your own pace with online study material, recorded lectures and academic support.',
-    href: '/courses?c=online-ba'
-  },
-  'online-bba': {
-    tag: 'BBA',
-    title: 'Online BBA (DU SOL Bachelor of Business Administration)',
-    dur: '3 Years',
-    intro:
-      'It is the Online BBA program offered by the University of Delhi School of Open Learning (DU SOL), specifically designed for students looking to pursue a career in management and business with a flexible learning approach.',
-    href: '/courses?c=online-bba'
-  },
-  'online-bcom': {
-    tag: 'BCom',
-    title: 'Online BCom (DU SOL Bachelor of Commerce)',
-    dur: '3 Years',
-    intro:
-      'The Online BCom program from DU SOL is perfect for online learners seeking a quality commerce education at home — covering accounting, finance, taxation and business studies.',
-    href: '/courses?c=online-bcom'
-  },
-  'distance-bms': {
-    tag: 'BMS',
-    title: 'Distance BMS (DU SOL Bachelor of Management Studies)',
-    dur: '3 Years',
-    intro:
-      'The Distance BMS program focuses on management studies, leadership and strategy — preparing students for management careers with a practical, career-oriented curriculum.',
-    href: '/courses?c=distance-bms'
-  },
-  'online-ma': {
-    tag: 'MA',
-    title: 'Online MA (DU SOL Master of Arts)',
-    dur: '2 Years',
-    intro:
-      'The Online MA program at DU SOL is offered in various disciplines through online education mode, helping graduates pursue advanced study flexibly while managing personal and professional commitments.',
-    href: '/courses?c=online-ma'
-  },
-  'online-mba': {
-    tag: 'MBA',
-    title: 'Online MBA (DU SOL Master of Business Administration)',
-    dur: '2 Years',
-    intro:
-      'The Online MBA program is designed to provide management education through online learning, with specializations and live sessions. Ideal for professionals seeking leadership roles without pausing their careers.',
-    href: '/courses?c=online-mba'
-  },
-  'online-mcom': {
-    tag: 'MCom',
-    title: 'Online MCom (DU SOL Master of Commerce)',
-    dur: '2 Years',
-    intro:
-      'The Online MCom program provides advanced commerce education through online mode, suited to commerce graduates aiming to strengthen their expertise for academic, banking and corporate careers.',
-    href: '/courses?c=online-mcom'
-  },
-  'online-mca': {
-    tag: 'MCA',
-    title: 'Online MCA (DU SOL Master of Computer Applications)',
-    dur: '2 Years',
-    intro:
-      'The Online MCA program is designed for working professionals and graduates who want to build advanced skills in computer applications, programming and software development.',
-    href: '/courses?c=online-mca'
-  }
-}
+
 
 function CourseCard({ c }) {
   const [leadModalOpen, setLeadModalOpen] = useState(false)
@@ -181,18 +116,7 @@ export default function HomeClient({ initialData }) {
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   const [videoPlaying, setVideoPlaying] = useState(false)
 
-  const bachelorCards = [
-    'online-ba',
-    'online-bba',
-    'online-bcom',
-    'distance-bms'
-  ].map(k => COURSES_DATA[k])
-  const masterCards = [
-    'online-ma',
-    'online-mba',
-    'online-mcom',
-    'online-mca'
-  ].map(k => COURSES_DATA[k])
+
 
   useEffect(() => {
     fetchCourses('UG')
@@ -219,6 +143,8 @@ export default function HomeClient({ initialData }) {
   const WhyChooseData = homeData?.data?.why_choose_us?.[0]
   const NewsData = homeData?.data?.news || []
   const FaqData = homeData?.data?.faqs || []
+  const Program = homeData?.data?.program || []
+
 
   const handleTabChange = tab => {
     setActiveTab(tab)
@@ -498,16 +424,17 @@ export default function HomeClient({ initialData }) {
       <section className='courses-sec'>
         <div className='wrap'>
           <div className='sec-head'>
-            <h2 className='sec-title underline'>Our Programs</h2>
+            <h2 className='sec-title underline'>{Program?.heading || 'Our Programs'}</h2>
+
           </div>
 
           <div className='intro-text'>
             <div
               className='eligibility-content'
               dangerouslySetInnerHTML={{
-                __html: AboutUs?.description || ''
+                __html: Program?.description || ''
               }}
-            />{' '}
+            />
           </div>
 
           <div className='tabs'>
