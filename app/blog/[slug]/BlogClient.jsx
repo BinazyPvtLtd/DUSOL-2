@@ -140,7 +140,7 @@ export default function BlogClient ({ slug: slugProp }) {
     phone: values.phone,
     state: values.state,
     remarks: values.remarks || '',
-    source: 'Google Ads',
+    source: 'Blog Page',
     page_url: window.location.href
   })
 

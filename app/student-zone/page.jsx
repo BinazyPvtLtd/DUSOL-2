@@ -1,9 +1,10 @@
 'use client'
 
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { AddLeadAPI } from '@/api'
+import PhoneInputField from '@/components/PhoneInputField'
 
 const SZ = {
   'dusol-admission': {
@@ -168,7 +169,7 @@ function StudentZoneContent () {
     phone: values.phone,
     state: values.state,
     remarks: values.remarks || '',
-    source: 'Google Ads',
+    source: 'Student Zone',
     page_url: window.location.href
   })
 
@@ -278,13 +279,9 @@ function StudentZoneContent () {
                     required
                   />
 
-                  <input
-                    type='tel'
-                    name='phone'
-                    placeholder='🇮🇳 Enter Your Number'
+                  <PhoneInputField
                     value={formData.phone}
-                    onChange={handleChange}
-                    required
+                    onChange={phone => setFormData(prev => ({ ...prev, phone }))}
                   />
 
                   <select

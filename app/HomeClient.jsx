@@ -11,6 +11,7 @@ import PodcastUI from '../components/modal/PodcastUI'
 import { getCoursesByLevelAPI } from '@/api'
 import LeadModal from '@/components/LeadModal'
 import { getYoutubeThumbnail } from '@/helperFunction/Helper'
+import HowToApply from '@/components/HowToApply'
 
 async function fetchHomeData() {
   let baseUrl = process.env.NEXT_PUBLIC_DEFAULT_API
@@ -53,8 +54,6 @@ export async function generateMetadata() {
     return generateSEOMetadata({})
   }
 }
-
-
 
 function CourseCard({ c }) {
   const [leadModalOpen, setLeadModalOpen] = useState(false)
@@ -103,6 +102,9 @@ function getYoutubeEmbedId(url) {
   const match = url.match(regExp)
   return match ? match[1] : null
 }
+
+
+
 
 export default function HomeClient({ initialData }) {
   const [activeTab, setActiveTab] = useState('bachelor')
@@ -552,6 +554,8 @@ export default function HomeClient({ initialData }) {
           </div>
         </div>
       </section>
+
+
 
       <section className='faq'>
         <div className='wrap'>

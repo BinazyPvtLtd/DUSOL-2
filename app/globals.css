@@ -3722,7 +3722,7 @@ section {
 
 .eligibility h3 {
   color: #fff;
-  margin-bottom: 15px;
+  margin-block: 15px;
 }
 
 .eligibility-text {
@@ -3848,4 +3848,5 @@ section {
 .lead-phone-container .country-list .country.highlight {
   background: color-mix(in srgb, var(--primary-color) 10%, white) !important;
 }
+
 /* ----------------------------------------------- */

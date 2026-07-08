@@ -13,6 +13,7 @@ import img5 from '../../../public/assets/accreditationsImg/NIRF.png'
 import Image from 'next/image'
 
 import { AddLeadAPI, getCourseDataAPI, getOneCourseDataAPI } from '@/api'
+import PhoneInputField from '@/components/PhoneInputField'
 
 const DEF_SYLLABUS = [
   {
@@ -331,7 +332,7 @@ const SemItem = ({ sem }) => {
   )
 }
 
-function FaqItem ({ q, a }) {
+function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false)
   const contentRef = useRef(null)
 
@@ -354,7 +355,7 @@ function FaqItem ({ q, a }) {
   )
 }
 
-function CoursesContent () {
+function CoursesContent() {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -410,7 +411,7 @@ function CoursesContent () {
     phone: values.phone,
     state: values.state,
     remarks: values.remarks || '',
-    source: 'Google Ads',
+    source: 'Course Page',
     page_url: window.location.href
   })
 
@@ -463,20 +464,13 @@ function CoursesContent () {
         ]) || []
     })) || []
 
+
+
   const feeItems = courseData?.fee_structures?.[0]?.items || []
 
-  const applicationFee = feeItems.find(item => item.title === 'Application Fee')
-
-  const courseFee = feeItems.find(item => item.title === 'Course Fee (Total)')
-
-  const examinationFee = feeItems.find(
-    item => item.title === 'Examination Fee (Per Year)'
-  )
-
-  console.log('fee items:', feeItems)
-  console.log('applicationFee:', applicationFee)
-  console.log('courseFee:', courseFee)
-  console.log('examinationFee:', examinationFee)
+  const applicationFee = feeItems[0]?.amount
+  const courseFee = feeItems[1]?.amount
+  const examinationFee = feeItems[2]?.amount
 
   return (
     <>
@@ -496,7 +490,6 @@ function CoursesContent () {
             <h1>
               {' '}
               {courseData?.name}{' '}
-              {courseData?.short_name && `(${courseData.short_name})`}
             </h1>
             <p className='mb-8'>{courseData?.short_description}</p>{' '}
             <div className='meta-row'>
@@ -603,13 +596,9 @@ function CoursesContent () {
                 required
               />
 
-              <input
-                type='tel'
-                name='phone'
-                placeholder='🇮🇳 Enter Your Number'
+              <PhoneInputField
                 value={formData.phone}
-                onChange={handleChange}
-                required
+                onChange={phone => setFormData(prev => ({ ...prev, phone }))}
               />
 
               <select
@@ -682,9 +671,8 @@ function CoursesContent () {
               <div className='ctabs-sticky'>
                 <div className='ctabs'>
                   <button
-                    className={`ctab ${
-                      activeTab === 'overview' ? 'active' : ''
-                    }`}
+                    className={`ctab ${activeTab === 'overview' ? 'active' : ''
+                      }`}
                     onClick={() => {
                       setActiveTab('overview')
                       scrollTo(overviewRef)
@@ -694,9 +682,8 @@ function CoursesContent () {
                   </button>
 
                   <button
-                    className={`ctab ${
-                      activeTab === 'curriculum' ? 'active' : ''
-                    }`}
+                    className={`ctab ${activeTab === 'curriculum' ? 'active' : ''
+                      }`}
                     onClick={() => {
                       setActiveTab('curriculum')
                       scrollTo(curriculumRef)
@@ -706,9 +693,8 @@ function CoursesContent () {
                   </button>
 
                   <button
-                    className={`ctab ${
-                      activeTab === 'specializations' ? 'active' : ''
-                    }`}
+                    className={`ctab ${activeTab === 'specializations' ? 'active' : ''
+                      }`}
                     onClick={() => {
                       setActiveTab('specializations')
                       scrollTo(specRef)
@@ -718,9 +704,8 @@ function CoursesContent () {
                   </button>
 
                   <button
-                    className={`ctab ${
-                      activeTab === 'instructor' ? 'active' : ''
-                    }`}
+                    className={`ctab ${activeTab === 'instructor' ? 'active' : ''
+                      }`}
                     onClick={() => {
                       setActiveTab('instructor')
                       scrollTo(instructorRef)
@@ -894,7 +879,7 @@ function CoursesContent () {
                   </div>
                   <div>
                     <small>Application Fee</small>
-                    <b>₹{applicationFee?.amount || '-'}</b>
+                    <b>₹{applicationFee || '-'}</b>
                   </div>
                 </div>
 
@@ -906,7 +891,7 @@ function CoursesContent () {
                   </div>
                   <div>
                     <small>Course Fee (Total)</small>
-                    <b>₹{courseFee?.amount || '-'}</b>
+                    <b>₹{courseFee || '-'}</b>
                   </div>
                 </div>
 
@@ -918,7 +903,7 @@ function CoursesContent () {
                   </div>
                   <div>
                     <small>Examination Fee (Per Year)</small>
-                    <b>₹{examinationFee?.amount || '-'}</b>
+                    <b>₹{examinationFee || '-'}</b>
                   </div>
                 </div>
 
@@ -978,9 +963,8 @@ function CoursesContent () {
 
                   <div className='eligibility-content'>
                     <div
-                      className={`eligibility-text ${
-                        showEligibility ? '' : 'eligibility-clamp'
-                      }`}
+                      className={`eligibility-text ${showEligibility ? '' : 'eligibility-clamp'
+                        }`}
                       dangerouslySetInnerHTML={{
                         __html: courseData?.eligibility || ''
                       }}
@@ -1097,7 +1081,7 @@ function CoursesContent () {
   )
 }
 
-export default function CoursesPage () {
+export default function CoursesPage() {
   return (
     <Suspense
       fallback={

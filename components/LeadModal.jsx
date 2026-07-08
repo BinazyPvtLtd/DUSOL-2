@@ -56,7 +56,7 @@ export default function LeadModal({ open, setOpen }) {
     phone: values.phone,
     state: values.state,
     remarks: values.remarks,
-    source: 'Google Ads',
+    source: 'Homepage',
     page_url: window.location.href
   })
 

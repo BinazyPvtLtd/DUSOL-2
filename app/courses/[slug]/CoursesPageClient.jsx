@@ -15,6 +15,7 @@ import { useTenant } from '@/context/TenantContext'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import PhoneInputField from '@/components/PhoneInputField'
 
+
 // NOTE: this file is intentionally minimal. It preserves the existing client UI by importing the original implementation.
 // If you want full integration, you can move the current CoursesContent implementation here.
 
@@ -75,7 +76,7 @@ export default function CoursesPageClient ({ slug }) {
     phone: values.phone,
     state: values.state,
     remarks: values.remarks || '',
-    source: 'Google Ads',
+    source: 'Course Page',
     page_url: window.location.href
   })
 

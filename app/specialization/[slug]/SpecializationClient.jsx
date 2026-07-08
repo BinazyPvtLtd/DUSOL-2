@@ -14,236 +14,7 @@ import { AddLeadAPI, getOneSpecializationAPI } from '@/api'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import PhoneInputField from '@/components/PhoneInputField'
 
-const COURSES = {
-  'distance-ba': {
-    tag: 'BA',
-    title: 'Distance BA (DU SOL Bachelor of Arts)',
-    mode: 'Distance',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '27,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Distance BA program from DU SOL is designed for students who want a flexible humanities degree from the University of Delhi. The course covers subjects across literature, political science, history and economics, and is ideal for working professionals and students who cannot attend regular classes. Recognized and valid for higher education and government jobs as per UGC-DEB norms.'
-  },
-  'distance-bba': {
-    tag: 'BBA',
-    title: 'Distance BBA (DU SOL Bachelor of Business Administration)',
-    mode: 'Distance',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '49,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Distance BBA program builds a strong foundation in business, management and leadership. Perfect for aspiring managers and entrepreneurs who need a flexible study mode while gaining industry-relevant skills in marketing, HR, finance and operations.'
-  },
-  'distance-bms': {
-    tag: 'BMS',
-    title: 'Distance BMS (DU SOL Bachelor of Management Studies)',
-    mode: 'Distance',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '44,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Distance BMS program focuses on management studies, leadership and strategy — preparing students for management careers with a practical, career-oriented curriculum delivered through flexible distance learning.'
-  },
-  'distance-bcom': {
-    tag: 'BCom',
-    title: 'Distance BCom (DU SOL Bachelor of Commerce)',
-    mode: 'Distance',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '29,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Distance BCom program provides comprehensive knowledge in commerce, finance, accounting and business operations. A recognized commerce degree from the University of Delhi suited to students balancing study with work.'
-  },
-  'distance-ma': {
-    tag: 'MA',
-    title: 'Distance MA (DU SOL Master of Arts)',
-    mode: 'Distance',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '19,999', '2,000'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Distance MA program offers postgraduate study across humanities disciplines through DU SOL, enabling graduates to deepen their subject expertise with a flexible learning schedule.'
-  },
-  'distance-mba': {
-    tag: 'MBA',
-    title: 'Distance MBA (DU SOL Master of Business Administration)',
-    mode: 'Distance',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,500', '89,999', '2,500'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Distance MBA program delivers management education through distance learning, covering core management areas and electives. Designed for working professionals seeking career growth and leadership roles.'
-  },
-  'distance-mcom': {
-    tag: 'MCom',
-    title: 'Distance MCom (DU SOL Master of Commerce)',
-    mode: 'Distance',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '24,999', '2,000'],
-    elig: 'B.Com',
-    intro:
-      'The Distance MCom program provides advanced education in commerce and related fields through flexible distance learning — ideal for commerce graduates aiming for academic or professional advancement.'
-  },
-  'distance-mlis': {
-    tag: 'MLIS',
-    title: 'Distance MLIS (DU SOL Master of Library & Information Science)',
-    mode: 'Distance',
-    level: 'Postgraduate',
-    dur: '1 Year',
-    sems: 2,
-    fees: ['1,000', '17,999', '2,000'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Distance MLIS program covers library and information science, preparing students for careers in modern libraries, information centres and digital archives through distance mode.'
-  },
-  'online-ba': {
-    tag: 'BA',
-    title: 'Online BA (DU SOL Bachelor of Arts)',
-    mode: 'Online / Offline',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '27,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Online BA program offers flexible, accessible humanities education from the University of Delhi School of Open Learning. Study at your own pace with online study material, recorded lectures and academic support. Recognized and valid for higher education and employment as per UGC-DEB norms.'
-  },
-  'online-bba': {
-    tag: 'BBA',
-    title: 'Online BBA (DU SOL Bachelor of Business Administration)',
-    mode: 'Online / Offline',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '49,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'It is the Online BBA program offered by the University of Delhi School of Open Learning (DU SOL), specifically designed for students looking to pursue a career in the field of management and business with a flexible learning approach. This is an excellent choice for professionals working as well as competitive exam candidates and students unable to take regular classes on campus. The curriculum is focused on important management and business topics such as Marketing, Finance, Accounting, Human Resource Management, and Business Communication.'
-  },
-  'online-bcom': {
-    tag: 'BCom',
-    title: 'Online BCom (DU SOL Bachelor of Commerce)',
-    mode: 'Online / Offline',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '29,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Online BCom program from DU SOL is perfect for online learners seeking a quality commerce education at home — covering accounting, finance, taxation and business studies with full online learning support.'
-  },
-  'online-ma': {
-    tag: 'MA',
-    title: 'Online MA (DU SOL Master of Arts)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '19,999', '2,000'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Online MA program at DU SOL is offered in various disciplines through online education mode, helping graduates pursue advanced study flexibly while managing personal and professional commitments.'
-  },
-  'online-mba': {
-    tag: 'MBA',
-    title: 'Online MBA (DU SOL Master of Business Administration)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,500', '89,999', '2,500'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Online MBA program is designed to provide management education through online learning, with specializations and live sessions. Ideal for professionals seeking leadership roles without pausing their careers. DU SOL degrees are UGC-DEB recognized.'
-  },
-  'online-mca': {
-    tag: 'MCA',
-    title: 'Online MCA (DU SOL Master of Computer Applications)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,500', '79,999', '2,500'],
-    elig: 'BCA/BSc (CS)',
-    intro:
-      'The Online MCA program is designed for working professionals and graduates who want to build advanced skills in computer applications, programming and software development through flexible online learning.'
-  },
-  'online-mcom': {
-    tag: 'MCom',
-    title: 'Online MCom (DU SOL Master of Commerce)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '24,999', '2,000'],
-    elig: 'B.Com',
-    intro:
-      'The Online MCom program provides advanced commerce education through online mode, suited to commerce graduates aiming to strengthen their expertise for academic, banking and corporate careers.'
-  },
-  'online-msc': {
-    tag: 'MSc',
-    title: 'Online MSC (DU SOL Master of Science)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '34,999', '2,000'],
-    elig: 'BSc',
-    intro:
-      'The Online MSc program at DU SOL offers affordable postgraduate science education in distance/online mode across multiple specializations, with practical and theory-based learning.'
-  },
-  'online-mjmc': {
-    tag: 'MJMC',
-    title: 'Online MJMC (Master of Journalism & Mass Communication)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '39,999', '2,000'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Online MJMC program covers journalism, mass communication and media studies, preparing students for careers in print, broadcast and digital media through flexible online learning.'
-  },
-  'online-mlis': {
-    tag: 'MLIS',
-    title: 'Online MLIS (Master of Library & Information Science)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '1 Year',
-    sems: 2,
-    fees: ['1,000', '17,999', '2,000'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Online MLIS program includes subjects related to library and information science, digital libraries and information management, delivered fully online for working professionals.'
-  },
-  'online-mtech': {
-    tag: 'MTech',
-    title: 'Online MTech (DU SOL Master of Technology)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['2,000', '99,999', '3,000'],
-    elig: 'B.Tech/BE',
-    intro:
-      'The Online MTech program offers affordable advanced technology education in online mode for engineering graduates seeking specialization and career progression.'
-  }
-}
+
 
 const MBA_SPECS = [
   { name: 'Information Technology', ico: '💻' },
@@ -289,7 +60,7 @@ const SemItem = ({ sem }) => {
   )
 }
 
-function FaqItem ({ q, a }) {
+function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false)
   const contentRef = useRef(null)
 
@@ -312,7 +83,7 @@ function FaqItem ({ q, a }) {
   )
 }
 
-function applySeoToDocument (seo = {}) {
+function applySeoToDocument(seo = {}) {
   if (typeof document === 'undefined') return
 
   const { title, description } = seo
@@ -343,7 +114,7 @@ function applySeoToDocument (seo = {}) {
   }
 }
 
-function SpecializationContent ({ slug: slugProp }) {
+function SpecializationContent({ slug: slugProp }) {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -351,8 +122,6 @@ function SpecializationContent ({ slug: slugProp }) {
 
   const params = useParams()
   const slug = slugProp || params?.slug
-
-  const course = COURSES[slug] || COURSES['online-bba']
 
   // refs for each panel
   const overviewRef = useRef(null)
@@ -368,28 +137,28 @@ function SpecializationContent ({ slug: slugProp }) {
   useEffect(() => {
     if (!slug) return
 
-    ;(async () => {
-      try {
-        const response = await getOneSpecializationAPI(slug)
-        const payloadCourse = response?.data?.data?.specialization;
+      ; (async () => {
+        try {
+          const response = await getOneSpecializationAPI(slug)
+          const payloadCourse = response?.data?.data?.specialization;
 
-        console.log('Specialization API Response:', response)
-        setCoursedata(payloadCourse)
+          console.log('Specialization API Response:', response)
+          setCoursedata(payloadCourse)
 
-        // Apply SEO client-side using same helper
-        const seoSource =
-          payloadCourse?.seo ||
-          response?.data?.seo ||
-          response?.data?.data?.seo ||
-          response?.data?.data?.university?.seo ||
-          {}
+          // Apply SEO client-side using same helper
+          const seoSource =
+            payloadCourse?.seo ||
+            response?.data?.seo ||
+            response?.data?.data?.seo ||
+            response?.data?.data?.university?.seo ||
+            {}
 
-        const seo = generateSEOMetadata(seoSource)
-        applySeoToDocument(seo)
-      } catch (e) {
-        console.log(e)
-      }
-    })()
+          const seo = generateSEOMetadata(seoSource)
+          applySeoToDocument(seo)
+        } catch (e) {
+          console.log(e)
+        }
+      })()
   }, [slug])
 
   const [formData, setFormData] = useState({
@@ -412,7 +181,7 @@ function SpecializationContent ({ slug: slugProp }) {
     phone: values.phone,
     state: values.state,
     remarks: values.remarks || '',
-    source: 'Google Ads',
+    source: 'Specialization Page',
     page_url: window.location.href
   })
 
@@ -464,13 +233,11 @@ function SpecializationContent ({ slug: slugProp }) {
         ]) || []
     })) || []
 
-  const feeItems = courseData?.fee_structures?.[0]?.items || []
 
-  const applicationFee = feeItems.find(item => item.title === 'Application Fee')
-  const courseFee = feeItems.find(item => item.title === 'Course Fee (Total)')
-  const examinationFee = feeItems.find(
-    item => item.title === 'Examination Fee (Per Year)'
-  )
+  const feeItems = courseData?.fee_structures?.[0]?.items || []
+  const applicationFee = feeItems[0]?.amount
+  const courseFee = feeItems[1]?.amount
+  const examinationFee = feeItems[2]?.amount
 
   if (!courseData) {
     return <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
@@ -687,28 +454,7 @@ function SpecializationContent ({ slug: slugProp }) {
                     }}
                   />
                 </div>
-                <ul className='feature-list'>
-                  <li>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}Industry-relevant curriculum
-                  </li>
-                  <li>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}Experienced faculty &amp; mentors
-                  </li>
-                  <li>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}Live projects &amp; case studies
-                  </li>
-                  <li>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}Internship &amp; placement support
-                  </li>
-                </ul>
+
 
                 <div className='divider'></div>
                 <div className='syllabus-head'>
@@ -805,7 +551,7 @@ function SpecializationContent ({ slug: slugProp }) {
                   </div>
                   <div>
                     <small>Application Fee</small>
-                    <b>₹{applicationFee?.amount || '-'}</b>
+                    <b>₹{applicationFee || '-'}</b>
                   </div>
                 </div>
 
@@ -817,7 +563,7 @@ function SpecializationContent ({ slug: slugProp }) {
                   </div>
                   <div>
                     <small>Course Fee (Total)</small>
-                    <b>₹{courseFee?.amount || '-'}</b>
+                    <b>₹{courseFee || '-'}</b>
                   </div>
                 </div>
 
@@ -829,7 +575,7 @@ function SpecializationContent ({ slug: slugProp }) {
                   </div>
                   <div>
                     <small>Examination Fee (Per Year)</small>
-                    <b>₹{examinationFee?.amount || '-'}</b>
+                    <b>₹{examinationFee || '-'}</b>
                   </div>
                 </div>
 
@@ -966,7 +712,7 @@ function SpecializationContent ({ slug: slugProp }) {
   )
 }
 
-export default function SpecializationClient ({ slug }) {
+export default function SpecializationClient({ slug }) {
   return (
     <Suspense
       fallback={<div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>}
