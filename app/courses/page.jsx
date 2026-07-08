@@ -12,6 +12,7 @@ import img4 from '../../public/assets/accreditationsImg/DEB.jpg'
 import img5 from '../../public/assets/accreditationsImg/NIRF.png'
 import Image from 'next/image'
 import { getCourseDataAPI } from '@/api'
+import PhoneInputField from '@/components/PhoneInputField'
 
 const DEF_SYLLABUS = [
   {
@@ -298,6 +299,7 @@ const MBA_SPECS = [
   { name: 'Marketing Management', ico: '📈' }
 ]
 
+
 function SemItem ({ sem }) {
   const [open, setOpen] = useState(false)
 
@@ -337,6 +339,7 @@ function FaqItem ({ q, a }) {
 function CoursesContent () {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(null)
+  const [counselPhone, setCounselPhone] = useState('')
   // const searchParams = useSearchParams()
   const { slug } = useParams()
   // const slug = searchParams.get('c') || 'online-bba'
@@ -389,35 +392,6 @@ function CoursesContent () {
               {courseData?.short_name && `(${courseData.short_name})`}
             </h1>
             <p className='mb-8'>{courseData?.short_description}</p>{' '}
-            {/* <div className='meta-row'>
-              <div className='cmeta'>
-                <svg viewBox='0 0 24 24'>
-                  <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm1 14.5h-2V11h2zm0-8.5h-2V6h2z' />
-                </svg>
-                <div>
-                  <small>Duration</small>
-                  <strong>{course.dur}</strong>
-                </div>
-              </div>
-              <div className='cmeta'>
-                <svg viewBox='0 0 24 24'>
-                  <path d='M12 3L1 9l11 6 9-4.9V17h2V9zm0 13.2L4.5 12 12 7.8l7.5 4.2z' />
-                </svg>
-                <div>
-                  <small>Level</small>
-                  <strong>{course.level}</strong>
-                </div>
-              </div>
-              <div className='cmeta'>
-                <svg viewBox='0 0 24 24'>
-                  <path d='M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2z' />
-                </svg>
-                <div>
-                  <small>Mode</small>
-                  <strong>{course.mode}</strong>
-                </div>
-              </div>
-            </div> */}
             <div className='hero-badges mt-5'>
               <div className='acc-logo'>
                 <Image
@@ -475,7 +449,10 @@ function CoursesContent () {
             <div className='counsel-body'>
               <input type='text' placeholder='Enter Your Name' />
               <input type='email' placeholder='Enter Your Email' />
-              <input type='tel' placeholder='🇮🇳 Enter Your Number' />
+              <PhoneInputField
+                value={counselPhone}
+                onChange={phone => setCounselPhone(phone)}
+              />
               <select>
                 <option>Select Course</option>
                 <option>BA</option>

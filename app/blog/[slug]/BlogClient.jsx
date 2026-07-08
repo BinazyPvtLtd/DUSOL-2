@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { AddLeadAPI, getBlogFaqsApi, getOneBlogDataApi } from '@/api'
 import { useParams } from 'next/navigation'
+import PhoneInputField from '@/components/PhoneInputField'
 
 const TRENDING = [
   {
@@ -263,13 +264,9 @@ export default function BlogClient ({ slug: slugProp }) {
                     required
                   />
 
-                  <input
-                    type='tel'
-                    name='phone'
-                    placeholder='🇮🇳 Enter Your Number'
+                  <PhoneInputField
                     value={formData.phone}
-                    onChange={handleChange}
-                    required
+                    onChange={phone => setFormData(prev => ({ ...prev, phone }))}
                   />
 
                   <select

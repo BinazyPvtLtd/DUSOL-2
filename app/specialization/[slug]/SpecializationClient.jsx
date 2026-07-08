@@ -12,6 +12,7 @@ import img5 from '../../../public/assets/accreditationsImg/NIRF.png'
 import Image from 'next/image'
 import { AddLeadAPI, getOneSpecializationAPI } from '@/api'
 import { generateSEOMetadata } from '@/app/lib/seo'
+import PhoneInputField from '@/components/PhoneInputField'
 
 const COURSES = {
   'distance-ba': {
@@ -560,13 +561,9 @@ function SpecializationContent ({ slug: slugProp }) {
                 required
               />
 
-              <input
-                type='tel'
-                name='phone'
-                placeholder='🇮🇳 Enter Your Number'
+              <PhoneInputField
                 value={formData.phone}
-                onChange={handleChange}
-                required
+                onChange={phone => setFormData(prev => ({ ...prev, phone }))}
               />
 
               <select name='course' value={formData.course} onChange={handleChange}>
@@ -683,13 +680,13 @@ function SpecializationContent ({ slug: slugProp }) {
 
               <div className='cpanel' id='p-overview' ref={overviewRef}>
                 <h2>Course Overview</h2>
-                <p>
+                <div>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: courseData?.overview || ''
                     }}
                   />
-                </p>
+                </div>
                 <ul className='feature-list'>
                   <li>
                     <svg viewBox='0 0 24 24'>

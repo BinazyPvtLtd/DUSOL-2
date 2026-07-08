@@ -2,6 +2,7 @@
 
 import { AddLeadAPI } from '@/api'
 import { useEffect, useState } from 'react'
+import PhoneInputField from '@/components/PhoneInputField'
 
 export default function LeadModal({ open, setOpen }) {
   const [formData, setFormData] = useState({
@@ -127,20 +128,10 @@ export default function LeadModal({ open, setOpen }) {
             required
           />
 
-          <div className='lead-phone'>
-            <select disabled>
-              <option>IN +91</option>
-            </select>
-
-            <input
-              type='tel'
-              name='phone'
-              placeholder='Enter Your Number'
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <PhoneInputField
+            value={formData.phone}
+            onChange={phone => setFormData(prev => ({ ...prev, phone }))}
+          />
 
           <select
             name='course'

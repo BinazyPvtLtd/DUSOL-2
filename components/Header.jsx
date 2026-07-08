@@ -103,7 +103,7 @@ const MENU = [
   { label: 'Blogs', link: '/blogs' }
 ]
 
-function DesktopDropdown ({ item }) {
+function DesktopDropdown({ item }) {
   if ('link' in item) return null
 
   if (item.type === 'cols') {
@@ -134,7 +134,7 @@ function DesktopDropdown ({ item }) {
   )
 }
 
-function MobileSubMenu ({ item, onClose }) {
+function MobileSubMenu({ item, onClose }) {
   if ('link' in item) return null
 
   if (item.type === 'cols') {
@@ -165,7 +165,7 @@ function MobileSubMenu ({ item, onClose }) {
   )
 }
 
-export default function Header () {
+export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openItem, setOpenItem] = useState(null)
   const [leadModalOpen, setLeadModalOpen] = useState(false)
@@ -191,7 +191,7 @@ export default function Header () {
                   height={55}
                 />
               )}
-              {/* <span className='logo-divider'></span>
+              <span className='logo-divider'></span>
               <span className='logo-text'>
                 <strong
                   style={{
@@ -202,10 +202,15 @@ export default function Header () {
                     letterSpacing: '.5px'
                   }}
                 >
-                  DU SOL
+                  {tenant?.short_name || tenant?.name}
                 </strong>
-                <span className='logo-sub'>Information by College Drishti</span>
-              </span> */}
+
+                {tenant?.tagline && (
+                  <span className="logo-sub">
+                    {tenant.tagline}
+                  </span>
+                )}
+              </span>
             </Link>
             <ul className='menu'>
               {MENU.map((m, i) => (
@@ -262,7 +267,9 @@ export default function Header () {
         <button className='mm-close' onClick={closeMobile}>
           &times;
         </button>
-        <div className='mm-logo'>DU SOL</div>
+        <div className="mm-logo">
+          {tenant?.short_name || tenant?.name}
+        </div>
         {MENU.map((m, i) => (
           <div key={i} className={`mm-item${openItem === i ? ' open' : ''}`}>
             {'link' in m ? (

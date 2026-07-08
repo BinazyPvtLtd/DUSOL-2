@@ -12,7 +12,7 @@ import { getCoursesByLevelAPI } from '@/api'
 import LeadModal from '@/components/LeadModal'
 import { getYoutubeThumbnail } from '@/helperFunction/Helper'
 
-async function fetchHomeData () {
+async function fetchHomeData() {
   let baseUrl = process.env.NEXT_PUBLIC_DEFAULT_API
 
   try {
@@ -38,7 +38,7 @@ async function fetchHomeData () {
   return response.data
 }
 
-export async function generateMetadata () {
+export async function generateMetadata() {
   try {
     const homeData = await fetchHomeData()
 
@@ -121,7 +121,7 @@ const COURSES_DATA = {
   }
 }
 
-function CourseCard ({ c }) {
+function CourseCard({ c }) {
   const [leadModalOpen, setLeadModalOpen] = useState(false)
 
   const years = c.duration
@@ -145,7 +145,7 @@ function CourseCard ({ c }) {
   )
 }
 
-function FaqItem ({ q, a }) {
+function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false)
   return (
     <div className={`faq-item${open ? ' open' : ''}`}>
@@ -160,7 +160,16 @@ function FaqItem ({ q, a }) {
   )
 }
 
-export default function HomeClient ({ initialData }) {
+// Extract YouTube video ID from both youtube.com and youtu.be URLs
+function getYoutubeEmbedId(url) {
+  if (!url) return null
+  const regExp =
+    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&?/]+)/
+  const match = url.match(regExp)
+  return match ? match[1] : null
+}
+
+export default function HomeClient({ initialData }) {
   const [activeTab, setActiveTab] = useState('bachelor')
   const [showModal, setShowModal] = useState(false)
   const homeData = initialData || null
@@ -170,6 +179,7 @@ export default function HomeClient ({ initialData }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openItem, setOpenItem] = useState(null)
   const [leadModalOpen, setLeadModalOpen] = useState(false)
+  const [videoPlaying, setVideoPlaying] = useState(false)
 
   const bachelorCards = [
     'online-ba',
@@ -361,32 +371,46 @@ export default function HomeClient ({ initialData }) {
               </a>
             </div> */}
             <div className='video-card'>
-              <img
-                src={thumbnail}
-                alt='Video Thumbnail'
-                className='video-thumbnail'
-              />
+              {videoPlaying && getYoutubeEmbedId(BannerData?.video_url) ? (
+                <iframe
+                  className='video-iframe'
+                  src={`https://www.youtube.com/embed/${getYoutubeEmbedId(BannerData.video_url)}?autoplay=1&rel=0`}
+                  title='Video'
+                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                  allowFullScreen
+                />
+              ) : (
+                <>
+                  <img
+                    src={thumbnail}
+                    alt='Video Thumbnail'
+                    className='video-thumbnail'
+                  />
 
-              <a
-                className='vc-play'
-                href={BannerData?.video_url}
-                target='_blank'
-                rel='noopener noreferrer'
-                aria-label='Play Video'
-              >
-                <svg viewBox='0 0 24 24'>
-                  <path d='M8 5v14l11-7z' />
-                </svg>
-              </a>
+                  {getYoutubeEmbedId(BannerData?.video_url) && (
+                    <>
+                      <button
+                        type='button'
+                        className='vc-play'
+                        aria-label='Play Video'
+                        onClick={() => setVideoPlaying(true)}
+                      >
+                        <svg viewBox='0 0 24 24'>
+                          <path d='M8 5v14l11-7z' />
+                        </svg>
+                      </button>
 
-              <a
-                href={BannerData?.video_url}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='vc-watch'
-              >
-                Watch On YouTube
-              </a>
+                      <button
+                        type='button'
+                        className='vc-watch'
+                        onClick={() => setVideoPlaying(true)}
+                      >
+                        Watch Video
+                      </button>
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -478,17 +502,6 @@ export default function HomeClient ({ initialData }) {
           </div>
 
           <div className='intro-text'>
-            {/* <p>
-              DU SOL provides a diverse selection of academic programs for
-              students looking for flexibility in their higher education — a
-              great option for working professionals, exam aspirants and those
-              with personal commitments.
-            </p>
-            <p>
-              The school offers undergraduate and postgraduate programs across
-              disciplines. Popular UG programs include BA, BCom, BBA and BMS; PG
-              options include MA, MCom, MBA and other specialized courses.
-            </p> */}
             <div
               className='eligibility-content'
               dangerouslySetInnerHTML={{

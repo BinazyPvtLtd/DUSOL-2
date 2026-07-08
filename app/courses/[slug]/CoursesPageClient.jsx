@@ -13,6 +13,7 @@ import img5 from '../../../public/assets/accreditationsImg/NIRF.png'
 import { AddLeadAPI, getOneCourseDataAPI } from '@/api'
 import { useTenant } from '@/context/TenantContext'
 import { generateSEOMetadata } from '@/app/lib/seo'
+import PhoneInputField from '@/components/PhoneInputField'
 
 // NOTE: this file is intentionally minimal. It preserves the existing client UI by importing the original implementation.
 // If you want full integration, you can move the current CoursesContent implementation here.
@@ -212,13 +213,9 @@ export default function CoursesPageClient ({ slug }) {
                 required
               />
 
-              <input
-                type='tel'
-                name='phone'
-                placeholder='🇮🇳 Enter Your Number'
+              <PhoneInputField
                 value={formData.phone}
-                onChange={handleChange}
-                required
+                onChange={phone => setFormData(prev => ({ ...prev, phone }))}
               />
 
               <select
