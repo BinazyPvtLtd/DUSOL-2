@@ -2239,6 +2239,9 @@ section {
   box-shadow: var(--shadow-sm);
 }
 
+.info-table th p{
+  color: #fff;
+}
 .info-table th,
 .info-table td {
   padding: 13px 16px;

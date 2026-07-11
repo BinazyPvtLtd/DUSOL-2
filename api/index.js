@@ -65,3 +65,35 @@ export const AddLeadAPI = async data => {
     headers: getHeaders()
   })
 }
+
+export const getAdmissionAPI = async () => {
+  return await axios.get(`${getBaseUrl()}/admission`)
+}
+
+export const getCoursesFeesAPI = async () => {
+  return await axios.get(`${getBaseUrl()}/courses-fees`)
+}
+
+export const getHallTicketAPI = async () => {
+  return await axios.get(`${getBaseUrl()}/hall-ticket`)
+}
+
+export const getStudyMaterialAPI = async () => {
+  return await axios.get(`${getBaseUrl()}/study-material`)
+}
+
+export const getResultAPI = async () => {
+  return await axios.get(`${getBaseUrl()}/result`)
+}
+
+export const getLibraryPortalAPI = async () => {
+  return await axios.get(`${getBaseUrl()}/library-portal`)
+}
+
+export const getAssignmentStatusAPI = async () => {
+  return await axios.get(`${getBaseUrl()}/assignment-status`)
+}
+
+export const getAlternativeUniversitiesAPI = async () => {
+  return await axios.get(`${getBaseUrl()}/alternative-universities`)
+}
