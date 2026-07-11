@@ -6,14 +6,16 @@ import { AddLeadAPI } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
 
 const SZ_LINKS = [
-  ['Admission', 'dusol-admission'],
-  ['Courses & Fees', 'dusol-courses-fees'],
-  ['Hall Ticket', 'dusol-hall-ticket'],
-  ['Study Material', 'du-sol-study-material'],
-  ['Result', 'dusol-result'],
-  ['Library Portal', 'du-sol-library-portal'],
-  ['Assignment Status', 'du-sol-assignment-status'],
-  ['Alternative Universities', 'dusol-alternative-universities']
+  ['Admission', 'admission'],
+  ['Courses & Fees', 'courses-fees'],
+
+  
+  ['Hall Ticket', 'hall-ticket'],
+  ['Study Material', 'study-material'],
+  ['Result', 'result'],
+  ['Library Portal', 'library-portal'],
+  ['Assignment Status', 'assignment-status'],
+  ['Alternative Universities', 'alternative-universities']
 ]
 
 export default function StudentSidebar({ pageKey }) {
@@ -45,7 +47,8 @@ export default function StudentSidebar({ pageKey }) {
     state: values.state,
     remarks: values.remarks || '',
     source: 'Student Zone',
-    page_url: window.location.href
+    page_url:
+      typeof window !== 'undefined' ? window.location.href : ''
   })
 
   const resetForm = () => {
@@ -53,7 +56,6 @@ export default function StudentSidebar({ pageKey }) {
       name: '',
       email: '',
       phone: '',
-      course: '',
       state: '',
       remarks: '',
       consent: false
