@@ -1,5 +1,8 @@
 // components/HowToApply.jsx
+'use client'
 
+import { useState } from 'react'
+import LeadModal from './LeadModal'
 import {
     Globe,
     GraduationCap,
@@ -49,7 +52,9 @@ const steps = [
 ]
 
 export default function HowToApply() {
+    const [leadModalOpen, setLeadModalOpen] = useState(false)
     return (
+        <>
         <section className='w-full bg-[#f7f4fb] py-10 md:py-14 overflow-hidden'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 {/* Heading */}
@@ -132,11 +137,21 @@ export default function HowToApply() {
 
                 {/* Button */}
                 <div className='flex justify-center mt-10'>
-                    <button className='bg-purple-700 hover:bg-purple-800 text-white text-sm font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg'>
-                        APPLY NOW
-                    </button>
+                    <button
+  type="button"
+  className="bg-purple-700 hover:bg-purple-800 text-white text-sm font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg"
+  onClick={() => setLeadModalOpen(true)}
+>
+  APPLY NOW
+</button>
                 </div>
             </div>
         </section>
+
+        <LeadModal
+            open={leadModalOpen}
+            setOpen={setLeadModalOpen}
+        />
+        </>
     )
 }

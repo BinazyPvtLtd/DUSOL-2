@@ -94,6 +94,8 @@ function FaqItem({ q, a }) {
   )
 }
 
+
+
 // Extract YouTube video ID from both youtube.com and youtu.be URLs
 function getYoutubeEmbedId(url) {
   if (!url) return null
@@ -117,6 +119,7 @@ export default function HomeClient({ initialData }) {
   const [openItem, setOpenItem] = useState(null)
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   const [videoPlaying, setVideoPlaying] = useState(false)
+  const [showAllCourses, setShowAllCourses] = useState(false)
 
 
 
@@ -124,20 +127,20 @@ export default function HomeClient({ initialData }) {
     fetchCourses('UG')
   }, [])
 
-  const fetchCourses = async level => {
-    try {
-      setLoading(true)
+const fetchCourses = async level => {
+  try {
+    setLoading(true)
 
-      const response = await getCoursesByLevelAPI(level)
+    const response = await getCoursesByLevelAPI(level)
 
-      setCourseData(response.data?.data || [])
-    } catch (error) {
-      console.log(error)
-      setCourseData([])
-    } finally {
-      setLoading(false)
-    }
+    setCourseData(response.data?.data || [])
+  } catch (error) {
+    console.log(error)
+    setCourseData([])
+  } finally {
+    setLoading(false)
   }
+}
 
   const BannerData = homeData?.data?.hero
   const AboutUs = homeData?.data?.about
@@ -150,6 +153,7 @@ export default function HomeClient({ initialData }) {
 
   const handleTabChange = tab => {
     setActiveTab(tab)
+     setShowAllCourses(false)
 
     if (tab === 'bachelor') {
       fetchCourses('UG')
@@ -157,6 +161,10 @@ export default function HomeClient({ initialData }) {
       fetchCourses('PG')
     }
   }
+
+  const displayedCourses = showAllCourses
+  ? courseData
+  : courseData.slice(0, 8)
 
   // SSR-safety: guard any browser-only APIs
   const safeWindowOpen = url => {
@@ -455,11 +463,24 @@ export default function HomeClient({ initialData }) {
             </button>
           </div>
 
-          <div className='course-grid'>
-            {courseData.map(course => (
-              <CourseCard key={course.id} c={course} />
-            ))}
-          </div>
+        <div className='course-grid'>
+  {displayedCourses.map(course => (
+    <CourseCard key={course.id} c={course} />
+  ))}
+</div>
+
+{courseData.length > 8 && (
+  <div className='text-center mt-10'>
+    <button
+      type='button'
+      className='btn btn-gold'
+      onClick={() => setShowAllCourses(!showAllCourses)}
+    >
+      
+      {showAllCourses ? 'View Less' : 'View More'}
+    </button>
+  </div>
+)}
         </div>
       </section>
 
@@ -556,6 +577,7 @@ export default function HomeClient({ initialData }) {
       </section>
 
 
+    <HowToApply/>
 
       <section className='faq'>
         <div className='wrap'>

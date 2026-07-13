@@ -2,20 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getHomePageDataAPI } from '@/api'
+import {
+  getHomePageDataAPI,
+  getCourseDataAPI,
+  getSpecializationsAPI
+} from '@/api'
 import LeadModal from './LeadModal'
 import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa'
-const mbaSpecializations = [
-  ['Information Technology', 'information-technology'],
-  ['Business Analytics', 'business-analytics'],
-  ['Hospital Administration', 'hospital-administration-management'],
-  ['International Trade', 'international-trade-management'],
-  ['Rural Management', 'rural-management'],
-  ['Retail Management', 'retail-management'],
-  ['Business Management', 'business-management'],
-  ['Project Management', 'project-management'],
-  ['Marketing Management', 'marketing-management']
-]
 
 export default function Footer () {
   const [footerCTA, setFooterCTA] = useState(null)
@@ -23,6 +16,8 @@ export default function Footer () {
   const [openItem, setOpenItem] = useState(null)
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   const [homeData, setHomeData] = useState(null)
+  const [courses, setCourses] = useState([])
+  const [specializations, setSpecializations] = useState([])
 
   useEffect(() => {
     fetchHomeData()
@@ -30,10 +25,17 @@ export default function Footer () {
 
   const fetchHomeData = async () => {
     try {
-      const response = await getHomePageDataAPI()
+      const [homeRes, courseRes, specializationRes] = await Promise.all([
+        getHomePageDataAPI(),
+        getCourseDataAPI(),
+        getSpecializationsAPI()
+      ])
+
       // Adjust this path if your API response is different
-      setHomeData(response?.data?.data)
-      setFooterCTA(response?.data?.data?.footer_cta)
+      setHomeData(homeRes?.data?.data)
+      setFooterCTA(homeRes?.data?.data?.footer_cta)
+      setCourses(courseRes?.data?.data || [])
+      setSpecializations(specializationRes?.data?.data || [])
     } catch (error) {
       console.error(error)
     }
@@ -45,6 +47,20 @@ export default function Footer () {
     setMobileOpen(false)
     setOpenItem(null)
   }
+
+  const ugCourses = courses.filter(
+    c => c.course_level === 'UG'
+  )
+
+  const pgCourses = courses.filter(
+    c => c.course_level === 'PG'
+  )
+
+  const mbaSpecializations = specializations.filter(
+    s =>
+      s.course?.slug === 'distance-mba' ||
+      s.course?.name === 'Distance MBA'
+  )
 
   return (
     <>
@@ -78,41 +94,25 @@ export default function Footer () {
               <h4>UG Programs</h4>
 
               <ul>
-                <li>
-                  <Link href='/courses?c=distance-ba'>Distance BA</Link>
-                </li>
-                <li>
-                  <Link href='/courses?c=distance-bba'>Distance BBA</Link>
-                </li>
-                <li>
-                  <Link href='/courses?c=distance-bms'>Distance BMS</Link>
-                </li>
-                <li>
-                  <Link href='/courses?c=distance-bcom'>Distance BCom</Link>
-                </li>
-                <li>
-                  <Link href='/courses?c=online-ba'>Online BA</Link>
-                </li>
-                <li>
-                  <Link href='/courses?c=online-bcom'>Online BCom</Link>
-                </li>
+                {ugCourses.map(course => (
+                  <li key={course.id}>
+                    <Link href={`/courses/${course.slug}`}>
+                      {course.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
 
               <h4 style={{ marginTop: '24px' }}>PG Programs</h4>
 
               <ul>
-                <li>
-                  <Link href='/courses?c=distance-ma'>Distance MA</Link>
-                </li>
-                <li>
-                  <Link href='/courses?c=distance-mba'>Distance MBA</Link>
-                </li>
-                <li>
-                  <Link href='/courses?c=distance-mcom'>Distance MCom</Link>
-                </li>
-                <li>
-                  <Link href='/courses?c=distance-mlis'>Distance MLIS</Link>
-                </li>
+                {pgCourses.map(course => (
+                  <li key={course.id}>
+                    <Link href={`/courses/${course.slug}`}>
+                      {course.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -121,10 +121,10 @@ export default function Footer () {
               <h4>MBA Specialisations</h4>
 
               <ul className='two-col'>
-                {mbaSpecializations.map(([label, slug]) => (
-                  <li key={slug}>
-                    <Link href={`/courses?c=online-mba&s=${slug}`}>
-                      {label} Management
+                {mbaSpecializations.map(item => (
+                  <li key={item.id}>
+                    <Link href={`/specialization/${item.slug}`}>
+                      {item.name}
                     </Link>
                   </li>
                 ))}
@@ -133,7 +133,7 @@ export default function Footer () {
           </div>
 
           <p className='footer-disclaimer'>
-            College Drishti acts as an information & counselling service. All
+            distanceeducationlearning.com acts as an information & counselling service. All
             university names, logos and trademarks mentioned are used for
             informational purposes only. We are not a university or an admission
             authority. Users are encouraged to verify information on the
@@ -151,8 +151,8 @@ export default function Footer () {
           </div>
 
           <div className='p-4'>
-            © {new Date().getFullYear()} DOSOLCOLLEGEDRISHTI · Powered by
-            College Drishti. All Rights Reserved.
+            © {new Date().getFullYear()} Powered by
+            distanceeducationlearning.com. All Rights Reserved.
           </div>
         </div>
       </footer>

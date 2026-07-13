@@ -1,133 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import LeadModal from './LeadModal'
 import { useTenant } from '@/context/TenantContext'
 import { getStorageBaseUrl } from '@/constant/constant'
 import Image from 'next/image'
-const MENU = [
-  {
-    label: 'Distance Course',
-    type: 'cols',
-    groups: [
-      {
-        title: 'Bachelor Programs',
-        items: [
-          ['Distance BA from DU SOL', '/courses?c=distance-ba'],
-          ['Distance BBA from DU SOL', '/courses?c=distance-bba'],
-          ['Distance BMS from DU SOL', '/courses?c=distance-bms'],
-          ['Distance BCom from DU SOL', '/courses?c=distance-bcom']
-        ]
-      },
-      {
-        title: 'Master Programs',
-        items: [
-          ['Distance MA from DU SOL', '/courses?c=distance-ma'],
-          ['Distance MBA from DU SOL', '/courses?c=distance-mba'],
-          ['Distance MCOM from DU SOL', '/courses?c=distance-mcom'],
-          ['Distance MLIS from DU SOL', '/courses?c=distance-mlis']
-        ]
-      }
-    ]
-  },
-  {
-    label: 'Online Course',
-    type: 'cols',
-    groups: [
-      {
-        title: 'Bachelor Programs',
-        items: [
-          ['Online BA from DU SOL', '/courses?c=online-ba'],
-          ['Online BBA from DU SOL', '/courses?c=online-bba'],
-          ['Online BCom from DU SOL', '/courses?c=online-bcom']
-        ]
-      },
-      {
-        title: 'Master Programs',
-        items: [
-          ['Online MA from DU SOL', '/courses?c=online-ma'],
-          ['Online MBA from DU SOL', '/courses?c=online-mba'],
-          ['Online MCA from DU SOL', '/courses?c=online-mca'],
-          ['Online MCOM from DU SOL', '/courses?c=online-mcom'],
-          ['Online MSC from DU SOL', '/courses?c=online-msc'],
-          ['Online MJMC from DU SOL', '/courses?c=online-mjmc'],
-          ['Online MLIS from DU SOL', '/courses?c=online-mlis'],
-          ['Online MTech from DU SOL', '/courses?c=online-mtech']
-        ]
-      }
-    ]
-  },
-
-  {
-    label: 'MBA Specialization',
-    type: 'single',
-    items: [
-      [
-        'MBA in Information Technology',
-        '/specialization/information-technology'
-      ],
-      ['MBA in Business Analytics', '/specialization/business-analytics'],
-      [
-        'MBA in Hospital Administration Management',
-        '/specialization/hospital-administration-management'
-      ],
-      [
-        'MBA in International Trade Management',
-        '/specialization/international-trade-management'
-      ],
-      ['MBA in Rural Management', '/specialization/rural-management'],
-      ['MBA in Retail Management', '/specialization/retail-management'],
-      ['MBA in Business Management', '/specialization/business-management'],
-      ['MBA in Project Management', '/specialization/project-management'],
-      ['MBA in Marketing Management', '/specialization/marketing-management']
-    ]
-  },
-  {
-    label: 'Student Zone',
-    type: 'single',
-    items: [
-      ['DUSOL Admission', '/student-zone?p=dusol-admission'],
-      ['DUSOL Courses Fees', '/student-zone?p=dusol-courses-fees'],
-      ['DUSOL Hall Ticket', '/student-zone?p=dusol-hall-ticket'],
-      ['DU SOL Study Material', '/student-zone?p=du-sol-study-material'],
-      ['DUSOL Result', '/student-zone?p=dusol-result'],
-      ['DU SOL Library Portal', '/student-zone?p=du-sol-library-portal'],
-      ['DU SOL Assignment Status', '/student-zone?p=du-sol-assignment-status'],
-      [
-        'DUSOL Alternative Universities',
-        '/student-zone?p=dusol-alternative-universities'
-      ]
-    ]
-  },
-  { label: 'Blogs', link: '/blogs' }
-]
+import {
+  getCourseDataAPI,
+  getSpecializationsAPI
+} from '@/api'
 
 function DesktopDropdown({ item }) {
   if ('link' in item) return null
 
-  if (item.type === 'cols') {
-    return (
-      <div className='dropdown cols'>
-        {item.groups.map((g, gi) => (
-          <div key={gi}>
-            <div className='dd-group-title'>{g.title}</div>
-            {g.items.map((it, ii) => (
-              <Link key={ii} className='dd-link' href={it[1]}>
-                {it[0]}
-              </Link>
-            ))}
-          </div>
-        ))}
-      </div>
-    )
-  }
-
   return (
     <div className='dropdown single'>
       {item.items.map((it, ii) => (
-        <Link key={ii} className='dd-link' href={it[1]}>
-          {it[0]}
+        <Link key={ii} className='dd-link' href={it.href}>
+          {it.label}
         </Link>
       ))}
     </div>
@@ -137,28 +28,11 @@ function DesktopDropdown({ item }) {
 function MobileSubMenu({ item, onClose }) {
   if ('link' in item) return null
 
-  if (item.type === 'cols') {
-    return (
-      <>
-        {item.groups.map((g, gi) => (
-          <div key={gi}>
-            <div className='mm-gt'>{g.title}</div>
-            {g.items.map((it, ii) => (
-              <Link key={ii} href={it[1]} onClick={onClose}>
-                {it[0]}
-              </Link>
-            ))}
-          </div>
-        ))}
-      </>
-    )
-  }
-
   return (
     <>
       {item.items.map((it, ii) => (
-        <Link key={ii} href={it[1]} onClick={onClose}>
-          {it[0]}
+        <Link key={ii} href={it.href} onClick={onClose}>
+          {it.label}
         </Link>
       ))}
     </>
@@ -169,7 +43,27 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openItem, setOpenItem] = useState(null)
   const [leadModalOpen, setLeadModalOpen] = useState(false)
+  const [courses, setCourses] = useState([])
+  const [specializations, setSpecializations] = useState([])
   const { tenant, loading } = useTenant()
+
+  useEffect(() => {
+    loadMenu()
+  }, [])
+
+  const loadMenu = async () => {
+    try {
+      const [courseRes, specializationRes] = await Promise.all([
+        getCourseDataAPI(),
+        getSpecializationsAPI()
+      ])
+
+      setCourses(courseRes.data.data)
+      setSpecializations(specializationRes.data.data)
+    } catch (error) {
+      console.error('Header Menu Error', error)
+    }
+  }
 
   if (loading) return null
 
@@ -177,6 +71,55 @@ export default function Header() {
     setMobileOpen(false)
     setOpenItem(null)
   }
+
+  const ugCourses = courses.filter(course => course.course_level === 'UG')
+
+  const pgCourses = courses.filter(course => course.course_level === 'PG')
+
+  const mbaSpecializations = specializations.filter(
+    item =>
+      item.course?.slug === 'distance-mba' ||
+      item.course?.name === 'Distance MBA'
+  )
+
+  const MENU = [
+    {
+      label: 'Bachelor Programs',
+      items: ugCourses.map(course => ({
+        label: course.name,
+        href: `/courses/${course.slug}`
+      }))
+    },
+    {
+      label: 'Master Programs',
+      items: pgCourses.map(course => ({
+        label: course.name,
+        href: `/courses/${course.slug}`
+      }))
+    },
+    {
+      label: 'MBA Specialization',
+      items: mbaSpecializations.map(item => ({
+        label: item.name,
+        href: `/specialization/${item.slug}`
+      }))
+    },
+    {
+  label: 'Student Zone',
+  items: [
+    { label: 'Admission', href: '/student-zone?p=admission' },
+    { label: 'Courses & Fees', href: '/student-zone?p=courses-fees' },
+    { label: 'Hall Ticket', href: '/student-zone?p=hall-ticket' },
+    { label: 'Study Material', href: '/student-zone?p=study-material' },
+    { label: 'Result', href: '/student-zone?p=result' },
+    { label: 'Library Portal', href: '/student-zone?p=library-portal' },
+    { label: 'Assignment Status', href: '/student-zone?p=assignment-status' },
+    { label: 'Alternative Universities', href: '/student-zone?p=alternative-universities' },
+  ]
+},
+    { label: 'Blogs', link: '/blogs' }
+  ]
+
   return (
     <>
       <header className='site-header'>

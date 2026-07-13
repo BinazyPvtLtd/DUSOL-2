@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Mulish:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Existing custom CSS */
 /* @import "tailwindcss"; */
 
 /* :root {
@@ -318,10 +322,11 @@ section {
 
 .logo {
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: 12px;
-  line-height: 1;
+
+  flex: 0 0 320px;   /* or 340px */
+  min-width: 320px;
 }
 
 .logo .logo-du {
@@ -339,21 +344,34 @@ section {
 .logo .logo-text {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  max-width: 250px;
+}
+
+.logo .logo-text strong {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .logo .logo-sub {
-  font-size: 15px;
-  letter-spacing: 0.2px;
-  text-transform: none;
+  font-size: 13px;
+  line-height: 1.35;
   color: var(--primary-color);
   font-weight: 400;
-  line-height: 1.25;
+
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
 }
 
 .menu {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
+  flex: 0 0 auto;
 }
 
 .menu>li {
@@ -371,6 +389,7 @@ section {
   color: var(--ink);
   border-radius: 8px;
   transition: 0.2s;
+  white-space: nowrap;
 }
 
 .menu>li>a .caret {
@@ -455,7 +474,13 @@ section {
 .nav-actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 12px;
+  flex: 1 1 0;
+}
+
+.nav-actions .btn {
+  white-space: nowrap;
 }
 
 .burger {
@@ -903,7 +928,7 @@ section {
 
 .eligibility .grid {
   display: grid;
-  grid-template-columns: 1.3fr 0.9fr;
+  grid-template-columns: 1.5fr 1fr;
   gap: 46px;
   align-items: center;
 }
@@ -911,7 +936,10 @@ section {
 .eligibility h2 {
   color: #fff;
   font-size: clamp(24px, 3vw, 34px);
-  margin-bottom: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.3px;
+  margin-bottom: 32px;
 }
 
 .elig-group {
@@ -942,18 +970,23 @@ section {
 
 .degree-card {
   text-align: center;
+  max-width: 380px;
+  margin-inline: auto;
 }
 
 .degree-frame {
-  background: transparent;
-  /* or remove this */
+  background: #fff;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow-lg);
   position: relative;
-  margin-bottom: 18px;
-  padding: 0;
-  /* Remove the white space */
+  margin-bottom: 26px;
+  padding: 10px;
+}
+
+.degree-card .btn {
+  padding: 14px 34px;
+  border-radius: 10px;
 }
 
 .degree-frame img {
@@ -2993,16 +3026,22 @@ section {
   margin-bottom: 24px;
 }
 
-/* mobile menu */
-@media (max-width: 768px) {
-
-  .menu,
-  .nav-actions .btn {
+/* collapse desktop menu before nowrap items run out of room */
+@media (max-width: 1100px) {
+  .menu {
     display: none;
   }
 
   .burger {
     display: flex;
+  }
+}
+
+/* mobile menu */
+@media (max-width: 768px) {
+
+  .nav-actions .btn {
+    display: none;
   }
 
   .topbar .tb-left {
@@ -3248,7 +3287,7 @@ section {
   .logo .logo-sub {
     font-size: 12px;
     line-height: 1.2;
-    max-width: 120px;
+    max-width: 80px;
   }
 
   .blog-grid {
@@ -3721,11 +3760,36 @@ section {
 
 .eligibility-content {
   flex: 1;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.eligibility-content p {
+  margin-bottom: 18px;
+}
+
+.eligibility-content p:last-child {
+  margin-bottom: 0;
 }
 
 .eligibility h3 {
-  color: #fff;
-  margin-block: 15px;
+  color: var(--secondary-color, #fdb515);
+  font-weight: 700;
+  margin-block: 30px 12px;
+}
+
+.eligibility-content > h3:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .eligibility-content {
+    font-size: 16px;
+  }
+
+  .eligibility h2 {
+    margin-bottom: 24px;
+  }
 }
 
 .eligibility-text {

@@ -39,6 +39,10 @@ export const getCoursesByLevelAPI = async level => {
   return await axios.get(`${getBaseUrl()}/courses?level=${level}`)
 }
 
+export const getSpecializationsAPI = async () => {
+  return await axios.get(`${getBaseUrl()}/specializations`)
+}
+
 export const getOneSpecializationAPI = async slug => {
   return await axios.get(`${getBaseUrl()}/specializations/${slug}`)
 }
