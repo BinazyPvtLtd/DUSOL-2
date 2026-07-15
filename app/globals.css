@@ -67,6 +67,7 @@ body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+  padding-top: 36px;
 }
 
 body {
@@ -307,9 +308,14 @@ section {
 /* --------- Header / Nav --------- */
 .site-header {
   background: #fff;
-  position: relative;
+  position:fixed;
   z-index: 900;
   box-shadow: 0 2px 14px rgba(67, 32, 95, 0.08);
+    top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 .nav {

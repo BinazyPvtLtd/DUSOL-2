@@ -139,7 +139,7 @@ export default function HowToApply() {
                 <div className='flex justify-center mt-10'>
                     <button
   type="button"
-  className="bg-purple-700 hover:bg-purple-800 text-white text-sm font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg"
+  className="btn btn-purple"
   onClick={() => setLeadModalOpen(true)}
 >
   APPLY NOW

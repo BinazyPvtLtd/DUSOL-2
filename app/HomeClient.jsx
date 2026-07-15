@@ -434,7 +434,7 @@ const fetchCourses = async level => {
       <section className='courses-sec'>
         <div className='wrap'>
           <div className='sec-head'>
-            <h2 className='sec-title underline'>{Program?.heading || 'Our Programs'}</h2>
+            <h2 className='sec-title '>{Program?.heading || 'Our Programs'}</h2>
 
           </div>
 
@@ -582,7 +582,7 @@ const fetchCourses = async level => {
       <section className='faq'>
         <div className='wrap'>
           <div className='sec-head'>
-            <h2 className='sec-title underline'>Frequently Asked Questions</h2>
+            <h2 className='sec-title'>Frequently Asked Questions</h2>
           </div>
 
           <div className='faq-grid'>
