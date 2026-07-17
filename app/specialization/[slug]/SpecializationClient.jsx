@@ -10,9 +10,12 @@ import img3 from '../../../public/assets/accreditationsImg/AICTE.png'
 import img4 from '../../../public/assets/accreditationsImg/DEB.jpg'
 import img5 from '../../../public/assets/accreditationsImg/NIRF.png'
 import Image from 'next/image'
-import { AddLeadAPI, getOneSpecializationAPI } from '@/api'
+import { getOneSpecializationAPI } from '@/api'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import PhoneInputField from '@/components/PhoneInputField'
+import { useLeadSubmit } from '@/hooks/useLeadSubmit'
+import LeadModal from '@/components/LeadModal'
+import BrochureButton from '@/components/BrochureButton'
 
 
 
@@ -119,6 +122,8 @@ function SpecializationContent({ slug: slugProp }) {
   const [courseData, setCoursedata] = useState(null)
   const [loading, setLoading] = useState(false)
   const [showEligibility, setShowEligibility] = useState(false)
+  const submitLead = useLeadSubmit()
+  const [leadModalOpen, setLeadModalOpen] = useState(false)
 
   const params = useParams()
   const slug = slugProp || params?.slug
@@ -196,17 +201,8 @@ function SpecializationContent({ slug: slugProp }) {
 
     try {
       const payload = buildLeadPayload(formData)
-      const response = await AddLeadAPI(payload)
 
-      if (response.data.success) {
-        alert(response.data.message)
-        resetForm()
-      } else {
-        alert(response.data.message || 'Something went wrong.')
-      }
-    } catch (error) {
-      console.error('Add Lead Error:', error)
-      alert(error.response?.data?.message || 'Failed to submit lead.')
+      await submitLead(payload, { onSuccess: resetForm })
     } finally {
       setLoading(false)
     }
@@ -294,12 +290,14 @@ function SpecializationContent({ slug: slugProp }) {
             </div>
 
             <div className='hero-actions'>
-              <Link href='#' className='btn btn-gold'>
+              <button
+                type='button'
+                className='btn btn-gold'
+                onClick={() => setLeadModalOpen(true)}
+              >
                 GET FREE COUNSELLING
-              </Link>
-              <Link href='#' className='btn btn-outline-white'>
-                DOWNLOAD BROCHURE
-              </Link>
+              </button>
+              <BrochureButton url={courseData?.brochure} />
             </div>
           </div>
 
@@ -699,15 +697,21 @@ function SpecializationContent({ slug: slugProp }) {
               </svg>
               <div>
                 <h2>Ready to Start Your Journey?</h2>
-                <p>Join thousands of students who are building their future with DOSOLCOLLEGEDRISHTI.</p>
+                <p>Join thousands of students who are building their future with Distance Education Learning.</p>
               </div>
             </div>
-            <Link href='#' className='btn btn-gold'>
+            <button
+              type='button'
+              className='btn btn-gold'
+              onClick={() => setLeadModalOpen(true)}
+            >
               GET FREE COUNSELLING →
-            </Link>
+            </button>
           </div>
         </div>
       </section>
+
+      <LeadModal open={leadModalOpen} setOpen={setLeadModalOpen} />
     </>
   )
 }

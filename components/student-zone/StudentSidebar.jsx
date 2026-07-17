@@ -2,24 +2,16 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { AddLeadAPI } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
+import { useLeadSubmit } from '@/hooks/useLeadSubmit'
+import {
+  STUDENT_ZONE_PAGES,
+  buildStudentZoneUrl
+} from '@/app/lib/studentZone'
 
-const SZ_LINKS = [
-  ['Admission', 'admission'],
-  ['Courses & Fees', 'courses-fees'],
-
-  
-  ['Hall Ticket', 'hall-ticket'],
-  ['Study Material', 'study-material'],
-  ['Result', 'result'],
-  ['Library Portal', 'library-portal'],
-  ['Assignment Status', 'assignment-status'],
-  ['Alternative Universities', 'alternative-universities']
-]
-
-export default function StudentSidebar({ pageKey }) {
+export default function StudentSidebar({ pageKey, tenantSlug }) {
   const [loading, setLoading] = useState(false)
+  const submitLead = useLeadSubmit()
 
   const [formData, setFormData] = useState({
     name: '',
@@ -75,18 +67,7 @@ export default function StudentSidebar({ pageKey }) {
 
       const payload = buildLeadPayload(formData)
 
-      const response = await AddLeadAPI(payload)
-
-      if (response.data.success) {
-        alert(response.data.message)
-        resetForm()
-      } else {
-        alert(response.data.message || 'Something went wrong.')
-      }
-    } catch (error) {
-      console.error(error)
-
-      alert(error.response?.data?.message || 'Failed to submit lead.')
+      await submitLead(payload, { onSuccess: resetForm })
     } finally {
       setLoading(false)
     }
@@ -194,17 +175,17 @@ export default function StudentSidebar({ pageKey }) {
         <h3>Student Zone Links</h3>
 
         <ul className='qual-list'>
-          {SZ_LINKS.map(([label, slug]) => (
-            <li key={slug}>
+          {STUDENT_ZONE_PAGES.map(({ label, key }) => (
+            <li key={key}>
               <Link
-                href={`/student-zone?p=${slug}`}
+                href={buildStudentZoneUrl(tenantSlug, key)}
                 style={{
                   color:
-                    pageKey === slug
+                    pageKey === key
                       ? 'var(--purple)'
                       : 'inherit',
                   fontWeight:
-                    pageKey === slug ? 700 : 500
+                    pageKey === key ? 700 : 500
                 }}
               >
                 {label}

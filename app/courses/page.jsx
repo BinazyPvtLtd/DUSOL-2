@@ -52,7 +52,7 @@ const DEF_FAQ = [
   ],
   [
     'How can I apply for DU SOL programs?',
-    'You can apply online by filling out the application form, uploading documents and completing the admission process through the official portal, with free guidance from College Drishti.'
+    'You can apply online by filling out the application form, uploading documents and completing the admission process through the official portal, with free guidance from Distance Education Learning.'
   ]
 ]
 
@@ -672,7 +672,7 @@ function CoursesContent () {
                     </svg>
                   </div>
                   <div>
-                    <small>Course Fee (Total)</small>
+                    <small>Course Fee</small>
                     <b>₹{course.fees[1]}</b>
                   </div>
                 </div>
@@ -681,9 +681,11 @@ function CoursesContent () {
                     <svg viewBox='0 0 24 24'>
                       <path d='M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z' />
                     </svg>
+                
                   </div>
+
                   <div>
-                    <small>Examination Fee (Per Year)</small>
+                    <small>Examination Fee</small>
                     <b>₹{course.fees[2]}</b>
                   </div>
                 </div>
@@ -807,7 +809,7 @@ function CoursesContent () {
                 <h2>Ready to Start Your Journey?</h2>
                 <p>
                   Join thousands of students who are building their future with
-                  DOSOLCOLLEGEDRISHTI.
+                  Distance Education Learning.
                 </p>
               </div>
             </div>

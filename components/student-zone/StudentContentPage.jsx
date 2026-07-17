@@ -6,6 +6,7 @@ import StudentSidebar from '@/components/student-zone/StudentSidebar'
 export default function StudentContentPage({
   page,
   pageKey,
+  tenantSlug,
 }) {
   return (
     <>
@@ -51,7 +52,7 @@ export default function StudentContentPage({
 )}
             </div>
 
-            <StudentSidebar pageKey={pageKey} />
+            <StudentSidebar pageKey={pageKey} tenantSlug={tenantSlug} />
           </div>
         </div>
       </section>

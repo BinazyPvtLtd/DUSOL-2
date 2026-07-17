@@ -1,8 +1,8 @@
 'use client'
 
-import { AddLeadAPI } from '@/api'
 import { useEffect, useState } from 'react'
 import PhoneInputField from '@/components/PhoneInputField'
+import { useLeadSubmit } from '@/hooks/useLeadSubmit'
 
 export default function LeadModal({ open, setOpen }) {
   const [formData, setFormData] = useState({
@@ -14,6 +14,10 @@ export default function LeadModal({ open, setOpen }) {
     remarks: '',
     consent: false
   })
+
+  const [loading, setLoading] = useState(false)
+
+  const submitLead = useLeadSubmit()
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -75,26 +79,21 @@ export default function LeadModal({ open, setOpen }) {
   const handleSubmit = async e => {
     e.preventDefault()
 
+    if (loading) return
+
+    setLoading(true)
+
     try {
       const payload = buildLeadPayload(formData)
 
-      const response = await AddLeadAPI(payload)
-
-      if (response.data.success) {
-        alert(response.data.message)
-
-        resetForm()
-        setOpen(false)
-      } else {
-        alert(response.data.message || 'Something went wrong.')
-      }
-    } catch (error) {
-      console.error('Add Lead Error:', error)
-
-      alert(
-        error.response?.data?.message ||
-          'Failed to submit lead.'
-      )
+      await submitLead(payload, {
+        onSuccess: () => {
+          resetForm()
+          setOpen(false)
+        }
+      })
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -181,8 +180,8 @@ export default function LeadModal({ open, setOpen }) {
             I consent to share my details.
           </label>
 
-          <button type='submit' className='lead-submit'>
-            SUBMIT
+          <button type='submit' className='lead-submit' disabled={loading}>
+            {loading ? 'Submitting...' : 'SUBMIT'}
           </button>
         </form>
       </div>

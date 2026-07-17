@@ -10,6 +10,11 @@ import {
   getCourseDataAPI,
   getSpecializationsAPI
 } from '@/api'
+import {
+  STUDENT_ZONE_PAGES,
+  buildStudentZoneUrl,
+  getTenantSlugFromHost
+} from '@/app/lib/studentZone'
 
 function DesktopDropdown({ item }) {
   if ('link' in item) return null
@@ -82,6 +87,11 @@ export default function Header() {
       item.course?.name === 'Distance MBA'
   )
 
+  const tenantSlug =
+    typeof window !== 'undefined'
+      ? getTenantSlugFromHost(window.location.hostname)
+      : null
+
   const MENU = [
     {
       label: 'Bachelor Programs',
@@ -105,18 +115,12 @@ export default function Header() {
       }))
     },
     {
-  label: 'Student Zone',
-  items: [
-    { label: 'Admission', href: '/student-zone?p=admission' },
-    { label: 'Courses & Fees', href: '/student-zone?p=courses-fees' },
-    { label: 'Hall Ticket', href: '/student-zone?p=hall-ticket' },
-    { label: 'Study Material', href: '/student-zone?p=study-material' },
-    { label: 'Result', href: '/student-zone?p=result' },
-    { label: 'Library Portal', href: '/student-zone?p=library-portal' },
-    { label: 'Assignment Status', href: '/student-zone?p=assignment-status' },
-    { label: 'Alternative Universities', href: '/student-zone?p=alternative-universities' },
-  ]
-},
+      label: 'Student Zone',
+      items: STUDENT_ZONE_PAGES.map(page => ({
+        label: page.label,
+        href: buildStudentZoneUrl(tenantSlug, page.key)
+      }))
+    },
     { label: 'Blogs', link: '/blogs' }
   ]
 

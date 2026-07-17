@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { AddLeadAPI, getBlogFaqsApi, getOneBlogDataApi } from '@/api'
+import { getBlogFaqsApi, getOneBlogDataApi } from '@/api'
 import { useParams } from 'next/navigation'
 import PhoneInputField from '@/components/PhoneInputField'
+import { useLeadSubmit } from '@/hooks/useLeadSubmit'
 
 const TRENDING = [
   {
@@ -42,6 +43,7 @@ export default function BlogClient ({ slug: slugProp }) {
   const slug = slugProp || params?.slug
   const [loading, setLoading] = useState(false)
   const [post, setPost] = useState(null)
+  const submitLead = useLeadSubmit()
   const [toc, setToc] = useState([])
   const [faqData, setFaqData] = useState([])
 
@@ -155,19 +157,8 @@ export default function BlogClient ({ slug: slugProp }) {
 
     try {
       const payload = buildLeadPayload(formData)
-      const response = await AddLeadAPI(payload)
 
-      if (response.data.success) {
-        alert(response.data.message)
-
-        resetForm()
-      } else {
-        alert(response.data.message || 'Something went wrong.')
-      }
-    } catch (error) {
-      console.error('Add Lead Error:', error)
-
-      alert(error.response?.data?.message || 'Failed to submit lead.')
+      await submitLead(payload, { onSuccess: resetForm })
     } finally {
       setLoading(false)
     }
@@ -243,7 +234,7 @@ export default function BlogClient ({ slug: slugProp }) {
               <div className='blog-lead'>
                 <div className='bl-head'>
                   <h3>Book 100% Free Counseling</h3>
-                  <p>Get 1-to-1 expert guidance from College Drishti</p>
+                  <p>Get 1-to-1 expert guidance from Distance Education Learning</p>
                 </div>
                 <form className='counsel-body' onSubmit={handleSubmit}>
                   <input
@@ -410,7 +401,7 @@ export default function BlogClient ({ slug: slugProp }) {
           <div className='blog-cta-box'>
             <h3>Ready to Take the Next Step?</h3>
             <p>
-              Get personalised guidance from College Drishti experts — compare
+              Get personalised guidance from Distance Education Learning experts — compare
               programs, check eligibility and find the right university for you.
               100% free.
             </p>
