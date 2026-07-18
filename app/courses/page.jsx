@@ -689,13 +689,16 @@ function CoursesContent () {
                     <b>₹{course.fees[2]}</b>
                   </div>
                 </div>
-                <Link
-                  href='#'
+                <button
+                   onClick={() => {
+                  closeMobile()
+                  setLeadModalOpen(true)
+                }}
                   className='btn btn-gold btn-block'
                   style={{ marginTop: '16px' }}
                 >
                   GET FREE COUNSELLING
-                </Link>
+                </button>
               </div>
               <div className='side-card'>
                 <h3>Course Details</h3>

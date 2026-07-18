@@ -18,33 +18,6 @@ import { useLeadSubmit } from '@/hooks/useLeadSubmit'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
 
-const DEF_SYLLABUS = [
-  {
-    sem: 'Semester 1',
-    subjects: [
-      ['Principles of the Discipline', '20 Hours'],
-      ['Foundation Course', '18 Hours'],
-      ['Communication Skills', '18 Hours']
-    ]
-  },
-  {
-    sem: 'Semester 2',
-    subjects: [
-      ['Core Subject I', '20 Hours'],
-      ['Core Subject II', '18 Hours'],
-      ['Environmental Studies', '16 Hours']
-    ]
-  },
-  {
-    sem: 'Semester 3',
-    subjects: [
-      ['Specialization Paper I', '20 Hours'],
-      ['Specialization Paper II', '18 Hours'],
-      ['Skill Enhancement', '16 Hours']
-    ]
-  }
-]
-
 const DEF_FAQ = [
   [
     'What is DU SOL?',
@@ -363,6 +336,7 @@ function CoursesContent() {
   const [courseData, setCoursedata] = useState(null)
   const [loading, setLoading] = useState(false)
   const [showEligibility, setShowEligibility] = useState(false)
+  const [showAllSemesters, setShowAllSemesters] = useState(false)
   const submitLead = useLeadSubmit()
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   // const searchParams = useSearchParams()
@@ -458,7 +432,9 @@ function CoursesContent() {
         ]) || []
     })) || []
 
-
+  const displayedSemesters = showAllSemesters
+    ? syllabusData
+    : syllabusData.slice(0, 3)
 
   const feeItems = courseData?.fee_structures?.[0]?.items || []
 
@@ -756,31 +732,29 @@ function CoursesContent() {
                     Internship &amp; placement support
                   </li>
                 </ul> */}
-                <div className='divider'></div>
+              </div>
+              <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
                 <div className='syllabus-head'>
                   <h2 style={{ margin: 0 }}>Curriculum / Syllabus</h2>
 
                   <span className='dur'>{syllabusData.length} Semesters</span>
                 </div>
 
-                {syllabusData.slice(0, 3).map((sem, index) => (
+                {displayedSemesters.map((sem, index) => (
                   <SemItem key={index} sem={sem} />
                 ))}
-              </div>
-              <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
-                <h2>Detailed Syllabus</h2>
 
-                <div className='syllabus-head'>
-                  <p style={{ margin: 0, color: 'var(--muted)' }}>
-                    Semester-wise breakdown of subjects and learning hours.
-                  </p>
-
-                  <span className='dur'>{syllabusData.length} Semesters</span>
-                </div>
-
-                {syllabusData.map((sem, index) => (
-                  <SemItem key={index} sem={sem} />
-                ))}
+                {syllabusData.length > 3 && (
+                  <div style={{ textAlign: 'center', marginTop: '18px' }}>
+                    <button
+                      type='button'
+                      className='btn btn-gold'
+                      onClick={() => setShowAllSemesters(!showAllSemesters)}
+                    >
+                      {showAllSemesters ? 'View Less' : 'View More'}
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className='cpanel' id='p-spec' ref={specRef}>
@@ -903,13 +877,16 @@ function CoursesContent() {
                   </div>
                 </div>
 
-                <Link
-                  href='#'
+                <button
+                   onClick={() => {
+                  closeMobile()
+                  setLeadModalOpen(true)
+                }}
                   className='btn btn-gold btn-block'
                   style={{ marginTop: '16px' }}
                 >
                   GET FREE COUNSELLING
-                </Link>
+                </button>
               </div>
               <div className='side-card'>
                 <h3>Course Details</h3>

@@ -510,12 +510,15 @@ const fetchCourses = async level => {
                 )}
               </div>
 
-              <Link
-                href={Eligibility?.button_url || '#'}
+              <button
+                 onClick={() => {
+                  closeMobile()
+                  setLeadModalOpen(true)
+                }}
                 className='btn btn-gold'
               >
                 {Eligibility?.button_text}
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -563,13 +566,15 @@ const fetchCourses = async level => {
               </ul>
 
               {WhyChooseData?.button_text && (
-                <Link
-                  // href={WhyChooseData.button_url || '#'}
-                  href='/course'
+                <button
+                   onClick={() => {
+                  closeMobile()
+                  setLeadModalOpen(true)
+                }}
                   className='btn btn-purple'
                 >
                   {WhyChooseData.button_text}
-                </Link>
+                </button>
               )}
             </div>
           </div>

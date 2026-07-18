@@ -981,13 +981,11 @@ section {
 }
 
 .degree-frame {
-  background: #fff;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow-lg);
   position: relative;
   margin-bottom: 26px;
-  padding: 10px;
 }
 
 .degree-card .btn {
@@ -3293,7 +3291,6 @@ section {
   .logo .logo-sub {
     font-size: 12px;
     line-height: 1.2;
-    max-width: 80px;
   }
 
   .blog-grid {

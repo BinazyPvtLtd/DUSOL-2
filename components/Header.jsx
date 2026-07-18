@@ -16,16 +16,76 @@ import {
   getTenantSlugFromHost
 } from '@/app/lib/studentZone'
 
+
+// Groups courses by the API's study_mode (Online | Distance).
+// Unknown modes land in "other" so no course disappears from the menu.
+function groupCoursesByMode(courses) {
+  const groups = {
+    online: [],
+    distance: [],
+    other: []
+  }
+
+  courses.forEach(course => {
+    const mode = (course.study_mode ?? '').trim().toLowerCase()
+
+    switch (mode) {
+      case 'online':
+        groups.online.push(course)
+        break
+      case 'distance':
+        groups.distance.push(course)
+        break
+      default:
+        groups.other.push(course)
+    }
+  })
+
+  return groups
+}
+
+const toCourseLink = course => ({
+  label: course.name,
+  href: `/courses/${course.slug}`
+})
+
+function buildProgramMenuItems(courses) {
+  const { online, distance, other } = groupCoursesByMode(courses)
+
+  const items = []
+
+  if (online.length) {
+    items.push({ label: 'Online', children: online.map(toCourseLink) })
+  }
+
+  if (distance.length) {
+    items.push({ label: 'Distance', children: distance.map(toCourseLink) })
+  }
+
+  return [...items, ...other.map(toCourseLink)]
+}
+
 function DesktopDropdown({ item }) {
   if ('link' in item) return null
 
   return (
     <div className='dropdown single'>
-      {item.items.map((it, ii) => (
-        <Link key={ii} className='dd-link' href={it.href}>
-          {it.label}
-        </Link>
-      ))}
+      {item.items.map((it, ii) =>
+        it.children ? (
+          <div key={ii}>
+            <div className='dd-group-title'>{it.label}</div>
+            {it.children.map((child, ci) => (
+              <Link key={ci} className='dd-link' href={child.href}>
+                {child.label}
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <Link key={ii} className='dd-link' href={it.href}>
+            {it.label}
+          </Link>
+        )
+      )}
     </div>
   )
 }
@@ -35,11 +95,22 @@ function MobileSubMenu({ item, onClose }) {
 
   return (
     <>
-      {item.items.map((it, ii) => (
-        <Link key={ii} href={it.href} onClick={onClose}>
-          {it.label}
-        </Link>
-      ))}
+      {item.items.map((it, ii) =>
+        it.children ? (
+          <div key={ii}>
+            <div className='mm-gt'>{it.label}</div>
+            {it.children.map((child, ci) => (
+              <Link key={ci} href={child.href} onClick={onClose}>
+                {child.label}
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <Link key={ii} href={it.href} onClick={onClose}>
+            {it.label}
+          </Link>
+        )
+      )}
     </>
   )
 }
@@ -70,6 +141,8 @@ export default function Header() {
     }
   }
 
+ 
+
   if (loading) return null
 
   const closeMobile = () => {
@@ -95,17 +168,11 @@ export default function Header() {
   const MENU = [
     {
       label: 'Bachelor Programs',
-      items: ugCourses.map(course => ({
-        label: course.name,
-        href: `/courses/${course.slug}`
-      }))
+      items: buildProgramMenuItems(ugCourses)
     },
     {
       label: 'Master Programs',
-      items: pgCourses.map(course => ({
-        label: course.name,
-        href: `/courses/${course.slug}`
-      }))
+      items: buildProgramMenuItems(pgCourses)
     },
     {
       label: 'MBA Specialization',
@@ -123,6 +190,8 @@ export default function Header() {
     },
     { label: 'Blogs', link: '/blogs' }
   ]
+
+  
 
   return (
     <>
@@ -240,7 +309,7 @@ export default function Header() {
                 </div>
                 <div
                   className='mm-sub'
-                  style={{ maxHeight: openItem === i ? '600px' : '0' }}
+                  style={{ maxHeight: openItem === i ? '1000px' : '0' }}
                 >
                   <MobileSubMenu item={m} onClose={closeMobile} />
                 </div>

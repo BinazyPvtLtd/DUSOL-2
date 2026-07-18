@@ -122,6 +122,7 @@ function SpecializationContent({ slug: slugProp }) {
   const [courseData, setCoursedata] = useState(null)
   const [loading, setLoading] = useState(false)
   const [showEligibility, setShowEligibility] = useState(false)
+  const [showAllSemesters, setShowAllSemesters] = useState(false)
   const submitLead = useLeadSubmit()
   const [leadModalOpen, setLeadModalOpen] = useState(false)
 
@@ -229,6 +230,9 @@ function SpecializationContent({ slug: slugProp }) {
         ]) || []
     })) || []
 
+  const displayedSemesters = showAllSemesters
+    ? syllabusData
+    : syllabusData.slice(0, 3)
 
   const feeItems = courseData?.fee_structures?.[0]?.items || []
   const applicationFee = feeItems[0]?.amount
@@ -454,29 +458,30 @@ function SpecializationContent({ slug: slugProp }) {
                 </div>
 
 
-                <div className='divider'></div>
-                <div className='syllabus-head'>
-                  <h2 style={{ margin: 0 }}>Curriculum / Syllabus</h2>
-                  <span className='dur'>{syllabusData.length} Semesters</span>
-                </div>
-
-                {syllabusData.slice(0, 3).map((sem, index) => (
-                  <SemItem key={index} sem={sem} />
-                ))}
               </div>
 
               <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
-                <h2>Detailed Syllabus</h2>
                 <div className='syllabus-head'>
-                  <p style={{ margin: 0, color: 'var(--muted)' }}>
-                    Semester-wise breakdown of subjects and learning hours.
-                  </p>
+                  <h2 style={{ margin: 0 }}>Curriculum / Syllabus</h2>
+
                   <span className='dur'>{syllabusData.length} Semesters</span>
                 </div>
 
-                {syllabusData.map((sem, index) => (
+                {displayedSemesters.map((sem, index) => (
                   <SemItem key={index} sem={sem} />
                 ))}
+
+                {syllabusData.length > 3 && (
+                  <div style={{ textAlign: 'center', marginTop: '18px' }}>
+                    <button
+                      type='button'
+                      className='btn btn-gold'
+                      onClick={() => setShowAllSemesters(!showAllSemesters)}
+                    >
+                      {showAllSemesters ? 'View Less' : 'View More'}
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className='cpanel' id='p-spec' ref={specRef}>
