@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { getBlogDataApi } from '@/api'
+import PhoneInputField from '@/components/PhoneInputField'
 
 const BLOGS = [
   {
@@ -117,6 +118,7 @@ export default function BlogsPage () {
   const [blogs, setBlogs] = useState([])
   const [query, setQuery] = useState('')
   const [pagination, setPagination] = useState(null)
+  const [phone, setPhone] = useState('')
 
   const filtered = blogs.filter(
     blog =>
@@ -269,7 +271,7 @@ export default function BlogsPage () {
                 <div className='counsel-body'>
                   <input type='text' placeholder='Enter Your Name' />
                   <input type='email' placeholder='Enter Your Email' />
-                  <input type='tel' placeholder='🇮🇳 Enter Your Number' />
+                  <PhoneInputField value={phone} onChange={setPhone} />
                   <select>
                     <option>Select Course</option>
                     <option>BA</option>
