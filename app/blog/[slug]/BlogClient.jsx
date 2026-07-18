@@ -203,11 +203,11 @@ export default function BlogClient ({ slug: slugProp }) {
                 {' · '}
                 {post.views} Views
               </div>
-              <div className=" w-full aspect-video overflow-hidden rounded-xl">
+              <div className=" w-full aspect-video overflow-hidden rounded-xl bg-white">
                 <img
                   src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${post.featured_image}`}
                   alt={post.title}
-                  className=""
+                  className="w-full h-full object-contain"
                 />
               </div>
               {toc.length > 0 && (
@@ -377,6 +377,7 @@ export default function BlogClient ({ slug: slugProp }) {
                     <div
                       dangerouslySetInnerHTML={{
                         __html: item.answer
+                        
                       }}
                     />
                   }

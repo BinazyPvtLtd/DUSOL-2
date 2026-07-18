@@ -7,11 +7,8 @@ export async function generateMetadata ({ params }) {
     const slug = params?.slug
     const blogData = await getOneBlogDataApi(slug)
 
-    const seo =
-      blogData?.seo ||
-      blogData?.data?.seo ||
-      blogData?.data?.university?.seo ||
-      {}
+    // axios response -> { data: { success, message, data: { seo, blog } } }
+    const seo = blogData?.data?.data?.seo || {}
 
     return generateSEOMetadata(seo)
   } catch (err) {

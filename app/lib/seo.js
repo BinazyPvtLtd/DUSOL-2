@@ -1,5 +1,13 @@
 // lib/seo.js
 
+// The CMS stores og/twitter images as storage-relative paths
+// (e.g. "seo/01ABC.png"); social crawlers need absolute URLs.
+const toAbsoluteImageUrl = url => {
+  if (!url) return null
+  if (/^https?:\/\//.test(url)) return url
+  return `${process.env.NEXT_PUBLIC_IMAGE_URL}/${url}`
+}
+
 export const generateSEOMetadata = (seo = {}) => {
   return {
     title: seo.meta_title,
@@ -23,7 +31,7 @@ export const generateSEOMetadata = (seo = {}) => {
       images: seo.og_image
         ? [
             {
-              url: seo.og_image,
+              url: toAbsoluteImageUrl(seo.og_image),
               width: 1200,
               height: 630,
             },
@@ -38,7 +46,7 @@ export const generateSEOMetadata = (seo = {}) => {
       description:
         seo.twitter_description || seo.meta_description,
       images: seo.twitter_image
-        ? [seo.twitter_image]
+        ? [toAbsoluteImageUrl(seo.twitter_image)]
         : [],
     },
   };
