@@ -1,11 +1,4 @@
 // lib/studentZone.js
-//
-// Single source of truth for Student Zone pages and their SEO URLs.
-// URL pattern: /{tenantSlug}-{pageKey}  e.g. /dusol-admission
-// The tenant slug is the subdomain of the current request, the same
-// tenant identity already used by middleware.js, app/lib/tenant.js and
-// constant/constant.jsx. No tenant names are hardcoded here, so new
-// universities work without any frontend change.
 
 export const STUDENT_ZONE_PAGES = [
   { label: 'Admission', key: 'admission' },
@@ -20,9 +13,6 @@ export const STUDENT_ZONE_PAGES = [
 
 const LOCAL_HOSTNAMES = ['localhost', '127.0.0.1', '0.0.0.0']
 
-// Works on the server (pass the request "host" header) and on the
-// client (pass window.location.hostname). On localhost the tenant is
-// derived from NEXT_PUBLIC_DEFAULT_API, mirroring getCurrentSubdomain()
 // in constant/constant.jsx.
 export const getTenantSlugFromHost = host => {
   const hostname = (host || '').split(':')[0]
@@ -49,7 +39,7 @@ export const buildStudentZoneUrl = (tenantSlug, pageKey) => {
   // resolvable; the legacy route upgrades them to slug URLs.
   if (!tenantSlug) return `/student-zone?p=${pageKey}`
 
-  return `/${tenantSlug}-${pageKey}`
+  return `/student-zone/${tenantSlug}-${pageKey}`
 }
 
 // Maps a path slug like "dusol-courses-fees" back to its Student Zone

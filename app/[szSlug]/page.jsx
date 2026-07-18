@@ -1,47 +1,22 @@
 import { headers } from 'next/headers'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import {
+  buildStudentZoneUrl,
   getTenantSlugFromHost,
   resolveStudentZonePage
 } from '@/app/lib/studentZone'
-import StudentZoneClient from './StudentZoneClient'
 
-// SEO Student Zone route: /{tenantSlug}-{pageKey}
-// e.g. dusol.example.com -> /dusol-admission
-//      cu.example.com    -> /cu-admission
-// The tenant slug comes from the request host, so any university
-// created in the admin panel is served automatically.
+// Legacy root-level Student Zone URLs: /{tenantSlug}-{pageKey}
+// (e.g. /dusol-admission). These were the previous SEO URLs and may
+// still be indexed or bookmarked, so they permanently redirect (308)
+// to the current /student-zone/{tenantSlug}-{pageKey} URLs.
+// Any other unmatched top-level path 404s, as before.
 
-const resolveFromRequest = szSlug => {
-  const host = headers().get('host') || ''
-  const tenantSlug = getTenantSlugFromHost(host)
-  const page = resolveStudentZonePage(szSlug, tenantSlug)
-
-  return { host, tenantSlug, page }
-}
-
-export function generateMetadata({ params }) {
-  const { host, page } = resolveFromRequest(params.szSlug)
-
-  if (!page) return {}
-
-  return {
-    title: page.label,
-    alternates: {
-      canonical: `https://${host}/${params.szSlug}`
-    }
-  }
-}
-
-export default function StudentZoneSlugPage({ params }) {
-  const { tenantSlug, page } = resolveFromRequest(params.szSlug)
+export default function LegacyStudentZoneSlugPage({ params }) {
+  const tenantSlug = getTenantSlugFromHost(headers().get('host') || '')
+  const page = resolveStudentZonePage(params.szSlug, tenantSlug)
 
   if (!page) notFound()
 
-  return (
-    <StudentZoneClient
-      pageKey={page.key}
-      tenantSlug={tenantSlug}
-    />
-  )
+  permanentRedirect(buildStudentZoneUrl(tenantSlug, page.key))
 }
