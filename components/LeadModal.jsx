@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import PhoneInputField from '@/components/PhoneInputField'
 import { useLeadSubmit } from '@/hooks/useLeadSubmit'
+import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { INDIAN_STATES } from '@/constant/indianStates'
 
 export default function LeadModal({ open, setOpen }) {
   const [formData, setFormData] = useState({
@@ -18,6 +20,7 @@ export default function LeadModal({ open, setOpen }) {
   const [loading, setLoading] = useState(false)
 
   const submitLead = useLeadSubmit()
+  const courseOptions = useCourseOptions()
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -138,16 +141,11 @@ export default function LeadModal({ open, setOpen }) {
             onChange={handleChange}
           >
             <option value=''>Select Course</option>
-            <option>BA</option>
-            <option>BBA</option>
-            <option>BCom</option>
-            <option>BMS</option>
-            <option>MA</option>
-            <option>MBA</option>
-            <option>MCom</option>
-            <option>MCA</option>
-            <option>MLIS</option>
-            <option>MSc</option>
+            {courseOptions.map(c => (
+              <option key={c.id} value={c.short_name || c.name}>
+                {c.name}
+              </option>
+            ))}
           </select>
 
           <select
@@ -157,16 +155,9 @@ export default function LeadModal({ open, setOpen }) {
             required
           >
             <option value=''>Select State</option>
-            <option>Delhi</option>
-            <option>Bihar</option>
-            <option>Uttar Pradesh</option>
-            <option>Haryana</option>
-            <option>Punjab</option>
-            <option>Rajasthan</option>
-            <option>Madhya Pradesh</option>
-            <option>Maharashtra</option>
-            <option>West Bengal</option>
-            <option>Other</option>
+            {INDIAN_STATES.map(state => (
+              <option key={state}>{state}</option>
+            ))}
           </select>
 
           <label className='lead-consent'>

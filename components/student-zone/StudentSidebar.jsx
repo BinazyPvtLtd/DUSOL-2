@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import PhoneInputField from '@/components/PhoneInputField'
 import { useLeadSubmit } from '@/hooks/useLeadSubmit'
+import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { INDIAN_STATES } from '@/constant/indianStates'
 import {
   STUDENT_ZONE_PAGES,
   buildStudentZoneUrl
@@ -12,6 +14,7 @@ import {
 export default function StudentSidebar({ pageKey, tenantSlug }) {
   const [loading, setLoading] = useState(false)
   const submitLead = useLeadSubmit()
+  const courseOptions = useCourseOptions()
 
   const [formData, setFormData] = useState({
     name: '',
@@ -116,16 +119,11 @@ export default function StudentSidebar({ pageKey, tenantSlug }) {
             onChange={handleChange}
           >
             <option value=''>Select Course</option>
-            <option>BA</option>
-            <option>BBA</option>
-            <option>BCom</option>
-            <option>BMS</option>
-            <option>MA</option>
-            <option>MBA</option>
-            <option>MCom</option>
-            <option>MCA</option>
-            <option>MLIS</option>
-            <option>MSc</option>
+            {courseOptions.map(c => (
+              <option key={c.id} value={c.short_name || c.name}>
+                {c.name}
+              </option>
+            ))}
           </select>
 
           <select
@@ -135,16 +133,9 @@ export default function StudentSidebar({ pageKey, tenantSlug }) {
             required
           >
             <option value=''>Select State</option>
-            <option>Delhi</option>
-            <option>Bihar</option>
-            <option>Uttar Pradesh</option>
-            <option>Haryana</option>
-            <option>Punjab</option>
-            <option>Rajasthan</option>
-            <option>Madhya Pradesh</option>
-            <option>Maharashtra</option>
-            <option>West Bengal</option>
-            <option>Other</option>
+            {INDIAN_STATES.map(state => (
+              <option key={state}>{state}</option>
+            ))}
           </select>
 
           <label className='consent'>

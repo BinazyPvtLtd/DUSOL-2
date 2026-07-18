@@ -14,6 +14,7 @@ import { AddLeadAPI, getOneCourseDataAPI } from '@/api'
 import { useTenant } from '@/context/TenantContext'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import PhoneInputField from '@/components/PhoneInputField'
+import { INDIAN_STATES } from '@/constant/indianStates'
 
 
 // NOTE: this file is intentionally minimal. It preserves the existing client UI by importing the original implementation.
@@ -226,10 +227,9 @@ export default function CoursesPageClient ({ slug }) {
                 required
               >
                 <option value=''>Select State</option>
-                <option>Delhi</option>
-                <option>Bihar</option>
-                <option>Haryana</option>
-                <option>Uttar Pradesh</option>
+                {INDIAN_STATES.map(state => (
+                  <option key={state}>{state}</option>
+                ))}
               </select>
 
               <label className='consent'>

@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { getBlogDataApi } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
+import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { INDIAN_STATES } from '@/constant/indianStates'
 
 const BLOGS = [
   {
@@ -89,7 +91,7 @@ function BlogCard ({ blog }) {
           <img
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${blog.featured_image}`}
             alt={blog.title}
-            className='img-fluid'
+            className='w-full'
           />
         </div>
 
@@ -119,6 +121,7 @@ export default function BlogsPage () {
   const [query, setQuery] = useState('')
   const [pagination, setPagination] = useState(null)
   const [phone, setPhone] = useState('')
+  const courseOptions = useCourseOptions()
 
   const filtered = blogs.filter(
     blog =>
@@ -274,18 +277,17 @@ export default function BlogsPage () {
                   <PhoneInputField value={phone} onChange={setPhone} />
                   <select>
                     <option>Select Course</option>
-                    <option>BA</option>
-                    <option>BCom</option>
-                    <option>BBA</option>
-                    <option>MBA</option>
-                    <option>MA</option>
+                    {courseOptions.map(c => (
+                      <option key={c.id} value={c.short_name || c.name}>
+                        {c.name}
+                      </option>
+                    ))}
                   </select>
                   <select>
                     <option>Select State</option>
-                    <option>Delhi</option>
-                    <option>Bihar</option>
-                    <option>Haryana</option>
-                    <option>Uttar Pradesh</option>
+                    {INDIAN_STATES.map(state => (
+                      <option key={state}>{state}</option>
+                    ))}
                   </select>
                   <div className='consent'>
                     I authorise DU SOL to contact me with updates via

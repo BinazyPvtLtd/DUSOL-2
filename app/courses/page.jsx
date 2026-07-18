@@ -13,6 +13,8 @@ import img5 from '../../public/assets/accreditationsImg/NIRF.png'
 import Image from 'next/image'
 import { getCourseDataAPI } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
+import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { INDIAN_STATES } from '@/constant/indianStates'
 
 const DEF_SYLLABUS = [
   {
@@ -340,6 +342,7 @@ function CoursesContent () {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(null)
   const [counselPhone, setCounselPhone] = useState('')
+  const courseOptions = useCourseOptions()
   // const searchParams = useSearchParams()
   const { slug } = useParams()
   // const slug = searchParams.get('c') || 'online-bba'
@@ -455,18 +458,17 @@ function CoursesContent () {
               />
               <select>
                 <option>Select Course</option>
-                <option>BA</option>
-                <option>BCom</option>
-                <option>BBA</option>
-                <option>MBA</option>
-                <option>MA</option>
+                {courseOptions.map(c => (
+                  <option key={c.id} value={c.short_name || c.name}>
+                    {c.name}
+                  </option>
+                ))}
               </select>
               <select>
                 <option>Select State</option>
-                <option>Delhi</option>
-                <option>Bihar</option>
-                <option>Haryana</option>
-                <option>Uttar Pradesh</option>
+                {INDIAN_STATES.map(state => (
+                  <option key={state}>{state}</option>
+                ))}
               </select>
               <div className='consent'>
                 I authorise DU SOL to contact me with updates via
@@ -597,49 +599,6 @@ function CoursesContent () {
                   ))}
                 </div>
               </div>
-
-              <div className='cpanel' id='p-instructor' ref={instructorRef}>
-                <h2>Instructor</h2>
-                <div className='inst-grid'>
-                  <div className='inst-profile'>
-                    <div className='inst-avatar'>RK</div>
-                    <div>
-                      <h3>Dr. Rajesh Kumar</h3>
-                      <div className='role'>
-                        Professor &amp; Head of Management Studies
-                      </div>
-                      <div className='exp'>
-                        15+ Years of Teaching Experience
-                      </div>
-                      <p>
-                        Dr. Rajesh Kumar is an expert in Business Strategy and
-                        Marketing Management. He has authored 8+ books and
-                        published numerous research papers in international
-                        journals.
-                      </p>
-                      {/* <div className='inst-social'>
-                        <a href='#'>in</a>
-                        <a href='#'>𝕏</a>
-                        <a href='#'>@</a>
-                      </div> */}
-                    </div>
-                  </div>
-                  <div>
-                    <h3 style={{ fontSize: '16px', marginBottom: '12px' }}>
-                      Key Qualifications
-                    </h3>
-                    <ul className='qual-list'>
-                      <li>
-                        Ph.D. in Business Administration, Delhi University
-                      </li>
-                      <li>MBA, Indian Institute of Management (IIM)</li>
-                      <li>Certified Management Consultant (CMC)</li>
-                      <li>Researcher &amp; Published Author</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
               <div className='cpanel' id='p-faq' ref={faqRef}>
                 <h2>Frequently Asked Questions</h2>
                 <div style={{ marginTop: '14px' }}>

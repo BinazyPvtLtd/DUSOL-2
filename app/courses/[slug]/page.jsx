@@ -15,6 +15,8 @@ import Image from 'next/image'
 import { getCourseDataAPI, getOneCourseDataAPI } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
 import { useLeadSubmit } from '@/hooks/useLeadSubmit'
+import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
 
@@ -338,6 +340,7 @@ function CoursesContent() {
   const [showEligibility, setShowEligibility] = useState(false)
   const [showAllSemesters, setShowAllSemesters] = useState(false)
   const submitLead = useLeadSubmit()
+  const courseOptions = useCourseOptions()
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   // const searchParams = useSearchParams()
   const { slug } = useParams()
@@ -579,16 +582,11 @@ function CoursesContent() {
                 onChange={handleChange}
               >
                 <option value=''>Select Course</option>
-                <option>BA</option>
-                <option>BBA</option>
-                <option>BCom</option>
-                <option>BMS</option>
-                <option>MA</option>
-                <option>MBA</option>
-                <option>MCom</option>
-                <option>MCA</option>
-                <option>MLIS</option>
-                <option>MSc</option>
+                {courseOptions.map(c => (
+                  <option key={c.id} value={c.short_name || c.name}>
+                    {c.name}
+                  </option>
+                ))}
               </select>
 
               <select
@@ -598,16 +596,9 @@ function CoursesContent() {
                 required
               >
                 <option value=''>Select State</option>
-                <option>Delhi</option>
-                <option>Bihar</option>
-                <option>Uttar Pradesh</option>
-                <option>Haryana</option>
-                <option>Punjab</option>
-                <option>Rajasthan</option>
-                <option>Madhya Pradesh</option>
-                <option>Maharashtra</option>
-                <option>West Bengal</option>
-                <option>Other</option>
+                {INDIAN_STATES.map(state => (
+                  <option key={state}>{state}</option>
+                ))}
               </select>
 
               <label className='consent'>
@@ -782,47 +773,7 @@ function CoursesContent() {
                 </div>
               </div>
 
-              <div className='cpanel' id='p-instructor' ref={instructorRef}>
-                <h2>Instructor</h2>
-                <div className='inst-grid'>
-                  <div className='inst-profile'>
-                    <div className='inst-avatar'>RK</div>
-                    <div>
-                      <h3>Dr. Rajesh Kumar</h3>
-                      <div className='role'>
-                        Professor &amp; Head of Management Studies
-                      </div>
-                      <div className='exp'>
-                        15+ Years of Teaching Experience
-                      </div>
-                      <p>
-                        Dr. Rajesh Kumar is an expert in Business Strategy and
-                        Marketing Management. He has authored 8+ books and
-                        published numerous research papers in international
-                        journals.
-                      </p>
-                      {/* <div className='inst-social'>
-                        <a href='#'>in</a>
-                        <a href='#'>𝕏</a>
-                        <a href='#'>@</a>
-                      </div> */}
-                    </div>
-                  </div>
-                  <div>
-                    <h3 style={{ fontSize: '16px', marginBottom: '12px' }}>
-                      Key Qualifications
-                    </h3>
-                    <ul className='qual-list'>
-                      <li>
-                        Ph.D. in Business Administration, Delhi University
-                      </li>
-                      <li>MBA, Indian Institute of Management (IIM)</li>
-                      <li>Certified Management Consultant (CMC)</li>
-                      <li>Researcher &amp; Published Author</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+
 
               <div className='cpanel' id='p-faq' ref={faqRef}>
                 <h2>Frequently Asked Questions</h2>
