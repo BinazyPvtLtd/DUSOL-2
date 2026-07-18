@@ -15,6 +15,7 @@ export default function StudentZoneLegacyPage({ searchParams }) {
   const pageKey = searchParams?.p || 'admission'
   const page = STUDENT_ZONE_PAGES.find(p => p.key === pageKey)
 
+
   if (!page) notFound()
 
   permanentRedirect(buildStudentZoneUrl(tenantSlug, page.key))
