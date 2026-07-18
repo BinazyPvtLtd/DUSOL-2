@@ -47,8 +47,8 @@ export const getOneSpecializationAPI = async slug => {
   return await axios.get(`${getBaseUrl()}/specializations/${slug}`)
 }
 
-export const getBlogDataApi = async () => {
-  return await axios.get(`${getBaseUrl()}/blogs`)
+export const getBlogDataApi = async (page = 1) => {
+  return await axios.get(`${getBaseUrl()}/blogs`, { params: { page } })
 }
 
 export const getOneBlogDataApi = async slug => {

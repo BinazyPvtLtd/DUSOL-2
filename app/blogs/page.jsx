@@ -116,6 +116,7 @@ function BlogCard ({ blog }) {
 export default function BlogsPage () {
   const [blogs, setBlogs] = useState([])
   const [query, setQuery] = useState('')
+  const [pagination, setPagination] = useState(null)
 
   const filtered = blogs.filter(
     blog =>
@@ -124,16 +125,23 @@ export default function BlogsPage () {
   )
 
   useEffect(() => {
-    fetchBlogs()
+    fetchBlogs(1)
   }, [])
 
-  const fetchBlogs = async () => {
+  const fetchBlogs = async (page = 1) => {
     try {
-      const response = await getBlogDataApi()
+      const response = await getBlogDataApi(page)
       setBlogs(response.data.data)
+      setPagination(response.data.pagination)
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handlePageChange = (e, page) => {
+    e.preventDefault()
+    if (!pagination || page === pagination.current_page) return
+    fetchBlogs(page)
   }
 
   return (
@@ -190,15 +198,25 @@ export default function BlogsPage () {
                   No articles found matching &ldquo;{query}&rdquo;
                 </p>
               )}
-              <div className='pagination'>
-                <a href='#' className='active'>
-                  1
-                </a>
-                <a href='#'>2</a>
-                <a href='#'>3</a>
-                <a href='#'>…</a>
-                <a href='#'>32</a>
-              </div>
+              {!query && pagination && pagination.last_page > 1 && (
+                <div className='pagination'>
+                  {Array.from(
+                    { length: pagination.last_page },
+                    (_, i) => i + 1
+                  ).map(page => (
+                    <a
+                      key={page}
+                      href='#'
+                      className={
+                        page === pagination.current_page ? 'active' : ''
+                      }
+                      onClick={e => handlePageChange(e, page)}
+                    >
+                      {page}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
 
             <aside>
