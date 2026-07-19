@@ -55,21 +55,21 @@ export default function HowToApply() {
     const [leadModalOpen, setLeadModalOpen] = useState(false)
     return (
         <>
-        <section className='w-full bg-[#f7f4fb] py-10 md:py-14 overflow-hidden'>
+        <section className='w-full bg-[color-mix(in_srgb,var(--primary-color)_4%,white)] py-10 md:py-14 overflow-hidden'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 {/* Heading */}
                 <div className='mb-10 text-center lg:text-left'>
-                    <h2 className='text-2xl sm:text-3xl font-bold text-purple-800 uppercase'>
+                    <h2 className='text-2xl sm:text-3xl font-bold text-[var(--primary-color)] uppercase'>
                         How To Apply
                     </h2>
 
-                    <div className='w-20 h-1 bg-yellow-400 mt-3 rounded-full mx-auto lg:mx-0'></div>
+                    <div className='w-20 h-1 bg-[var(--secondary-color)] mt-3 rounded-full mx-auto lg:mx-0'></div>
                 </div>
 
                 {/* Desktop Layout */}
                 <div className='hidden lg:grid grid-cols-6 gap-6 relative'>
                     {/* Dotted Line */}
-                    <div className='absolute top-8 left-0 w-full border-t-2 border-dashed border-purple-200 z-0'></div>
+                    <div className='absolute top-8 left-0 w-full border-t-2 border-dashed border-[color-mix(in_srgb,var(--primary-color)_25%,white)] z-0'></div>
 
                     {steps.map(step => {
                         const Icon = step.icon
@@ -85,8 +85,8 @@ export default function HowToApply() {
                 </div> */}
 
                                 {/* Icon */}
-                                <div className='w-16 h-16 rounded-2xl border border-purple-200 bg-white flex items-center justify-center shadow-md'>
-                                    <Icon className='text-purple-700 w-8 h-8' />
+                                <div className='w-16 h-16 rounded-2xl border border-[color-mix(in_srgb,var(--primary-color)_25%,white)] bg-white flex items-center justify-center shadow-md'>
+                                    <Icon className='text-[var(--primary-color)] w-8 h-8' />
                                 </div>
 
                                 {/* Content */}
@@ -113,13 +113,13 @@ export default function HowToApply() {
                                 className='relative bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-300'
                             >
                                 {/* Step Number */}
-                                <div className='absolute top-4 right-4 w-7 h-7 rounded-full bg-yellow-400 text-black text-xs font-bold flex items-center justify-center'>
+                                <div className='absolute top-4 right-4 w-7 h-7 rounded-full bg-[var(--secondary-color)] text-black text-xs font-bold flex items-center justify-center'>
                                     {step.id}
                                 </div>
 
                                 {/* Icon */}
-                                <div className='w-14 h-14 rounded-xl border border-purple-200 bg-purple-50 flex items-center justify-center'>
-                                    <Icon className='text-purple-700 w-7 h-7' />
+                                <div className='w-14 h-14 rounded-xl border border-[color-mix(in_srgb,var(--primary-color)_25%,white)] bg-[color-mix(in_srgb,var(--primary-color)_8%,white)] flex items-center justify-center'>
+                                    <Icon className='text-[var(--primary-color)] w-7 h-7' />
                                 </div>
 
                                 {/* Content */}
