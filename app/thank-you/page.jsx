@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import ThankYouAnalytics from './ThankYouAnalytics'
 
 export const metadata = {
   title: 'Thank You | Distance Education Learning',
@@ -9,10 +10,14 @@ export const metadata = {
   }
 }
 
-export default function ThankYouPage () {
+export default function ThankYouPage ({ searchParams }) {
+  const source = searchParams?.source
+
   return (
     <section className='flex min-h-[70vh] items-center justify-center bg-bg px-4 py-16'>
       <div className='w-full max-w-xl rounded-site bg-white p-8 text-center shadow sm:p-12'>
+        <ThankYouAnalytics source={source} />
+
         <div className='mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green/10'>
           <svg
             className='h-10 w-10 text-green'
@@ -35,21 +40,18 @@ export default function ThankYouPage () {
         <p className='mb-8 text-base text-muted sm:text-lg'>
           Your counselling request has been submitted successfully.
           <br />
-          Our admission experts will contact you shortly.
+          Our admission counselor will contact you shortly.
         </p>
 
         <div className='flex flex-col justify-center gap-3 sm:flex-row'>
-          <Link
-            href='/courses'
-            className='rounded-lg bg-purple px-6 py-3 font-semibold text-white transition hover:bg-purple-dark'
-          >
-            Explore Courses
+          <Link href='/' className='btn btn-purple justify-center'>
+            Back to Home
           </Link>
           <Link
-            href='/'
+            href='/courses'
             className='rounded-lg border border-line px-6 py-3 font-semibold text-ink transition hover:bg-bg'
           >
-            Back to Home
+            Continue Browsing
           </Link>
         </div>
       </div>

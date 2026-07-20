@@ -93,7 +93,8 @@ export default function LeadModal({ open, setOpen }) {
         onSuccess: () => {
           resetForm()
           setOpen(false)
-        }
+        },
+        redirectTo: '/thank-you?source=lead'
       })
     } finally {
       setLoading(false)

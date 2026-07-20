@@ -8,13 +8,13 @@ import { AddLeadAPI } from '@/api'
 export function useLeadSubmit () {
   const router = useRouter()
 
-  return async (payload, { onSuccess } = {}) => {
+  return async (payload, { onSuccess, redirectTo = '/thank-you' } = {}) => {
     try {
       const response = await AddLeadAPI(payload)
 
       if (response.data.success) {
         onSuccess?.()
-        router.push('/thank-you')
+        router.push(redirectTo)
         return true
       }
 
