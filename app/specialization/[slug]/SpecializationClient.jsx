@@ -480,15 +480,19 @@ function SpecializationContent({ slug: slugProp }) {
                 <p>Choose a specialization in your final year to build domain expertise.</p>
 
                 <div className='spec-grid'>
-                  {(courseData?.specializations || []).map(sp => (
-                    <div key={sp.id} className='spec-card'>
+                  {(courseData?.course?.specializations || []).map(sp => (
+                    <Link
+                      key={sp.id}
+                      href={`/specialization/${sp.slug}`}
+                      className='spec-card'
+                    >
                       <div className='sp-ico'>
                         <svg viewBox='0 0 24 24'>
                           <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2z' />
                         </svg>
                       </div>
                       <span>{sp.name}</span>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>
