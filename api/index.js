@@ -54,6 +54,10 @@ export const getBlogDataApi = async (page = 1) => {
 export const getOneBlogDataApi = async slug => {
   return await axios.get(`${getBaseUrl()}/blogs/${slug}`)
 }
+
+export const getTrendingBlogsApi = async () => {
+  return await axios.get(`${getBaseUrl()}/blogs/trending`)
+}
 // api/index.js
 
 export const getBlogFaqsApi = async blogId => {

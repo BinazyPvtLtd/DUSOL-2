@@ -414,16 +414,6 @@ function SpecializationContent({ slug: slugProp }) {
                   </button>
 
                   <button
-                    className={`ctab ${activeTab === 'instructor' ? 'active' : ''}`}
-                    onClick={() => {
-                      setActiveTab('instructor')
-                      scrollTo(instructorRef)
-                    }}
-                  >
-                    Instructor
-                  </button>
-
-                  <button
                     className={`ctab ${activeTab === 'faq' ? 'active' : ''}`}
                     onClick={() => {
                       setActiveTab('faq')
@@ -577,7 +567,7 @@ function SpecializationContent({ slug: slugProp }) {
         </div>
       </section>
 
-      {/* ACCREDITATIONS */}
+         {/* ACCREDITATIONS */}
       <section className='accred'>
         <div className='wrap'>
           <div className='box'>
@@ -636,6 +626,7 @@ function SpecializationContent({ slug: slugProp }) {
           </div>
         </div>
       </section>
+
 
       {/* CTA */}
       <section className='cta-banner'>

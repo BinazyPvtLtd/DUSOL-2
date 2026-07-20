@@ -663,17 +663,6 @@ function CoursesContent() {
                   </button>
 
                   <button
-                    className={`ctab ${activeTab === 'instructor' ? 'active' : ''
-                      }`}
-                    onClick={() => {
-                      setActiveTab('instructor')
-                      scrollTo(instructorRef)
-                    }}
-                  >
-                    Instructor
-                  </button>
-
-                  <button
                     className={`ctab ${activeTab === 'faq' ? 'active' : ''}`}
                     onClick={() => {
                       setActiveTab('faq')
@@ -693,32 +682,7 @@ function CoursesContent() {
                     }}
                   />
                 </p>
-                {/* <ul className='feature-list'>
-                  <li>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}
-                    Industry-relevant curriculum
-                  </li>
-                  <li>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}
-                    Experienced faculty &amp; mentors
-                  </li>
-                  <li>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}
-                    Live projects &amp; case studies
-                  </li>
-                  <li>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm-1 14.5L6.5 12l1.4-1.4L11 13.6l5.1-5.1 1.4 1.4z' />
-                    </svg>{' '}
-                    Internship &amp; placement support
-                  </li>
-                </ul> */}
+                
               </div>
               <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
                 <div className='syllabus-head'>
@@ -769,8 +733,6 @@ function CoursesContent() {
                 </div>
               </div>
 
-
-
               <div className='cpanel' id='p-faq' ref={faqRef}>
                 <h2>Frequently Asked Questions</h2>
                 <div style={{ marginTop: '14px' }}>
@@ -815,30 +777,6 @@ function CoursesContent() {
               </div>
               <div className='side-card'>
                 <h3>Course Details</h3>
-                {/* <div className='detail-row'>
-                  <span>Duration</span>
-                  <span>{course.dur}</span>
-                </div>
-                <div className='detail-row'>
-                  <span>Level</span>
-                  <span>{course.level}</span>
-                </div>
-                <div className='detail-row'>
-                  <span>Mode</span>
-                  <span>{course.mode}</span>
-                </div>
-                <div className='detail-row'>
-                  <span>Language</span>
-                  <span>English</span>
-                </div>
-                <div className='detail-row'>
-                  <span>Eligibility</span>
-                  <span>{course.elig}</span>
-                </div>
-                <div className='detail-row'>
-                  <span>Difficulty</span>
-                  <span>Beginner</span>
-                </div> */}
                 <div className='detail-row'>
                   <span>Duration</span>
                   <span>

@@ -1837,6 +1837,12 @@ section {
   align-items: start;
 }
 
+.blog-layout>aside {
+  position: sticky;
+  top: 20px;
+  align-self: start;
+}
+
 .search-bar {
   position: relative;
   margin-bottom: 26px;
@@ -3227,7 +3233,8 @@ section {
   }
 
   .course-layout>aside,
-  .post-layout>aside {
+  .post-layout>aside,
+  .blog-layout>aside {
     position: static;
   }
 

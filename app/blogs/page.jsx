@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getBlogDataApi } from '@/api'
+import { getBlogDataApi, getTrendingBlogsApi } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
 import { useCourseOptions } from '@/hooks/useCourseOptions'
 import { INDIAN_STATES } from '@/constant/indianStates'
@@ -67,22 +67,6 @@ const BLOGS = [
   }
 ]
 
-const TRENDING = [
-  {
-    slug: 'online-mba-in-digital-marketing',
-    title:
-      'Online MBA in Digital Marketing: Scope, Syllabus, Fees & Career Guide 2026'
-  },
-  {
-    slug: 'dusol-admission-2026-form-filling-guide',
-    title: 'DU SOL Admission 2026: Step-by-Step Form Filling Guide'
-  },
-  {
-    slug: 'dusol-exam-pattern-explained',
-    title: 'DU SOL Exam Pattern Explained for New Students'
-  }
-]
-
 function BlogCard ({ blog }) {
   return (
     <div className='blog-card'>
@@ -121,6 +105,7 @@ export default function BlogsPage () {
   const [query, setQuery] = useState('')
   const [pagination, setPagination] = useState(null)
   const [phone, setPhone] = useState('')
+  const [trending, setTrending] = useState([])
   const courseOptions = useCourseOptions()
 
   const filtered = blogs.filter(
@@ -131,6 +116,7 @@ export default function BlogsPage () {
 
   useEffect(() => {
     fetchBlogs(1)
+    fetchTrending()
   }, [])
 
   const fetchBlogs = async (page = 1) => {
@@ -138,6 +124,15 @@ export default function BlogsPage () {
       const response = await getBlogDataApi(page)
       setBlogs(response.data.data)
       setPagination(response.data.pagination)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const fetchTrending = async () => {
+    try {
+      const response = await getTrendingBlogsApi()
+      setTrending(response.data.data)
     } catch (error) {
       console.log(error)
     }
@@ -228,8 +223,8 @@ export default function BlogsPage () {
               <div className='card' style={{ padding: '22px' }}>
                 <div className='side-trending'>
                   <h3>Trending Post</h3>
-                  {TRENDING.map(t => (
-                    <div key={t.slug} className='trend-item'>
+                  {trending.map(t => (
+                    <div key={t.id} className='trend-item'>
                       <div className='trend-thumb'>
                         <svg viewBox='0 0 30 30' fill='none'>
                           <rect
