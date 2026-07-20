@@ -441,10 +441,6 @@ function CoursesContent() {
 
   const feeItems = courseData?.fee_structures?.[0]?.items || []
 
-  const applicationFee = feeItems[0]?.amount
-  const courseFee = feeItems[1]?.amount
-  const examinationFee = feeItems[2]?.amount
-
   return (
     <>
       {/* PAGE HERO */}
@@ -791,42 +787,20 @@ function CoursesContent() {
             <aside>
               <div className='side-card'>
                 <h3>Fee Structure</h3>
-
-                <div className='fee-row'>
-                  <div className='f-ico'>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zm-1 10H8v-2h5z' />
-                    </svg>
+                {feeItems.length === 0 && <span>Fee details not available</span>}
+                {feeItems.map(item => (
+                  <div className='fee-row' key={item.id}>
+                    <div className='f-ico'>
+                      <svg viewBox='0 0 24 24'>
+                        <path d='M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zm-1 10H8v-2h5z' />
+                      </svg>
+                    </div>
+                    <div>
+                      <small>{item.title}</small>
+                      <b>₹{Number(item.amount || 0).toLocaleString('en-IN')}</b>
+                    </div>
                   </div>
-                  <div>
-                    <small>Application Fee</small>
-                    <b>₹{applicationFee || '-'}</b>
-                  </div>
-                </div>
-
-                <div className='fee-row'>
-                  <div className='f-ico'>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M13.7 5H17V3H7v2h3c1.4 0 2.6.8 3.1 2H7v2h6.1c-.5 1.2-1.7 2-3.1 2H7v2.3L12.7 21h2.8L9.8 15c2.4-.3 4.3-2 4.7-4H17V9z' />
-                    </svg>
-                  </div>
-                  <div>
-                    <small>Course Fee (Total)</small>
-                    <b>₹{courseFee || '-'}</b>
-                  </div>
-                </div>
-
-                <div className='fee-row'>
-                  <div className='f-ico'>
-                    <svg viewBox='0 0 24 24'>
-                      <path d='M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z' />
-                    </svg>
-                  </div>
-                  <div>
-                    <small>Examination Fee (Per Year)</small>
-                    <b>₹{examinationFee || '-'}</b>
-                  </div>
-                </div>
+                ))}
 
                 <button
                    onClick={() => {
