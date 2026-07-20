@@ -402,18 +402,24 @@ const fetchCourses = async level => {
             </div>
 
             <div className='about-block'>
-              <h2>
-                {AboutUs?.subtitle}-{AboutUs.title}
-              </h2>
+              {(AboutUs?.subtitle || AboutUs?.title) && (
+                <h2>
+                  {AboutUs?.subtitle}
+                  {AboutUs?.subtitle && AboutUs?.title ? '-' : ''}
+                  {AboutUs?.title}
+                </h2>
+              )}
 
               {/* {AboutUs?.subtitle && (
                 <h2 className='about-subtitle'></h2>
               )} */}
 
-              <div
-                className='about-description'
-                dangerouslySetInnerHTML={{ __html: AboutUs?.description || '' }}
-              />
+              {AboutUs?.description && (
+                <div
+                  className='about-description'
+                  dangerouslySetInnerHTML={{ __html: AboutUs.description }}
+                />
+              )}
 
               <button
                 type='button'

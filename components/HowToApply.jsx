@@ -12,6 +12,7 @@ import {
     BadgeCheck
 } from 'lucide-react'
 
+
 const steps = [
     {
         id: 1,
@@ -51,25 +52,36 @@ const steps = [
     }
 ]
 
+// Tenant-themed colors, computed at runtime from the CSS variables the
+// TenantContext injects onto <html>. Tailwind's arbitrary-value type
+// inference for bracket classes like bg-[color-mix(...)] or text-[var(...)]
+// is a build-time heuristic guess (see tailwindcss/src/util/dataTypes.js
+// `color()`), not a guarantee — using inline styles instead sidesteps that
+// guesswork entirely and always resolves the live CSS variable.
+const primaryTint4 = 'color-mix(in srgb, var(--primary-color) 4%, white)'
+const primaryTint8 = 'color-mix(in srgb, var(--primary-color) 8%, white)'
+const primaryTint25 = 'color-mix(in srgb, var(--primary-color) 25%, white)'
+const primaryColorStyle = { color: 'var(--primary-color)' }
+
 export default function HowToApply() {
     const [leadModalOpen, setLeadModalOpen] = useState(false)
     return (
         <>
-        <section className='w-full bg-[color-mix(in_srgb,var(--primary-color)_4%,white)] py-10 md:py-14 overflow-hidden'>
+        <section className='w-full py-10 md:py-14 overflow-hidden' style={{ backgroundColor: primaryTint4 }}>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 {/* Heading */}
                 <div className='mb-10 text-center lg:text-left'>
-                    <h2 className='text-2xl sm:text-3xl font-bold text-[var(--primary-color)] uppercase'>
+                    <h2 className='text-2xl sm:text-3xl font-bold uppercase' style={primaryColorStyle}>
                         How To Apply
                     </h2>
 
-                    <div className='w-20 h-1 bg-[var(--secondary-color)] mt-3 rounded-full mx-auto lg:mx-0'></div>
+                    <div className='w-20 h-1 mt-3 rounded-full mx-auto lg:mx-0' style={{ backgroundColor: 'var(--secondary-color)' }}></div>
                 </div>
 
                 {/* Desktop Layout */}
                 <div className='hidden lg:grid grid-cols-6 gap-6 relative'>
                     {/* Dotted Line */}
-                    <div className='absolute top-8 left-0 w-full border-t-2 border-dashed border-[color-mix(in_srgb,var(--primary-color)_25%,white)] z-0'></div>
+                    <div className='absolute top-8 left-0 w-full border-t-2 border-dashed z-0' style={{ borderColor: primaryTint25 }}></div>
 
                     {steps.map(step => {
                         const Icon = step.icon
@@ -85,8 +97,8 @@ export default function HowToApply() {
                 </div> */}
 
                                 {/* Icon */}
-                                <div className='w-16 h-16 rounded-2xl border border-[color-mix(in_srgb,var(--primary-color)_25%,white)] bg-white flex items-center justify-center shadow-md'>
-                                    <Icon className='text-[var(--primary-color)] w-8 h-8' />
+                                <div className='w-16 h-16 rounded-2xl border bg-white flex items-center justify-center shadow-md' style={{ borderColor: primaryTint25 }}>
+                                    <Icon className='w-8 h-8' style={primaryColorStyle} />
                                 </div>
 
                                 {/* Content */}
@@ -113,13 +125,13 @@ export default function HowToApply() {
                                 className='relative bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-300'
                             >
                                 {/* Step Number */}
-                                <div className='absolute top-4 right-4 w-7 h-7 rounded-full bg-[var(--secondary-color)] text-black text-xs font-bold flex items-center justify-center'>
+                                <div className='absolute top-4 right-4 w-7 h-7 rounded-full text-black text-xs font-bold flex items-center justify-center' style={{ backgroundColor: 'var(--secondary-color)' }}>
                                     {step.id}
                                 </div>
 
                                 {/* Icon */}
-                                <div className='w-14 h-14 rounded-xl border border-[color-mix(in_srgb,var(--primary-color)_25%,white)] bg-[color-mix(in_srgb,var(--primary-color)_8%,white)] flex items-center justify-center'>
-                                    <Icon className='text-[var(--primary-color)] w-7 h-7' />
+                                <div className='w-14 h-14 rounded-xl border flex items-center justify-center' style={{ borderColor: primaryTint25, backgroundColor: primaryTint8 }}>
+                                    <Icon className='w-7 h-7' style={primaryColorStyle} />
                                 </div>
 
                                 {/* Content */}
