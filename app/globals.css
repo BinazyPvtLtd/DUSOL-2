@@ -2284,6 +2284,7 @@ section {
 
 .info-table th p{
   color: #fff;
+  text-align: left;
 }
 .info-table th,
 .info-table td {

@@ -121,6 +121,39 @@ export default function BlogClient ({ slug: slugProp }) {
 
       setToc(headings)
 
+      // Reuse the same table styling as Alternative Universities / other
+      // student-zone pages (.info-table in globals.css) and ensure the CMS
+      // table markup is a proper semantic table (thead/th scope=col/tbody).
+      doc.querySelectorAll('table').forEach(table => {
+        table.classList.add('info-table')
+
+        if (!table.querySelector('thead')) {
+          const firstRow = table.querySelector('tr')
+
+          if (firstRow) {
+            const thead = doc.createElement('thead')
+            const headRow = doc.createElement('tr')
+
+            firstRow.querySelectorAll('td, th').forEach(cell => {
+              const th = doc.createElement('th')
+              th.setAttribute('scope', 'col')
+              th.innerHTML = cell.innerHTML
+              headRow.appendChild(th)
+            })
+
+            thead.appendChild(headRow)
+            table.insertBefore(thead, table.firstChild)
+            firstRow.remove()
+          }
+        }
+
+        if (!table.querySelector('tbody')) {
+          const tbody = doc.createElement('tbody')
+          table.querySelectorAll(':scope > tr').forEach(row => tbody.appendChild(row))
+          table.appendChild(tbody)
+        }
+      })
+
       setPost({
         ...blog,
         content: doc.body.innerHTML
@@ -203,7 +236,7 @@ export default function BlogClient ({ slug: slugProp }) {
                 {' · '}
                 {post.views} Views
               </div>
-              <div className=" w-full aspect-video overflow-hidden rounded-xl bg-white">
+              <div className=" w-full aspect-video overflow-hidden rounded-xl bg-white mb-4">
                 <img
                   src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${post.featured_image}`}
                   alt={post.title}
