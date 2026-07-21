@@ -2,6 +2,7 @@ import HomeClient from './HomeClient'
 import { generateSEOMetadata } from './lib/seo'
 import { headers } from 'next/headers'
 import axios from 'axios'
+import JsonLd from '@/components/JsonLd'
 
 async function fetchHomePageData() {
   let baseUrl = process.env.NEXT_PUBLIC_DEFAULT_API
@@ -47,7 +48,15 @@ export default async function HomePage() {
   try {
     const response = await fetchHomePageData()
 
-    return <HomeClient initialData={response?.data || null} />
+    const payload = response?.data
+    const schema = payload?.seo?.schema || payload?.data?.seo?.schema || null
+
+    return (
+      <>
+        <JsonLd schema={schema} />
+        <HomeClient initialData={response?.data || null} />
+      </>
+    )
   } catch (err) {
     console.error('Home Page API Error:', err)
 
