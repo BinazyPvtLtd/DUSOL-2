@@ -8,7 +8,7 @@ import PhoneInputField from '@/components/PhoneInputField'
 import { useLeadSubmit } from '@/hooks/useLeadSubmit'
 import { useCourseOptions } from '@/hooks/useCourseOptions'
 import { INDIAN_STATES } from '@/constant/indianStates'
-import LeadModal from '@/components/LeadModal'
+
 const TRENDING = [
   {
     slug: 'online-mba-in-digital-marketing',
@@ -152,16 +152,14 @@ export default function BlogClient ({ slug: slugProp }) {
 
         if (!table.querySelector('tbody')) {
           const tbody = doc.createElement('tbody')
-          table
-            .querySelectorAll(':scope > tr')
-            .forEach(row => tbody.appendChild(row))
+          table.querySelectorAll(':scope > tr').forEach(row => tbody.appendChild(row))
           table.appendChild(tbody)
         }
       })
 
       setPost({
         ...blog,
-        content: doc.body.innerHTML
+        content: applyInfoTableStyling(doc.body.innerHTML)
       })
     } catch (error) {
       console.error('Failed to generate table of contents:', error)

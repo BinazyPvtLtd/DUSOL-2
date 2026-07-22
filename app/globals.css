@@ -56,6 +56,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* outline: 2px solid red; */
 }
 
 html {
@@ -824,7 +825,7 @@ section {
 }
 
 .kh-col + .kh-col {
-  border-left: 1px solid var(--line);
+  /* border-left: 1px solid var(--line); */
   padding-left: 56px;
 }
 
@@ -1141,6 +1142,31 @@ section {
   height: 20px;
   fill: var(--primary-color);
   flex: none;
+}
+
+
+/* ----------- Admission process ---------*/
+.admission-content {
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.admission-content p {
+    margin-bottom: 1rem;
+}
+
+.admission-content strong {
+    font-weight: 600;
+}
+
+.admission-content ul,
+.admission-content ol {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+
+.admission-content li {
+    margin-bottom: 0.5rem;
 }
 
 /* --------- HOW TO APPLY --------- */
@@ -2361,6 +2387,12 @@ section {
 
 .content-main ul.bullets li {
   margin-bottom: 7px;
+}
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .info-table {

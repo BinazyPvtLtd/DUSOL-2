@@ -26,22 +26,20 @@ export default function AdmissionProcedure({ homeData }) {
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='mb-10 text-center lg:text-left'>
           <h2
-            className='text-2xl sm:text-3xl font-bold uppercase'
+            className='text-2xl sm:text-3xl font-bold uppercase text-center mb-2'
             style={primaryColorStyle}
           >
             {admissionProcedure.title}
           </h2>
-
+       
           {admissionProcedure.description && (
-            <p className='mt-3 text-sm text-gray-600 max-w-2xl mx-auto lg:mx-0'>
-              {admissionProcedure.description}
-            </p>
-          )}
-
-          <div
-            className='w-20 h-1 mt-3 rounded-full mx-auto lg:mx-0'
-            style={{ backgroundColor: 'var(--secondary-color)' }}
-          ></div>
+            <div
+              className="mt-3 text-gray-600 admission-content"
+              dangerouslySetInnerHTML={{
+                __html: admissionProcedure.description
+              }}
+            />
+          )}         
         </div>
 
         {steps.length > 0 && (

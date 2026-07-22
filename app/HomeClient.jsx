@@ -391,14 +391,6 @@ export default function HomeClient({ initialData }) {
                   )
                 })}
               </div>
-
-              {/* <Link
-                href='/news'
-                className='btn btn-purple btn-block'
-                style={{ marginTop: '16px' }}
-              >
-                VIEW ALL NEWS
-              </Link> */}
             </div>
 
             <div className='about-block'>
@@ -409,10 +401,6 @@ export default function HomeClient({ initialData }) {
                   {AboutUs?.title}
                 </h2>
               )}
-
-              {/* {AboutUs?.subtitle && (
-                <h2 className='about-subtitle'></h2>
-              )} */}
 
               {AboutUs?.description && (
                 <div

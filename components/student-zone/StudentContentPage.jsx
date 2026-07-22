@@ -1,13 +1,20 @@
 'use client'
 
+import { useMemo } from 'react'
 import StudentHero from '@/components/student-zone/StudentHero'
 import StudentSidebar from '@/components/student-zone/StudentSidebar'
+import { applyInfoTableStyling } from '@/helperFunction/Helper'
 
 export default function StudentContentPage({
   page,
   pageKey,
   tenantSlug,
 }) {
+  const content = useMemo(
+    () => applyInfoTableStyling(page?.content),
+    [page?.content]
+  )
+
   return (
     <>
       <StudentHero
@@ -19,13 +26,10 @@ export default function StudentContentPage({
         <div className='wrap'>
           <div className='content-layout'>
             <div className='content-main'>
-              {page?.content && (
+              {content && (
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: page.content?.replace(
-                      /<table([^>]*)>/g,
-                      '<table class="info-table"$1>'
-                    ),
+                    __html: content,
                   }}
                 />
               )}

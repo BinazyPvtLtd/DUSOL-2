@@ -19,6 +19,8 @@ import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
 
+
+
 const MBA_SPECS = [
   { name: 'Information Technology', ico: '💻' },
   { name: 'Business Analytics', ico: '📊' },
@@ -463,7 +465,7 @@ function SpecializationContent ({ slug: slugProp }) {
                 <div>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: courseData?.overview || ''
+                      __html: applyInfoTableStyling(courseData?.overview || '')
                     }}
                   />
                 </div>
@@ -588,12 +590,8 @@ function SpecializationContent ({ slug: slugProp }) {
                   <span>Eligibility</span>
                   <div className='eligibility-content'>
                     <div
-                      className={`eligibility-text ${
-                        showEligibility ? '' : 'eligibility-clamp'
-                      }`}
-                      dangerouslySetInnerHTML={{
-                        __html: courseData?.eligibility || ''
-                      }}
+                      className={`eligibility-text ${showEligibility ? '' : 'eligibility-clamp'}`}
+                      dangerouslySetInnerHTML={{ __html: courseData?.eligibility || '' }}
                     />
 
                     {courseData?.eligibility && (

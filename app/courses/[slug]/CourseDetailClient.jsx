@@ -19,6 +19,7 @@ import { useCourseOptions } from '@/hooks/useCourseOptions'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
+import { applyInfoTableStyling } from '@/helperFunction/Helper'
 
 const DEF_FAQ = [
   [
@@ -684,7 +685,7 @@ function CoursesContent () {
                 <p>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: courseData?.overview || ''
+                      __html: applyInfoTableStyling(courseData?.overview || '')
                     }}
                   />
                 </p>
@@ -810,7 +811,7 @@ function CoursesContent () {
                         showEligibility ? '' : 'eligibility-clamp'
                       }`}
                       dangerouslySetInnerHTML={{
-                        __html: courseData?.eligibility || ''
+                        __html: applyInfoTableStyling(courseData?.eligibility || '')
                       }}
                     />
 
