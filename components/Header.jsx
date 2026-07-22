@@ -213,7 +213,7 @@ export default function Header() {
                   style={{
                     fontFamily: 'var(--font-head)',
                     fontWeight: 800,
-                    fontSize: '20px',
+                    fontSize: '18px',
                     color: 'var(--purple-dark)',
                     letterSpacing: '.5px'
                   }}

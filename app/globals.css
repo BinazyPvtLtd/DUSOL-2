@@ -129,7 +129,7 @@ h5 {
   gap: 8px;
   font-family: var(--font-head);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   padding: 12px 24px;
   border-radius: 8px;
   cursor: pointer;
@@ -362,7 +362,7 @@ section {
 }
 
 .logo .logo-sub {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.35;
   color: var(--primary-color);
   font-weight: 400;
@@ -391,7 +391,7 @@ section {
   padding: 10px 14px;
   font-family: var(--font-head);
   font-weight: 500;
-  font-size: 15px;
+  font-size: 12px;
   color: var(--ink);
   border-radius: 8px;
   transition: 0.2s;
@@ -464,7 +464,7 @@ section {
 .dropdown a.dd-link {
   display: block;
   padding: 8px 10px;
-  font-size: 14px;
+  font-size: 12px;
   color: var(--ink);
   border-radius: 7px;
   transition: 0.18s;
@@ -806,6 +806,97 @@ section {
   margin-top: 6px;
 }
 
+/* --------- KEY HIGHLIGHTS --------- */
+.key-highlights {
+  padding: 10px;
+}
+
+.kh-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px 56px;
+}
+
+.kh-col {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.kh-col + .kh-col {
+  border-left: 1px solid var(--line);
+  padding-left: 56px;
+}
+
+.kh-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  height: 100%;
+  min-height: 132px;
+  padding: 26px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  opacity: 0;
+  animation: khFadeUp 0.6s ease forwards;
+}
+
+.kh-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary-color);
+}
+
+.kh-ico {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.kh-ico svg {
+  width: 26px;
+  height: 26px;
+  stroke: var(--primary-color);
+  fill: none;
+}
+
+.kh-card h3 {
+  font-family: var(--font-head);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.kh-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+@keyframes khFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kh-card {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 /* --------- COURSES --------- */
 .courses-sec {
   background: #fff;
@@ -1009,7 +1100,7 @@ section {
 
 .why .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 46px;
   align-items: center;
 }
@@ -3223,6 +3314,16 @@ section {
 
   .news-about .grid {
     grid-template-columns: 1fr;
+  }
+
+  .kh-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .kh-col + .kh-col {
+    border-left: none;
+    padding-left: 0;
   }
 
   .course-grid {

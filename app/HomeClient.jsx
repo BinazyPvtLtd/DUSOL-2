@@ -12,6 +12,8 @@ import { getCoursesByLevelAPI } from '@/api'
 import LeadModal from '@/components/LeadModal'
 import { getYoutubeThumbnail } from '@/helperFunction/Helper'
 import HowToApply from '@/components/HowToApply'
+import KeyHighlights from '@/components/KeyHighlights'
+import AdmissionProcedure from '@/components/AdmissionProcedure'
 
 async function fetchHomeData() {
   let baseUrl = process.env.NEXT_PUBLIC_DEFAULT_API
@@ -127,20 +129,20 @@ export default function HomeClient({ initialData }) {
     fetchCourses('UG')
   }, [])
 
-const fetchCourses = async level => {
-  try {
-    setLoading(true)
+  const fetchCourses = async level => {
+    try {
+      setLoading(true)
 
-    const response = await getCoursesByLevelAPI(level)
+      const response = await getCoursesByLevelAPI(level)
 
-    setCourseData(response.data?.data || [])
-  } catch (error) {
-    console.log(error)
-    setCourseData([])
-  } finally {
-    setLoading(false)
+      setCourseData(response.data?.data || [])
+    } catch (error) {
+      console.log(error)
+      setCourseData([])
+    } finally {
+      setLoading(false)
+    }
   }
-}
 
   const BannerData = homeData?.data?.hero
   const AboutUs = homeData?.data?.about
@@ -153,7 +155,7 @@ const fetchCourses = async level => {
 
   const handleTabChange = tab => {
     setActiveTab(tab)
-     setShowAllCourses(false)
+    setShowAllCourses(false)
 
     if (tab === 'bachelor') {
       fetchCourses('UG')
@@ -163,8 +165,8 @@ const fetchCourses = async level => {
   }
 
   const displayedCourses = showAllCourses
-  ? courseData
-  : courseData.slice(0, 8)
+    ? courseData
+    : courseData.slice(0, 8)
 
   // SSR-safety: guard any browser-only APIs
   const safeWindowOpen = url => {
@@ -436,7 +438,6 @@ const fetchCourses = async level => {
           </div>
         </div>
       </section>
-
       <section className='courses-sec'>
         <div className='wrap'>
           <div className='sec-head'>
@@ -469,24 +470,24 @@ const fetchCourses = async level => {
             </button>
           </div>
 
-        <div className='course-grid'>
-  {displayedCourses.map(course => (
-    <CourseCard key={course.id} c={course} />
-  ))}
-</div>
+          <div className='course-grid'>
+            {displayedCourses.map(course => (
+              <CourseCard key={course.id} c={course} />
+            ))}
+          </div>
 
-{courseData.length > 8 && (
-  <div className='text-center mt-10'>
-    <button
-      type='button'
-      className='btn btn-gold'
-      onClick={() => setShowAllCourses(!showAllCourses)}
-    >
-      
-      {showAllCourses ? 'View Less' : 'View More'}
-    </button>
-  </div>
-)}
+          {courseData.length > 8 && (
+            <div className='text-center mt-10'>
+              <button
+                type='button'
+                className='btn btn-gold'
+                onClick={() => setShowAllCourses(!showAllCourses)}
+              >
+
+                {showAllCourses ? 'View Less' : 'View More'}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -517,7 +518,7 @@ const fetchCourses = async level => {
               </div>
 
               <button
-                 onClick={() => {
+                onClick={() => {
                   closeMobile()
                   setLeadModalOpen(true)
                 }}
@@ -533,18 +534,6 @@ const fetchCourses = async level => {
       <section className='why'>
         <div className='wrap'>
           <div className='grid'>
-            {/* <div className='why-illus'> */}
-            <div className=''>
-              {WhyChooseData?.image && (
-                <img
-                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${WhyChooseData.image}`}
-                  alt={WhyChooseData?.title || 'Why Choose'}
-                  width={500}
-                  height={450}
-                  className='img-fluid'
-                />
-              )}
-            </div>
 
             <div>
               {WhyChooseData?.subtitle && (
@@ -571,24 +560,33 @@ const fetchCourses = async level => {
                 ))}
               </ul>
 
+
               {WhyChooseData?.button_text && (
-                <button
-                   onClick={() => {
-                  closeMobile()
-                  setLeadModalOpen(true)
-                }}
-                  className='btn btn-purple'
-                >
-                  {WhyChooseData.button_text}
-                </button>
+
+                <div style={{ textAlign: 'center', margin: 'auto' }}>
+                  <button
+                    onClick={() => {
+                      closeMobile()
+                      setLeadModalOpen(true)
+                    }}
+                    className='btn btn-purple'
+                  >
+                    {WhyChooseData.button_text}
+                  </button>
+                </div>
               )}
             </div>
+
+
+            <KeyHighlights homeData={homeData?.data} />
           </div>
         </div>
       </section>
 
 
-    <HowToApply/>
+      <AdmissionProcedure homeData={homeData?.data} />
+
+      <HowToApply />
 
       <section className='faq'>
         <div className='wrap'>
