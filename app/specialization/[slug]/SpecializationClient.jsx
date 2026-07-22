@@ -142,9 +142,57 @@ function SpecializationContent ({ slug: slugProp }) {
   const instructorRef = useRef(null)
   const faqRef = useRef(null)
 
+  // manualScrollRef suppresses the scroll-spy observer while a tab-click
+  // triggered smooth-scroll is in flight, so the clicked tab doesn't get
+  // overridden by sections it scrolls past on the way to the target.
+  const manualScrollRef = useRef(false)
+  const manualScrollTimeoutRef = useRef(null)
+
   const scrollTo = ref => {
+    manualScrollRef.current = true
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+    clearTimeout(manualScrollTimeoutRef.current)
+    manualScrollTimeoutRef.current = setTimeout(() => {
+      manualScrollRef.current = false
+    }, 700)
   }
+
+  // Scroll-spy: keep the active tab in sync with whichever panel is under
+  // the sticky header/tab bar while the user scrolls freely.
+  useEffect(() => {
+    if (!courseData) return
+
+    const sections = [
+      { id: 'overview', ref: overviewRef },
+      { id: 'curriculum', ref: curriculumRef },
+      { id: 'specializations', ref: specRef },
+      { id: 'faq', ref: faqRef }
+    ].filter(section => section.ref.current)
+
+    if (sections.length === 0) return
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (manualScrollRef.current) return
+
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return
+
+          const match = sections.find(
+            section => section.ref.current === entry.target
+          )
+
+          if (match) setActiveTab(match.id)
+        })
+      },
+      { rootMargin: '-140px 0px -60% 0px', threshold: 0 }
+    )
+
+    sections.forEach(section => observer.observe(section.ref.current))
+
+    return () => observer.disconnect()
+  }, [courseData])
 
   useEffect(() => {
     if (!slug) return

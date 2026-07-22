@@ -262,7 +262,6 @@ export default function CoursesPageClient ({ slug }) {
             </div>
           </div>
         </section>
-
         {/* Full course UI not replicated here to avoid breaking your existing complex component. */}
       </Suspense>
    

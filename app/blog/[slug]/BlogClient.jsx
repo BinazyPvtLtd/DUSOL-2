@@ -8,6 +8,8 @@ import PhoneInputField from '@/components/PhoneInputField'
 import { useLeadSubmit } from '@/hooks/useLeadSubmit'
 import { useCourseOptions } from '@/hooks/useCourseOptions'
 import { INDIAN_STATES } from '@/constant/indianStates'
+import LeadModal from '@/components/LeadModal'
+import { applyInfoTableStyling } from '@/helperFunction/Helper'
 
 const TRENDING = [
   {
