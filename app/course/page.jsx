@@ -98,5 +98,6 @@ export default function ComingSoon() {
 
       <div className="wave"></div>
     </main>
+    
   );
 }

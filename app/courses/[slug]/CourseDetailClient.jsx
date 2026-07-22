@@ -310,7 +310,7 @@ const SemItem = ({ sem }) => {
   )
 }
 
-function FaqItem({ q, a }) {
+function FaqItem ({ q, a }) {
   const [open, setOpen] = useState(false)
   const contentRef = useRef(null)
 
@@ -333,7 +333,7 @@ function FaqItem({ q, a }) {
   )
 }
 
-function CoursesContent() {
+function CoursesContent () {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -342,7 +342,8 @@ function CoursesContent() {
   const submitLead = useLeadSubmit()
   const courseOptions = useCourseOptions()
   const [leadModalOpen, setLeadModalOpen] = useState(false)
-  // const searchParams = useSearchParams()
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [openItem, setOpenItem] = useState(null)  // const searchParams = useSearchParams()
   const { slug } = useParams()
   // const slug = searchParams.get('c') || 'online-bba'
   const course = COURSES[slug] || COURSES['online-bba']
@@ -441,6 +442,11 @@ function CoursesContent() {
 
   const feeItems = courseData?.fee_structures?.[0]?.items || []
 
+  const closeMobile = () => {
+    setMobileOpen(false)
+    setOpenItem(null)
+  }
+
   return (
     <>
       {/* PAGE HERO */}
@@ -456,10 +462,7 @@ function CoursesContent() {
               <span>{courseData?.short_name}</span>{' '}
             </div>
             <span className='tag'> {courseData?.short_name}</span>
-            <h1>
-              {' '}
-              {courseData?.name}{' '}
-            </h1>
+            <h1> {courseData?.name} </h1>
             <p className='mb-8'>{courseData?.short_description}</p>{' '}
             <div className='meta-row'>
               <div className='cmeta'>
@@ -630,8 +633,9 @@ function CoursesContent() {
               <div className='ctabs-sticky'>
                 <div className='ctabs'>
                   <button
-                    className={`ctab ${activeTab === 'overview' ? 'active' : ''
-                      }`}
+                    className={`ctab ${
+                      activeTab === 'overview' ? 'active' : ''
+                    }`}
                     onClick={() => {
                       setActiveTab('overview')
                       scrollTo(overviewRef)
@@ -641,8 +645,9 @@ function CoursesContent() {
                   </button>
 
                   <button
-                    className={`ctab ${activeTab === 'curriculum' ? 'active' : ''
-                      }`}
+                    className={`ctab ${
+                      activeTab === 'curriculum' ? 'active' : ''
+                    }`}
                     onClick={() => {
                       setActiveTab('curriculum')
                       scrollTo(curriculumRef)
@@ -652,8 +657,9 @@ function CoursesContent() {
                   </button>
 
                   <button
-                    className={`ctab ${activeTab === 'specializations' ? 'active' : ''
-                      }`}
+                    className={`ctab ${
+                      activeTab === 'specializations' ? 'active' : ''
+                    }`}
                     onClick={() => {
                       setActiveTab('specializations')
                       scrollTo(specRef)
@@ -682,7 +688,6 @@ function CoursesContent() {
                     }}
                   />
                 </p>
-                
               </div>
               <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
                 <div className='syllabus-head'>
@@ -749,7 +754,9 @@ function CoursesContent() {
             <aside>
               <div className='side-card'>
                 <h3>Fee Structure</h3>
-                {feeItems.length === 0 && <span>Fee details not available</span>}
+                {feeItems.length === 0 && (
+                  <span>Fee details not available</span>
+                )}
                 {feeItems.map(item => (
                   <div className='fee-row' key={item.id}>
                     <div className='f-ico'>
@@ -765,12 +772,12 @@ function CoursesContent() {
                 ))}
 
                 <button
-                   onClick={() => {
-                  closeMobile()
-                  setLeadModalOpen(true)
-                }}
-                  className='btn btn-gold btn-block'
-                  style={{ marginTop: '16px' }}
+                  type='button'
+                  className='btn btn-gold'
+                  onClick={() => {
+                    closeMobile()
+                    setLeadModalOpen(true)
+                  }}
                 >
                   GET FREE COUNSELLING
                 </button>
@@ -799,8 +806,9 @@ function CoursesContent() {
 
                   <div className='eligibility-content'>
                     <div
-                      className={`eligibility-text ${showEligibility ? '' : 'eligibility-clamp'
-                        }`}
+                      className={`eligibility-text ${
+                        showEligibility ? '' : 'eligibility-clamp'
+                      }`}
                       dangerouslySetInnerHTML={{
                         __html: courseData?.eligibility || ''
                       }}
@@ -923,7 +931,7 @@ function CoursesContent() {
   )
 }
 
-export default function CoursesPage() {
+export default function CoursesPage () {
   return (
     <Suspense
       fallback={

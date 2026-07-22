@@ -19,8 +19,6 @@ import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
 
-
-
 const MBA_SPECS = [
   { name: 'Information Technology', ico: '💻' },
   { name: 'Business Analytics', ico: '📊' },
@@ -65,7 +63,7 @@ const SemItem = ({ sem }) => {
   )
 }
 
-function FaqItem({ q, a }) {
+function FaqItem ({ q, a }) {
   const [open, setOpen] = useState(false)
   const contentRef = useRef(null)
 
@@ -88,7 +86,7 @@ function FaqItem({ q, a }) {
   )
 }
 
-function applySeoToDocument(seo = {}) {
+function applySeoToDocument (seo = {}) {
   if (typeof document === 'undefined') return
 
   const { title, description } = seo
@@ -119,7 +117,7 @@ function applySeoToDocument(seo = {}) {
   }
 }
 
-function SpecializationContent({ slug: slugProp }) {
+function SpecializationContent ({ slug: slugProp }) {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -128,6 +126,8 @@ function SpecializationContent({ slug: slugProp }) {
   const submitLead = useLeadSubmit()
   const courseOptions = useCourseOptions()
   const [leadModalOpen, setLeadModalOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [openItem, setOpenItem] = useState(null)
 
   const params = useParams()
   const slug = slugProp || params?.slug
@@ -145,29 +145,28 @@ function SpecializationContent({ slug: slugProp }) {
 
   useEffect(() => {
     if (!slug) return
+    ;(async () => {
+      try {
+        const response = await getOneSpecializationAPI(slug)
+        const payloadCourse = response?.data?.data?.specialization
 
-      ; (async () => {
-        try {
-          const response = await getOneSpecializationAPI(slug)
-          const payloadCourse = response?.data?.data?.specialization;
+        console.log('Specialization API Response:', response)
+        setCoursedata(payloadCourse)
 
-          console.log('Specialization API Response:', response)
-          setCoursedata(payloadCourse)
+        // Apply SEO client-side using same helper
+        const seoSource =
+          payloadCourse?.seo ||
+          response?.data?.seo ||
+          response?.data?.data?.seo ||
+          response?.data?.data?.university?.seo ||
+          {}
 
-          // Apply SEO client-side using same helper
-          const seoSource =
-            payloadCourse?.seo ||
-            response?.data?.seo ||
-            response?.data?.data?.seo ||
-            response?.data?.data?.university?.seo ||
-            {}
-
-          const seo = generateSEOMetadata(seoSource)
-          applySeoToDocument(seo)
-        } catch (e) {
-          console.log(e)
-        }
-      })()
+        const seo = generateSEOMetadata(seoSource)
+        applySeoToDocument(seo)
+      } catch (e) {
+        console.log(e)
+      }
+    })()
   }, [slug])
 
   const [formData, setFormData] = useState({
@@ -240,7 +239,14 @@ function SpecializationContent({ slug: slugProp }) {
   const feeItems = courseData?.fee_structures?.[0]?.items || []
 
   if (!courseData) {
-    return <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
+    return (
+      <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
+    )
+  }
+
+  const closeMobile = () => {
+    setMobileOpen(false)
+    setOpenItem(null)
   }
 
   return (
@@ -263,10 +269,14 @@ function SpecializationContent({ slug: slugProp }) {
               {courseData?.short_name && `(${courseData.short_name})`}
             </h1>
             <p className='mb-8'>{courseData?.short_description}</p>{' '}
-
             <div className='hero-badges mt-5'>
               <div className='acc-logo'>
-                <Image src={img1} alt='NAAC Accredited' width={60} height={60} />
+                <Image
+                  src={img1}
+                  alt='NAAC Accredited'
+                  width={60}
+                  height={60}
+                />
                 <div className='acc-text'>
                   NAAC Accredited
                   <br />
@@ -275,7 +285,12 @@ function SpecializationContent({ slug: slugProp }) {
               </div>
 
               <div className='acc-logo'>
-                <Image src={img2} alt='UGC + DEB Approved' width={60} height={60} />
+                <Image
+                  src={img2}
+                  alt='UGC + DEB Approved'
+                  width={60}
+                  height={60}
+                />
                 <div className='acc-text'>
                   UGC + DEB
                   <br />
@@ -292,12 +307,14 @@ function SpecializationContent({ slug: slugProp }) {
                 </div>
               </div>
             </div>
-
             <div className='hero-actions'>
               <button
                 type='button'
                 className='btn btn-gold'
-                onClick={() => setLeadModalOpen(true)}
+                onClick={() => {
+                  closeMobile()
+                  setLeadModalOpen(true)
+                }}
               >
                 GET FREE COUNSELLING
               </button>
@@ -335,7 +352,11 @@ function SpecializationContent({ slug: slugProp }) {
                 onChange={phone => setFormData(prev => ({ ...prev, phone }))}
               />
 
-              <select name='course' value={formData.course} onChange={handleChange}>
+              <select
+                name='course'
+                value={formData.course}
+                onChange={handleChange}
+              >
                 <option value=''>Select Course</option>
                 {courseOptions.map(c => (
                   <option key={c.id} value={c.short_name || c.name}>
@@ -344,7 +365,12 @@ function SpecializationContent({ slug: slugProp }) {
                 ))}
               </select>
 
-              <select name='state' value={formData.state} onChange={handleChange} required>
+              <select
+                name='state'
+                value={formData.state}
+                onChange={handleChange}
+                required
+              >
                 <option value=''>Select State</option>
                 {INDIAN_STATES.map(state => (
                   <option key={state}>{state}</option>
@@ -360,7 +386,8 @@ function SpecializationContent({ slug: slugProp }) {
                   required
                 />
                 <span>
-                  I authorise DU SOL to contact me with updates via SMS/Email/WhatsApp.
+                  I authorise DU SOL to contact me with updates via
+                  SMS/Email/WhatsApp.
                 </span>
               </label>
 
@@ -384,7 +411,9 @@ function SpecializationContent({ slug: slugProp }) {
               <div className='ctabs-sticky'>
                 <div className='ctabs'>
                   <button
-                    className={`ctab ${activeTab === 'overview' ? 'active' : ''}`}
+                    className={`ctab ${
+                      activeTab === 'overview' ? 'active' : ''
+                    }`}
                     onClick={() => {
                       setActiveTab('overview')
                       scrollTo(overviewRef)
@@ -394,7 +423,9 @@ function SpecializationContent({ slug: slugProp }) {
                   </button>
 
                   <button
-                    className={`ctab ${activeTab === 'curriculum' ? 'active' : ''}`}
+                    className={`ctab ${
+                      activeTab === 'curriculum' ? 'active' : ''
+                    }`}
                     onClick={() => {
                       setActiveTab('curriculum')
                       scrollTo(curriculumRef)
@@ -404,7 +435,9 @@ function SpecializationContent({ slug: slugProp }) {
                   </button>
 
                   <button
-                    className={`ctab ${activeTab === 'specializations' ? 'active' : ''}`}
+                    className={`ctab ${
+                      activeTab === 'specializations' ? 'active' : ''
+                    }`}
                     onClick={() => {
                       setActiveTab('specializations')
                       scrollTo(specRef)
@@ -434,8 +467,6 @@ function SpecializationContent({ slug: slugProp }) {
                     }}
                   />
                 </div>
-
-
               </div>
 
               <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
@@ -464,7 +495,10 @@ function SpecializationContent({ slug: slugProp }) {
 
               <div className='cpanel' id='p-spec' ref={specRef}>
                 <h2>Specializations</h2>
-                <p>Choose a specialization in your final year to build domain expertise.</p>
+                <p>
+                  Choose a specialization in your final year to build domain
+                  expertise.
+                </p>
 
                 <div className='spec-grid'>
                   {(courseData?.course?.specializations || []).map(sp => (
@@ -484,7 +518,6 @@ function SpecializationContent({ slug: slugProp }) {
                 </div>
               </div>
 
-
               <div className='cpanel' id='p-faq' ref={faqRef}>
                 <h2>Frequently Asked Questions</h2>
                 <div style={{ marginTop: '14px' }}>
@@ -502,7 +535,9 @@ function SpecializationContent({ slug: slugProp }) {
               <div className='side-card'>
                 <h3>Fee Structure</h3>
 
-                {feeItems.length === 0 && <span>Fee details not available</span>}
+                {feeItems.length === 0 && (
+                  <span>Fee details not available</span>
+                )}
                 {feeItems.map(item => (
                   <div className='fee-row' key={item.id}>
                     <div className='f-ico'>
@@ -517,9 +552,16 @@ function SpecializationContent({ slug: slugProp }) {
                   </div>
                 ))}
 
-                <Link href='#' className='btn btn-gold btn-block' style={{ marginTop: '16px' }}>
+                <button
+                  type='button'
+                  className='btn btn-gold'
+                  onClick={() => {
+                    closeMobile()
+                    setLeadModalOpen(true)
+                  }}
+                >
                   GET FREE COUNSELLING
-                </Link>
+                </button>
               </div>
 
               <div className='side-card'>
@@ -546,8 +588,12 @@ function SpecializationContent({ slug: slugProp }) {
                   <span>Eligibility</span>
                   <div className='eligibility-content'>
                     <div
-                      className={`eligibility-text ${showEligibility ? '' : 'eligibility-clamp'}`}
-                      dangerouslySetInnerHTML={{ __html: courseData?.eligibility || '' }}
+                      className={`eligibility-text ${
+                        showEligibility ? '' : 'eligibility-clamp'
+                      }`}
+                      dangerouslySetInnerHTML={{
+                        __html: courseData?.eligibility || ''
+                      }}
                     />
 
                     {courseData?.eligibility && (
@@ -567,7 +613,7 @@ function SpecializationContent({ slug: slugProp }) {
         </div>
       </section>
 
-         {/* ACCREDITATIONS */}
+      {/* ACCREDITATIONS */}
       <section className='accred'>
         <div className='wrap'>
           <div className='box'>
@@ -579,7 +625,9 @@ function SpecializationContent({ slug: slugProp }) {
                 </div>
                 <div>
                   <strong>UGC</strong>
-                  <small className='acc-text'>University Grants Commission</small>
+                  <small className='acc-text'>
+                    University Grants Commission
+                  </small>
                 </div>
               </div>
 
@@ -589,7 +637,9 @@ function SpecializationContent({ slug: slugProp }) {
                 </div>
                 <div>
                   <strong>AICTE</strong>
-                  <small className='acc-text'>All India Council for Technical Education</small>
+                  <small className='acc-text'>
+                    All India Council for Technical Education
+                  </small>
                 </div>
               </div>
 
@@ -609,7 +659,9 @@ function SpecializationContent({ slug: slugProp }) {
                 </div>
                 <div>
                   <strong>NAAC</strong>
-                  <small className='acc-text'>Quality Education Recognized</small>
+                  <small className='acc-text'>
+                    Quality Education Recognized
+                  </small>
                 </div>
               </div>
 
@@ -619,14 +671,15 @@ function SpecializationContent({ slug: slugProp }) {
                 </div>
                 <div>
                   <strong>NIRF</strong>
-                  <small className='acc-text'>National Institutional Ranking</small>
+                  <small className='acc-text'>
+                    National Institutional Ranking
+                  </small>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
 
       {/* CTA */}
       <section className='cta-banner'>
@@ -638,7 +691,10 @@ function SpecializationContent({ slug: slugProp }) {
               </svg>
               <div>
                 <h2>Ready to Start Your Journey?</h2>
-                <p>Join thousands of students who are building their future with Distance Education Learning.</p>
+                <p>
+                  Join thousands of students who are building their future with
+                  Distance Education Learning.
+                </p>
               </div>
             </div>
             <button
@@ -652,18 +708,24 @@ function SpecializationContent({ slug: slugProp }) {
         </div>
       </section>
 
-      <LeadModal open={leadModalOpen} setOpen={setLeadModalOpen} />
+      <LeadModal
+        open={leadModalOpen}
+        setOpen={setLeadModalOpen}
+        pageType='specialization'
+        pageId={courseData?.id}
+      />
     </>
   )
 }
 
-export default function SpecializationClient({ slug }) {
+export default function SpecializationClient ({ slug }) {
   return (
     <Suspense
-      fallback={<div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>}
+      fallback={
+        <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
+      }
     >
       <SpecializationContent slug={slug} />
     </Suspense>
   )
 }
-

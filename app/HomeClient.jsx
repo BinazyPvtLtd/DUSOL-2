@@ -121,8 +121,6 @@ export default function HomeClient({ initialData }) {
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [showAllCourses, setShowAllCourses] = useState(false)
 
-
-
   useEffect(() => {
     fetchCourses('UG')
   }, [])

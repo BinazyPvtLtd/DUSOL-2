@@ -6,6 +6,8 @@ import { getBlogDataApi, getTrendingBlogsApi } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
 import { useCourseOptions } from '@/hooks/useCourseOptions'
 import { INDIAN_STATES } from '@/constant/indianStates'
+import LeadModal from '@/components/LeadModal'
+
 
 const BLOGS = [
   {
@@ -100,6 +102,7 @@ function BlogCard ({ blog }) {
     </div>
   )
 }
+
 export default function BlogsPage () {
   const [blogs, setBlogs] = useState([])
   const [query, setQuery] = useState('')
@@ -107,6 +110,9 @@ export default function BlogsPage () {
   const [phone, setPhone] = useState('')
   const [trending, setTrending] = useState([])
   const courseOptions = useCourseOptions()
+  const [leadModalOpen, setLeadModalOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [openItem, setOpenItem] = useState(null)
 
   const filtered = blogs.filter(
     blog =>
@@ -142,6 +148,11 @@ export default function BlogsPage () {
     e.preventDefault()
     if (!pagination || page === pagination.current_page) return
     fetchBlogs(page)
+  }
+
+  const closeMobile = () => {
+    setMobileOpen(false)
+    setOpenItem(null)
   }
 
   return (
@@ -186,7 +197,7 @@ export default function BlogsPage () {
                 {filtered.map(blog => (
                   <BlogCard key={blog.id} blog={blog} />
                 ))}
-              </div>  
+              </div>
               {filtered.length === 0 && (
                 <p
                   style={{
@@ -312,16 +323,38 @@ export default function BlogsPage () {
               Get 100% free, personalised guidance from our experts — compare
               courses, check eligibility and find the right path for you.
             </p>
-            <Link
-              href='/blogs'
+            {/* <Link
+              // href='/blogs'
               className='btn btn-gold'
               style={{ marginTop: '18px' }}
+              onClick={() => {
+                closeMobile()
+                setLeadModalOpen(true)
+              }}
             >
               GET FREE COUNSELLING
-            </Link>
+            </Link> */}
+
+            <button
+              type='button'
+              className='btn btn-gold'
+              onClick={() => {
+                closeMobile()
+                setLeadModalOpen(true)
+              }}
+            >
+              GET FREE COUNSELLING
+            </button>
           </div>
         </div>
       </section>
+
+      <LeadModal
+        open={leadModalOpen}
+        setOpen={setLeadModalOpen}
+        pageType='home'
+        pageId={blogs?.id}
+      />
     </>
   )
 }

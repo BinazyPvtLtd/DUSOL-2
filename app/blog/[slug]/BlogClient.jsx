@@ -8,7 +8,7 @@ import PhoneInputField from '@/components/PhoneInputField'
 import { useLeadSubmit } from '@/hooks/useLeadSubmit'
 import { useCourseOptions } from '@/hooks/useCourseOptions'
 import { INDIAN_STATES } from '@/constant/indianStates'
-
+import LeadModal from '@/components/LeadModal'
 const TRENDING = [
   {
     slug: 'online-mba-in-digital-marketing',
@@ -49,6 +49,9 @@ export default function BlogClient ({ slug: slugProp }) {
   const courseOptions = useCourseOptions()
   const [toc, setToc] = useState([])
   const [faqData, setFaqData] = useState([])
+  const [leadModalOpen, setLeadModalOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [openItem, setOpenItem] = useState(null)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -149,7 +152,9 @@ export default function BlogClient ({ slug: slugProp }) {
 
         if (!table.querySelector('tbody')) {
           const tbody = doc.createElement('tbody')
-          table.querySelectorAll(':scope > tr').forEach(row => tbody.appendChild(row))
+          table
+            .querySelectorAll(':scope > tr')
+            .forEach(row => tbody.appendChild(row))
           table.appendChild(tbody)
         }
       })
@@ -210,6 +215,11 @@ export default function BlogClient ({ slug: slugProp }) {
     })
   }
 
+  const closeMobile = () => {
+    setMobileOpen(false)
+    setOpenItem(null)
+  }
+
   return (
     <>
       <section className='post-section'>
@@ -236,11 +246,11 @@ export default function BlogClient ({ slug: slugProp }) {
                 {' · '}
                 {post.views} Views
               </div>
-              <div className=" w-full aspect-video overflow-hidden rounded-xl bg-white mb-4">
+              <div className=' w-full aspect-video overflow-hidden rounded-xl bg-white mb-4'>
                 <img
                   src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${post.featured_image}`}
                   alt={post.title}
-                  className="w-full h-full object-contain"
+                  className='w-full h-full object-contain'
                 />
               </div>
               {toc.length > 0 && (
@@ -270,7 +280,9 @@ export default function BlogClient ({ slug: slugProp }) {
               <div className='blog-lead'>
                 <div className='bl-head'>
                   <h3>Book 100% Free Counseling</h3>
-                  <p>Get 1-to-1 expert guidance from Distance Education Learning</p>
+                  <p>
+                    Get 1-to-1 expert guidance from Distance Education Learning
+                  </p>
                 </div>
                 <form className='counsel-body' onSubmit={handleSubmit}>
                   <input
@@ -293,7 +305,9 @@ export default function BlogClient ({ slug: slugProp }) {
 
                   <PhoneInputField
                     value={formData.phone}
-                    onChange={phone => setFormData(prev => ({ ...prev, phone }))}
+                    onChange={phone =>
+                      setFormData(prev => ({ ...prev, phone }))
+                    }
                   />
 
                   <select
@@ -410,7 +424,6 @@ export default function BlogClient ({ slug: slugProp }) {
                     <div
                       dangerouslySetInnerHTML={{
                         __html: item.answer
-                        
                       }}
                     />
                   }
@@ -426,16 +439,29 @@ export default function BlogClient ({ slug: slugProp }) {
           <div className='blog-cta-box'>
             <h3>Ready to Take the Next Step?</h3>
             <p>
-              Get personalised guidance from Distance Education Learning experts — compare
-              programs, check eligibility and find the right university for you.
-              100% free.
+              Get personalised guidance from Distance Education Learning experts
+              — compare programs, check eligibility and find the right
+              university for you. 100% free.
             </p>
-            <Link href='/blogs' className='btn btn-purple'>
+            <button
+              type='button'
+              className='btn btn-purple'
+              onClick={() => {
+                closeMobile()
+                setLeadModalOpen(true)
+              }}
+            >
               GET FREE COUNSELLING
-            </Link>
+            </button>
           </div>
         </div>
       </section>
+      <LeadModal
+        open={leadModalOpen}
+        setOpen={setLeadModalOpen}
+        pageType='home'
+        pageId={post?.id}
+      />
     </>
   )
 }

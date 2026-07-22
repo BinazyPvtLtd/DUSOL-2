@@ -16,7 +16,6 @@ import { generateSEOMetadata } from '@/app/lib/seo'
 import PhoneInputField from '@/components/PhoneInputField'
 import { INDIAN_STATES } from '@/constant/indianStates'
 
-
 // NOTE: this file is intentionally minimal. It preserves the existing client UI by importing the original implementation.
 // If you want full integration, you can move the current CoursesContent implementation here.
 
@@ -121,144 +120,152 @@ export default function CoursesPageClient ({ slug }) {
   }
 
   return (
-    <Suspense
-      fallback={
-        <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
-      }
-    >
-      <section className='page-hero course-hero'>
-        <div className='hero-inner'>
-          <div className='wrap'>
-            <div className='breadcrumb'>
-              <Link href='/'>Home</Link>
-              <span className='sep'>›</span>
-              <Link href='/courses'>Courses</Link>
-              <span className='sep'>›</span>
-              <span>{courseData?.short_name || slug}</span>
-            </div>
+    <>
+      <Suspense
+        fallback={
+          <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
+        }
+      >
+        <section className='page-hero course-hero'>
+          <div className='hero-inner'>
+            <div className='wrap'>
+              <div className='breadcrumb'>
+                <Link href='/'>Home</Link>
+                <span className='sep'>›</span>
+                <Link href='/courses'>Courses</Link>
+                <span className='sep'>›</span>
+                <span>{courseData?.short_name || slug}</span>
+              </div>
 
-            <span className='tag'> {courseData?.short_name}</span>
-            <h1>
-              {courseData?.name}{' '}
-              {courseData?.short_name && `(${courseData.short_name})`}
-            </h1>
-            <p className='mb-8'>{courseData?.short_description}</p>
+              <span className='tag'> {courseData?.short_name}</span>
+              <h1>
+                {courseData?.name}{' '}
+                {courseData?.short_name && `(${courseData.short_name})`}
+              </h1>
+              <p className='mb-8'>{courseData?.short_description}</p>
 
-            <div className='hero-badges mt-5'>
-              <div className='acc-logo'>
-                <Image
-                  src={img1}
-                  alt='NAAC Accredited'
-                  width={60}
-                  height={60}
-                />
-                <div className='acc-text'>
-                  NAAC Accredited
-                  <br />
-                  Grade A++
+              <div className='hero-badges mt-5'>
+                <div className='acc-logo'>
+                  <Image
+                    src={img1}
+                    alt='NAAC Accredited'
+                    width={60}
+                    height={60}
+                  />
+                  <div className='acc-text'>
+                    NAAC Accredited
+                    <br />
+                    Grade A++
+                  </div>
+                </div>
+                <div className='acc-logo'>
+                  <Image
+                    src={img2}
+                    alt='UGC + DEB Approved'
+                    width={60}
+                    height={60}
+                  />
+                  <div className='acc-text'>
+                    UGC + DEB
+                    <br />
+                    Approved
+                  </div>
+                </div>
+                <div className='acc-logo'>
+                  <Image
+                    src={img3}
+                    alt='AICTE Approved'
+                    width={60}
+                    height={60}
+                  />
+                  <div className='acc-text'>
+                    AICTE
+                    <br />
+                    Approved
+                  </div>
                 </div>
               </div>
-              <div className='acc-logo'>
-                <Image
-                  src={img2}
-                  alt='UGC + DEB Approved'
-                  width={60}
-                  height={60}
-                />
-                <div className='acc-text'>
-                  UGC + DEB
-                  <br />
-                  Approved
-                </div>
-              </div>
-              <div className='acc-logo'>
-                <Image src={img3} alt='AICTE Approved' width={60} height={60} />
-                <div className='acc-text'>
-                  AICTE
-                  <br />
-                  Approved
-                </div>
+
+              <div className='hero-actions'>
+                <Link href='#' className='btn btn-gold'>
+                  GET FREE COUNSELLING
+                </Link>
+                <Link href='#' className='btn btn-outline-white'>
+                  DOWNLOAD BROCHURE
+                </Link>
               </div>
             </div>
 
-            <div className='hero-actions'>
-              <Link href='#' className='btn btn-gold'>
-                GET FREE COUNSELLING
-              </Link>
-              <Link href='#' className='btn btn-outline-white'>
-                DOWNLOAD BROCHURE
-              </Link>
-            </div>
-          </div>
-
-          <div className='counsel-card'>
-            <div className='counsel-head'>
-              <h3>Book 100% Free Counseling</h3>
-              <p>Get 1 to 1 Expert Guidance from DU SOL</p>
-            </div>
-            <form className='counsel-body' onSubmit={handleSubmit}>
-              <input
-                type='text'
-                name='name'
-                placeholder='Enter Your Name'
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-
-              <input
-                type='email'
-                name='email'
-                placeholder='Enter Your Email'
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-
-              <PhoneInputField
-                value={formData.phone}
-                onChange={phone => setFormData(prev => ({ ...prev, phone }))}
-              />
-
-              <select
-                name='state'
-                value={formData.state}
-                onChange={handleChange}
-                required
-              >
-                <option value=''>Select State</option>
-                {INDIAN_STATES.map(state => (
-                  <option key={state}>{state}</option>
-                ))}
-              </select>
-
-              <label className='consent'>
+            <div className='counsel-card'>
+              <div className='counsel-head'>
+                <h3>Book 100% Free Counseling</h3>
+                <p>Get 1 to 1 Expert Guidance from DU SOL</p>
+              </div>
+              <form className='counsel-body' onSubmit={handleSubmit}>
                 <input
-                  type='checkbox'
-                  name='consent'
-                  checked={formData.consent}
+                  type='text'
+                  name='name'
+                  placeholder='Enter Your Name'
+                  value={formData.name}
                   onChange={handleChange}
                   required
                 />
-                <span>
-                  I authorise DU SOL to contact me with updates via
-                  SMS/Email/WhatsApp.
-                </span>
-              </label>
 
-              <button
-                type='submit'
-                className='btn btn-purple btn-block'
-                disabled={loading}
-              >
-                {loading ? 'Submitting...' : 'SUBMIT'}
-              </button>
-            </form>
+                <input
+                  type='email'
+                  name='email'
+                  placeholder='Enter Your Email'
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+
+                <PhoneInputField
+                  value={formData.phone}
+                  onChange={phone => setFormData(prev => ({ ...prev, phone }))}
+                />
+
+                <select
+                  name='state'
+                  value={formData.state}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value=''>Select State</option>
+                  {INDIAN_STATES.map(state => (
+                    <option key={state}>{state}</option>
+                  ))}
+                </select>
+
+                <label className='consent'>
+                  <input
+                    type='checkbox'
+                    name='consent'
+                    checked={formData.consent}
+                    onChange={handleChange}
+                    required
+                  />
+                  <span>
+                    I authorise DU SOL to contact me with updates via
+                    SMS/Email/WhatsApp.
+                  </span>
+                </label>
+
+                <button
+                  type='submit'
+                  className='btn btn-purple btn-block'
+                  disabled={loading}
+                >
+                  {loading ? 'Submitting...' : 'SUBMIT'}
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Full course UI not replicated here to avoid breaking your existing complex component. */}
-    </Suspense>
+        {/* Full course UI not replicated here to avoid breaking your existing complex component. */}
+      </Suspense>
+   
+    </>
   )
 }
