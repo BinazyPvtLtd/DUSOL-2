@@ -18,6 +18,7 @@ import { useCourseOptions } from '@/hooks/useCourseOptions'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
+import { applyInfoTableStyling } from '@/helperFunction/Helper'
 
 
 
