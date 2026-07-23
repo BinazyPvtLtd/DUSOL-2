@@ -1522,7 +1522,7 @@ section {
 
 .cpanel {
   display: block;
-  scroll-margin-top: 66px;
+  scroll-margin-top: 130px;
   margin-bottom: 14px;
 }
 
@@ -1642,7 +1642,7 @@ section {
 
 .course-layout>aside {
   position: sticky;
-  top: 20px;
+  top: 94px;
   align-self: start;
 }
 
@@ -2515,6 +2515,37 @@ section {
   background: color-mix(in srgb, var(--primary-color) 10%, white);
 }
 
+/* CMS content overflow safety: long words/URLs, raw tables, images, embeds */
+:is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+:is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) img {
+  height: auto;
+}
+
+:is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) iframe,
+:is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) video,
+:is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) embed {
+  max-width: 100%;
+  height: auto;
+}
+
+:is(.about-description, .eligibility-content, .admission-content, .rich-content, .faq-a) table:not(.info-table) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+:is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 /* --------- FOOTER --------- */
 .site-footer {
   background: linear-gradient(160deg,
@@ -2529,6 +2560,10 @@ section {
   grid-template-columns: 1.2fr 1fr 1.4fr;
   gap: 34px;
   padding-bottom: 40px;
+}
+
+.site-footer .footer-grid > div {
+  min-width: 0;
 }
 
 .footer-brand .f-logo {
@@ -2696,6 +2731,11 @@ section {
 
 .fb-links span {
   color: rgba(255, 255, 255, 0.3);
+}
+
+:is(.footer-cta h3, .footer-cta p, .footer-col a, .footer-disclaimer, .footer-bottom) {
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* floating CTA */
@@ -2950,6 +2990,9 @@ section {
   background: #fff;
   width: 100%;
   max-width: 480px;
+  max-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
   border-radius: 14px;
   padding: 30px 28px 26px;
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
@@ -2989,6 +3032,7 @@ section {
 }
 
 .lead-box h3 {
+  flex-shrink: 0;
   text-align: center;
   color: var(--primary-color);
   font-family: var(--font-head);
@@ -3008,6 +3052,9 @@ section {
   display: flex;
   flex-direction: column;
   gap: 13px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .lead-fields input[type='text'],
@@ -3266,49 +3313,6 @@ section {
   .burger {
     display: flex;
   }
-}
-
-/* mobile menu */
-@media (max-width: 768px) {
-
-  .nav-actions .btn {
-    display: none;
-  }
-
-  .topbar .tb-left {
-    display: none;
-  }
-
-  .course-grid,
-  .faq-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .steps {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .spec-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .sec {
-    padding: 50px 0;
-  }
-
-  .cta-box {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .cta-left {
-    flex-direction: column;
-    text-align: center;
-  }
 
   .mobile-menu {
     display: block;
@@ -3409,6 +3413,49 @@ section {
     color: var(--primary-color);
     font-weight: 700;
     padding: 10px 14px 4px;
+  }
+}
+
+/* mobile menu */
+@media (max-width: 768px) {
+
+  .nav-actions .btn {
+    display: none;
+  }
+
+  .topbar .tb-left {
+    display: none;
+  }
+
+  .course-grid,
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .spec-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sec {
+    padding: 50px 0;
+  }
+
+  .cta-box {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .cta-left {
+    flex-direction: column;
+    text-align: center;
   }
 }
 
@@ -3516,6 +3563,8 @@ section {
 
   .logo {
     gap: 8px;
+    flex: 0 1 auto;
+    min-width: 0;
   }
 
   .logo .logo-du {
@@ -4131,6 +4180,7 @@ section {
 }
 
 .lead-phone-container .country-list {
+  width: min(300px, calc(100vw - 76px)) !important;
   border-radius: 8px !important;
   border: 1px solid #d7dbe0 !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;

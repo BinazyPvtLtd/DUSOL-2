@@ -257,55 +257,6 @@ export default function HomeClient({ initialData }) {
           </div>
 
           <div className='hero-visual'>
-            {/* <div className='video-card'>
-            <span className='vc-du'>🎓 Delhi University</span>
-
-              <div className='vc-left'>
-                <span className='vc-small'>All About</span>
-                <span className='vc-big'>
-                  DU<span>SOL</span>
-                </span>
-                <span className='vc-tag'>Online &amp; Distance Courses</span>
-                <span className='vc-sub'>Complete Details</span>
-              </div> 
-
-               {BannerData?.hero_image ? (
-                  <img
-                    className="vc-figure"
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${BannerData.hero_image}`}
-                    alt={BannerData?.title}
-                  />
-                ) : (
-                  <svg
-                    className="vc-figure"
-                    viewBox="0 0 120 150"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    {/* Existing SVG */}
-            {/* </svg>
-                )} 
-
-              <a
-                className='vc-play'
-                href={BannerData?.video_url}
-                target='_blank'
-                rel='noopener noreferrer'
-                aria-label='Play Video'
-              >
-                <svg viewBox='0 0 24 24'>
-                  <path d='M8 5v14l11-7z' />
-                </svg>
-              </a>
-
-              <a
-                href={BannerData?.video_url}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='vc-watch'
-              >
-                Watch On YouTube
-              </a>
-            </div> */}
             <div className='video-card'>
               {videoPlaying && getYoutubeEmbedId(BannerData?.video_url) ? (
                 <iframe
@@ -526,9 +477,10 @@ export default function HomeClient({ initialData }) {
                 <span className='eyebrow'>{WhyChooseData.subtitle}</span>
               )}
 
-              <h2>{WhyChooseData?.title}</h2>
+              <h2 className='text-center'>{WhyChooseData?.title}</h2>
 
               <div
+                className='rich-content'
                 dangerouslySetInnerHTML={{
                   __html: WhyChooseData?.description || ''
                 }}

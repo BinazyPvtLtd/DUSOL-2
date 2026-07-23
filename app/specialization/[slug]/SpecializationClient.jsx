@@ -36,6 +36,7 @@ const MBA_SPECS = [
 
 const SemItem = ({ sem }) => {
   const [open, setOpen] = useState(false)
+  const contentRef = useRef(null)
 
   return (
     <div className={`sem${open ? ' open' : ''}`}>
@@ -44,7 +45,13 @@ const SemItem = ({ sem }) => {
         <span className='ar'>▾</span>
       </div>
 
-      <div className='sem-body' style={{ maxHeight: open ? '500px' : '0' }}>
+      <div
+        className='sem-body'
+        ref={contentRef}
+        style={{
+          maxHeight: open ? `${contentRef.current?.scrollHeight || 0}px` : '0'
+        }}
+      >
         {sem.description && (
           <p style={{ marginBottom: 12 }}>{sem.description}</p>
         )}
