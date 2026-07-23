@@ -1165,8 +1165,92 @@ section {
     margin: 1rem 0;
 }
 
+.admission-content ul {
+    list-style: disc;
+}
+
+.admission-content ol {
+    list-style: decimal;
+}
+
 .admission-content li {
     margin-bottom: 0.5rem;
+}
+
+.admission-content h2,
+.admission-content h3 {
+    margin: 1rem 0 0.5rem;
+    font-weight: 700;
+}
+
+.admission-content blockquote {
+    margin: 1rem 0;
+    padding-left: 1rem;
+    border-left: 3px solid var(--line);
+    color: var(--muted);
+    font-style: italic;
+}
+
+.admission-content a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* Shared minimal styling for RichEditor HTML rendered outside
+   .admission-content (Key Highlights cards, Admission Procedure steps) —
+   the global reset (`* { margin/padding: 0 }`, `ul { list-style: none }`)
+   otherwise leaves lists/headings/quotes unstyled. */
+.rich-content p {
+    margin-bottom: 0.75rem;
+}
+
+.rich-content p:last-child {
+    margin-bottom: 0;
+}
+
+.rich-content ul,
+.rich-content ol {
+    padding-left: 1.25rem;
+    margin: 0.5rem 0;
+}
+
+.rich-content ul {
+    list-style: disc;
+}
+
+.rich-content ol {
+    list-style: decimal;
+}
+
+.rich-content li {
+    margin-bottom: 0.25rem;
+}
+
+.rich-content h2,
+.rich-content h3 {
+    margin: 0.5rem 0 0.25rem;
+    font-weight: 700;
+}
+
+.rich-content h2 {
+    font-size: 15px;
+}
+
+.rich-content h3 {
+    font-size: 14px;
+}
+
+.rich-content blockquote {
+    margin: 0.5rem 0;
+    padding-left: 0.75rem;
+    border-left: 3px solid var(--line);
+    font-style: italic;
+    color: var(--muted);
+}
+
+.rich-content a {
+    color: var(--primary-color);
+    text-decoration: underline;
 }
 
 /* --------- HOW TO APPLY --------- */

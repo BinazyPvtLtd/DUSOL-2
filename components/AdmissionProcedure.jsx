@@ -11,6 +11,7 @@ import IconMapper from './IconMapper'
 const secondaryTint6 = 'color-mix(in srgb, var(--secondary-color) 6%, white)'
 const primaryTint25 = 'color-mix(in srgb, var(--primary-color) 25%, white)'
 const primaryColorStyle = { color: 'var(--primary-color)' }
+const isHtmlContent = value => /<\/?[a-z][\s\S]*>/i.test(value || '')
 
 export default function AdmissionProcedure({ homeData }) {
   const admissionProcedure = homeData?.admissionProcedure
@@ -67,9 +68,16 @@ export default function AdmissionProcedure({ homeData }) {
                   {step.title}
                 </h3>
 
-                <p className='mt-2 text-xs text-gray-500 leading-5'>
-                  {step.description}
-                </p>
+                {isHtmlContent(step.description) ? (
+                  <div
+                    className='mt-2 text-xs text-gray-500 leading-5 rich-content'
+                    dangerouslySetInnerHTML={{ __html: step.description }}
+                  />
+                ) : (
+                  <p className='mt-2 text-xs text-gray-500 leading-5'>
+                    {step.description}
+                  </p>
+                )}
               </div>
             ))}
           </div>
