@@ -9,23 +9,8 @@ import { useLeadSubmit } from '@/hooks/useLeadSubmit'
 import { useCourseOptions } from '@/hooks/useCourseOptions'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
+import TrendingSidebar from '@/components/TrendingSidebar'
 import { applyInfoTableStyling } from '@/helperFunction/Helper'
-
-const TRENDING = [
-  {
-    slug: 'online-mba-in-digital-marketing',
-    title:
-      'Online MBA in Digital Marketing: Scope, Syllabus, Fees & Career Guide 2026'
-  },
-  {
-    slug: 'dusol-admission-2026-form-filling-guide',
-    title: 'DU SOL Admission 2026: Step-by-Step Form Filling Guide'
-  },
-  {
-    slug: 'dusol-exam-pattern-explained',
-    title: 'DU SOL Exam Pattern Explained for New Students'
-  }
-]
 
 function FaqItem ({ q, a }) {
   const [open, setOpen] = useState(false)
@@ -358,47 +343,7 @@ export default function BlogClient ({ slug: slugProp }) {
                   </button>
                 </form>
               </div>
-              <div className='card' style={{ padding: '22px' }}>
-                <div className='side-trending'>
-                  <h3>Trending Post</h3>
-                  {TRENDING.map(t => (
-                    <div key={t.slug} className='trend-item'>
-                      <div className='trend-thumb'>
-                        <svg viewBox='0 0 30 30' fill='none'>
-                          <rect
-                            x='4'
-                            y='3'
-                            width='22'
-                            height='24'
-                            rx='3'
-                            fill='rgba(255,255,255,.2)'
-                          />
-                          <rect
-                            x='8'
-                            y='9'
-                            width='14'
-                            height='2.5'
-                            rx='1.2'
-                            fill='rgba(255,255,255,.6)'
-                          />
-                          <rect
-                            x='8'
-                            y='14'
-                            width='10'
-                            height='2'
-                            rx='1'
-                            fill='rgba(255,255,255,.4)'
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <h4>{t.title}</h4>
-                        <Link href={`/blog/${t.slug}`}>Read More →</Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <TrendingSidebar />
             </aside>
           </div>
         </div>

@@ -2,72 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getBlogDataApi, getTrendingBlogsApi } from '@/api'
+import { getBlogDataApi } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
 import { useCourseOptions } from '@/hooks/useCourseOptions'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
-
-
-const BLOGS = [
-  {
-    slug: 'online-mba-in-digital-marketing',
-    title:
-      'Online MBA in Digital Marketing: Scope, Syllabus, Fees & Career Guide 2026',
-    excerpt:
-      'An Online MBA in Digital Marketing helps you master SEO, social media, analytics and growth strategy while you keep working. Here is everything you need to know before you enrol.',
-    date: 'June 5, 2026',
-    category: 'MBA'
-  },
-  {
-    slug: 'dusol-admission-2026-form-filling-guide',
-    title: 'DU SOL Admission 2026: Step-by-Step Form Filling Guide',
-    excerpt:
-      'Complete walkthrough of the DU SOL online admission process — from registration to document upload and fee payment. Avoid common mistakes with this step-by-step guide.',
-    date: 'May 28, 2026',
-    category: 'Admission'
-  },
-  {
-    slug: 'dusol-exam-pattern-explained',
-    title: 'DU SOL Exam Pattern Explained for New Students',
-    excerpt:
-      'A clear breakdown of the DU SOL examination pattern, marking scheme, assignment weightage and how to prepare effectively for your semester exams.',
-    date: 'April 15, 2026',
-    category: 'Exams'
-  },
-  {
-    slug: 'delhi-university-online-courses-admission-2026',
-    title: 'Delhi University Online Courses Admission 2026 Guide',
-    excerpt:
-      'Everything you need to know about DU online course admissions for 2026 — eligibility, available programs, fees and how to apply with free expert support.',
-    date: 'April 14, 2026',
-    category: 'Admission'
-  },
-  {
-    slug: 'dusol-online-mba-fees-guide',
-    title: 'DU SOL Online MBA Course Fees: Complete Guide',
-    excerpt:
-      'Detailed fee breakdown for the DU SOL Online MBA — application fee, semester fee, exam fee and total cost. Compare with other universities and understand scholarship options.',
-    date: 'April 9, 2026',
-    category: 'Fees'
-  },
-  {
-    slug: 'dusol-support-grievance-guide',
-    title: 'DU SOL Support & Grievance Redressal Guide',
-    excerpt:
-      'Learn how to raise a grievance, track your complaint and get support from DU SOL — covering portal issues, fee problems, study material queries and exam concerns.',
-    date: 'April 7, 2026',
-    category: 'Support'
-  },
-  {
-    slug: 'dusol-admission-competitive-exam-aspirants',
-    title: 'DU SOL Admission for Competitive Exam Aspirants',
-    excerpt:
-      'How DU SOL programs are ideal for students preparing for UPSC, SSC, banking exams and other competitive tests — study at your pace while continuing exam preparation.',
-    date: 'April 2, 2026',
-    category: 'Admission'
-  }
-]
+import TrendingSidebar from '@/components/TrendingSidebar'
 
 function BlogCard ({ blog }) {
   return (
@@ -108,7 +48,6 @@ export default function BlogsPage () {
   const [query, setQuery] = useState('')
   const [pagination, setPagination] = useState(null)
   const [phone, setPhone] = useState('')
-  const [trending, setTrending] = useState([])
   const courseOptions = useCourseOptions()
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -122,7 +61,6 @@ export default function BlogsPage () {
 
   useEffect(() => {
     fetchBlogs(1)
-    fetchTrending()
   }, [])
 
   const fetchBlogs = async (page = 1) => {
@@ -130,15 +68,6 @@ export default function BlogsPage () {
       const response = await getBlogDataApi(page)
       setBlogs(response.data.data)
       setPagination(response.data.pagination)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const fetchTrending = async () => {
-    try {
-      const response = await getTrendingBlogsApi()
-      setTrending(response.data.data)
     } catch (error) {
       console.log(error)
     }
@@ -231,47 +160,7 @@ export default function BlogsPage () {
             </div>
 
             <aside>
-              <div className='card' style={{ padding: '22px' }}>
-                <div className='side-trending'>
-                  <h3>Trending Post</h3>
-                  {trending.map(t => (
-                    <div key={t.id} className='trend-item'>
-                      <div className='trend-thumb'>
-                        <svg viewBox='0 0 30 30' fill='none'>
-                          <rect
-                            x='4'
-                            y='3'
-                            width='22'
-                            height='24'
-                            rx='3'
-                            fill='rgba(255,255,255,.2)'
-                          />
-                          <rect
-                            x='8'
-                            y='9'
-                            width='14'
-                            height='2.5'
-                            rx='1.2'
-                            fill='rgba(255,255,255,.6)'
-                          />
-                          <rect
-                            x='8'
-                            y='14'
-                            width='10'
-                            height='2'
-                            rx='1'
-                            fill='rgba(255,255,255,.4)'
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <h4>{t.title}</h4>
-                        <Link href={`/blog/${t.slug}`}>Read More →</Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <TrendingSidebar />
               <div className='counsel-card'>
                 <div className='counsel-head'>
                   <h3>Book 100% Free Counseling</h3>
@@ -315,7 +204,7 @@ export default function BlogsPage () {
       </section>
 
       {/* STILL CONFUSED */}
-      <section className='still'>
+      <section className='still sticky top-20'>
         <div className='wrap'>
           <div className='still-box'>
             <h2>Still Confused?</h2>

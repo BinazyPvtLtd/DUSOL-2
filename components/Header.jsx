@@ -100,7 +100,7 @@ function MobileSubMenu({ item, onClose }) {
           <div key={ii}>
             <div className='mm-gt'>{it.label}</div>
             {it.children.map((child, ci) => (
-              <Link key={ci} href={child.href} onClick={onClose}>
+              <Link key={ci} href={child.href} onClick={onClose} className='mm-sub-link'>
                 {child.label}
               </Link>
             ))}

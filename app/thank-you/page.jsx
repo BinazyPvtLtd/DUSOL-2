@@ -48,7 +48,7 @@ export default function ThankYouPage ({ searchParams }) {
             Back to Home
           </Link>
           <Link
-            href='/courses'
+            href='/'
             className='rounded-lg border border-line px-6 py-3 font-semibold text-ink transition hover:bg-bg'
           >
             Continue Browsing

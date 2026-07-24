@@ -67,11 +67,11 @@ export default function HowToApply() {
     const [leadModalOpen, setLeadModalOpen] = useState(false)
     return (
         <>
-        <section className='w-full py-10 md:py-14 overflow-hidden' style={{ backgroundColor: primaryTint4 }}>
+        <section className='w-full py-8 md:py-12 overflow-hidden' style={{ backgroundColor: primaryTint4 }}>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 {/* Heading */}
                 <div className='mb-10 text-center lg:/usagetext-left'>
-                    <h2 className='text-2xl sm:text-3xl font-bold uppercase text-center' style={primaryColorStyle}>
+                    <h2 className='text-2xl sm:text-3xl font-semibold text-center' style={primaryColorStyle}>
                         How To Apply
                     </h2>
                 </div>

@@ -378,7 +378,7 @@ export default function HomeClient({ initialData }) {
       <section className='courses-sec'>
         <div className='wrap'>
           <div className='sec-head'>
-            <h2 className='sec-title '>{Program?.heading || 'Our Programs'}</h2>
+            <h2 className='sec-title'>{Program?.heading || 'Our Programs'}</h2>
 
           </div>
 
@@ -515,7 +515,6 @@ export default function HomeClient({ initialData }) {
               )}
             </div>
 
-
             <KeyHighlights homeData={homeData?.data} />
           </div>
         </div>
@@ -523,9 +522,7 @@ export default function HomeClient({ initialData }) {
 
 
       <AdmissionProcedure homeData={homeData?.data} />
-
       <HowToApply />
-
       <section className='faq'>
         <div className='wrap'>
           <div className='sec-head'>

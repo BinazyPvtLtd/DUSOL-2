@@ -21,13 +21,13 @@ export default function AdmissionProcedure({ homeData }) {
 
   return (
     <section
-      className='w-full py-10 md:py-14 overflow-hidden'
+      className='w-full overflow-hidden'
       style={{ backgroundColor: secondaryTint6 }}
     >
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='mb-10 text-center lg:text-left'>
           <h2
-            className='text-2xl sm:text-3xl font-bold text-center mb-2'
+            className='text-2xl sm:text-3xl font-semibold text-center mb-2'
             style={primaryColorStyle}
           >
             {admissionProcedure.title}
