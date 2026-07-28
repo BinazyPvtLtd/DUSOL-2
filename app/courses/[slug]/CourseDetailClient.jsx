@@ -454,7 +454,12 @@ function CoursesContent () {
     setMobileOpen(false)
     setOpenItem(null)
   }
-
+const hasEligibility =
+  !!courseData?.eligibility &&
+  courseData.eligibility
+    .replace(/<[^>]*>/g, '')   // Remove HTML tags
+    .replace(/&nbsp;/gi, '')   // Remove &nbsp;
+    .trim().length > 0;
   return (
     <>
       {/* PAGE HERO */}
@@ -806,20 +811,20 @@ function CoursesContent () {
                   <span>{courseData?.study_mode}</span>
                 </div>
 
-                <div className='detail-row'>
-                  <span>Eligibility</span>
+             {hasEligibility && (
+                  <div className='detail-row'>
+                    <span>Eligibility</span>
 
-                  <div className='eligibility-content'>
-                    <div
-                      className={`eligibility-text ${
-                        showEligibility ? '' : 'eligibility-clamp'
-                      }`}
-                      dangerouslySetInnerHTML={{
-                        __html: applyInfoTableStyling(courseData?.eligibility || '')
-                      }}
-                    />
+                    <div className='eligibility-content'>
+                      <div
+                        className={`eligibility-text ${
+                          showEligibility ? '' : 'eligibility-clamp'
+                        }`}
+                        dangerouslySetInnerHTML={{
+                          __html: applyInfoTableStyling(courseData.eligibility)
+                        }}
+                      />
 
-                    {courseData?.eligibility && (
                       <button
                         type='button'
                         className='read-more-btn'
@@ -827,9 +832,9 @@ function CoursesContent () {
                       >
                         {showEligibility ? 'Read Less' : 'Read More'}
                       </button>
-                    )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </aside>
           </div>

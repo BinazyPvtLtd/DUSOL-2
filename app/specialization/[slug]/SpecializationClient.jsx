@@ -258,6 +258,13 @@ function SpecializationContent ({ slug: slugProp }) {
     setOpenItem(null)
   }
 
+  const hasEligibility =
+  !!courseData?.eligibility &&
+  courseData.eligibility
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/gi, '')
+    .trim().length > 0;
+
   return (
     <>
       {/* PAGE HERO */}
@@ -590,15 +597,20 @@ function SpecializationContent ({ slug: slugProp }) {
                   <span>{courseData?.study_mode}</span>
                 </div>
 
-                <div className='detail-row'>
-                  <span>Eligibility</span>
-                  <div className='eligibility-content'>
-                    <div
-                      className={`eligibility-text ${showEligibility ? '' : 'eligibility-clamp'}`}
-                      dangerouslySetInnerHTML={{ __html: courseData?.eligibility || '' }}
-                    />
+                {hasEligibility && (
+                  <div className='detail-row'>
+                    <span>Eligibility</span>
 
-                    {courseData?.eligibility && (
+                    <div className='eligibility-content'>
+                      <div
+                        className={`eligibility-text ${
+                          showEligibility ? '' : 'eligibility-clamp'
+                        }`}
+                        dangerouslySetInnerHTML={{
+                          __html: courseData.eligibility
+                        }}
+                      />
+
                       <button
                         type='button'
                         className='read-more-btn'
@@ -606,9 +618,9 @@ function SpecializationContent ({ slug: slugProp }) {
                       >
                         {showEligibility ? 'Read Less' : 'Read More'}
                       </button>
-                    )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </aside>
           </div>
