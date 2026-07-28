@@ -2,12 +2,6 @@
 'use client'
 
 import IconMapper from './IconMapper'
-
-// Tenant-themed colors, computed at runtime from the CSS variables the
-// TenantContext injects onto <html>. Tailwind's arbitrary-value type
-// inference for bracket classes like bg-[color-mix(...)] or text-[var(...)]
-// is a build-time heuristic guess, not a guarantee — inline styles sidestep
-// that guesswork entirely and always resolve the live CSS variable.
 const secondaryTint6 = 'color-mix(in srgb, var(--secondary-color) 6%, white)'
 const primaryTint25 = 'color-mix(in srgb, var(--primary-color) 25%, white)'
 const primaryColorStyle = { color: 'var(--primary-color)' }
@@ -21,7 +15,7 @@ export default function AdmissionProcedure({ homeData }) {
 
   return (
     <section
-      className='w-full overflow-hidden'
+      className='w-full overflow-hidden bg-white' 
     >
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='mb-10 text-center lg:text-left'>
@@ -51,7 +45,7 @@ export default function AdmissionProcedure({ homeData }) {
               >
                 <div
                   className='absolute top-4 right-4 w-7 h-7 rounded-full text-black text-xs font-bold flex items-center justify-center'
-                  style={{ backgroundColor: 'var(--secondary-color)' }}
+                  
                 >
                   {i + 1}
                 </div>

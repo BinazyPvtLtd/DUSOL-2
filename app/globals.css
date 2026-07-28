@@ -2111,7 +2111,7 @@ section {
 }
 
 .blog-thumb {
-  
+  height: 150px;
   background: linear-gradient(135deg,
       var(--primary-color),
       var(--primary-color));
@@ -2389,6 +2389,12 @@ section {
 .post-body p {
   color: #444;
   margin-bottom: 16px;
+}
+
+.post-body a{
+  color: blue !important;
+  text-decoration: underline !important;
+  font-weight: 500;
 }
 
 .post-body ul {

@@ -269,9 +269,9 @@ function SpecializationContent ({ slug: slugProp }) {
               <span className='sep'>›</span>
               <Link href='/courses'>Courses</Link>
               <span className='sep'>›</span>
-              <span>{courseData?.short_name}</span>{' '}
+              <span>{courseData?.name}</span>{' '}
             </div>
-            <span className='tag'> {courseData?.short_name}</span>
+            {/* <span className='tag'> {courseData?.short_name}</span> */}
             <h1>
               {' '}
               {courseData?.name}{' '}

@@ -183,7 +183,7 @@ export default function BlogClient ({ slug: slugProp }) {
                 {' · '}
                 By {post.author_name}
                 {' · '}
-                {post.views} Views
+                {/* {post.views} Views */}
               </div>
               <div className=' w-full aspect-video overflow-hidden rounded-xl bg-white mb-4'>
                 <img

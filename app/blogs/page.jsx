@@ -35,7 +35,7 @@ function BlogCard ({ blog }) {
               })}
             </span>
 
-            <span>{blog.views} Views</span>
+            {/* <span>{blog.views} Views</span> */}
           </div>
         </div>
       </Link>
