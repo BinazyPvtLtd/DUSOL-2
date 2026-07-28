@@ -1,29 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import {
-  getAdmissionAPI,
-  getCoursesFeesAPI,
-  getHallTicketAPI,
-  getStudyMaterialAPI,
-  getResultAPI,
-  getLibraryPortalAPI,
-  getAssignmentStatusAPI,
-  getAlternativeUniversitiesAPI
-} from '@/api'
+import { STUDENT_ZONE_API_MAP } from '@/app/lib/studentZone'
 
 import StudentContentPage from '@/components/student-zone/StudentContentPage'
-
-const apiMap = {
-  admission: getAdmissionAPI,
-  'courses-fees': getCoursesFeesAPI,
-  'hall-ticket': getHallTicketAPI,
-  'study-material': getStudyMaterialAPI,
-  result: getResultAPI,
-  'library-portal': getLibraryPortalAPI,
-  'assignment-status': getAssignmentStatusAPI,
-  'alternative-universities': getAlternativeUniversitiesAPI,
-}
 
 const normalizeResponse = (pageKey, response) => {
   const data = response?.data?.data
@@ -73,7 +53,7 @@ export default function StudentZoneClient({ pageKey, tenantSlug }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const api = apiMap[pageKey]
+      const api = STUDENT_ZONE_API_MAP[pageKey]
 
       if (!api) {
         setPage(null)

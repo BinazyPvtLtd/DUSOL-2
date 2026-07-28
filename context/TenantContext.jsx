@@ -79,11 +79,6 @@ export const TenantProvider = ({ children }) => {
       root.style.setProperty('--font-family', '"Poppins", sans-serif')
     }
 
-    // Page Title
-    if (tenant.name) {
-      document.title = tenant.name
-    }
-
     // Favicon
     if (tenant.favicon) {
       let favicon = document.querySelector("link[rel='icon']")

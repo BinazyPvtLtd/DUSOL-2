@@ -1,10 +1,13 @@
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import {
+  STUDENT_ZONE_API_MAP,
   buildStudentZoneUrl,
   getTenantSlugFromHost,
   resolveStudentZonePage
 } from '@/app/lib/studentZone'
+import { generateSEOMetadata } from '@/app/lib/seo'
+import JsonLd from '@/components/JsonLd'
 import StudentZoneClient from './StudentZoneClient'
 
 // SEO Student Zone route: /student-zone/{tenantSlug}-{pageKey}
@@ -21,28 +24,51 @@ const resolveFromRequest = szSlug => {
   return { host, tenantSlug, page }
 }
 
-export function generateMetadata({ params }) {
+export async function generateMetadata({ params }) {
   const { host, tenantSlug, page } = resolveFromRequest(params.szSlug)
 
   if (!page) return {}
 
-  return {
-    title: page.label,
-    alternates: {
-      canonical: `https://${host}${buildStudentZoneUrl(tenantSlug, page.key)}`
+  try {
+    const api = STUDENT_ZONE_API_MAP[page.key]
+    const response = await api({ headers: { 'X-Tenant': tenantSlug } })
+
+    const seo = response?.data?.data?.seo || {}
+
+    return {
+      ...generateSEOMetadata(seo),
+      alternates: {
+        canonical: `https://${host}${buildStudentZoneUrl(tenantSlug, page.key)}`
+      }
     }
+  } catch (err) {
+    return generateSEOMetadata({})
   }
 }
 
-export default function StudentZoneSlugPage({ params }) {
+export default async function StudentZoneSlugPage({ params }) {
   const { tenantSlug, page } = resolveFromRequest(params.szSlug)
 
   if (!page) notFound()
 
+  let schema = null
+
+  try {
+    const api = STUDENT_ZONE_API_MAP[page.key]
+    const response = await api({ headers: { 'X-Tenant': tenantSlug } })
+
+    schema = response?.data?.data?.seo?.schema || null
+  } catch (err) {
+    schema = null
+  }
+
   return (
-    <StudentZoneClient
-      pageKey={page.key}
-      tenantSlug={tenantSlug}
-    />
+    <>
+      <JsonLd schema={schema} />
+      <StudentZoneClient
+        pageKey={page.key}
+        tenantSlug={tenantSlug}
+      />
+    </>
   )
 }

@@ -5,8 +5,7 @@ import Link from 'next/link'
 import { getBlogFaqsApi, getOneBlogDataApi } from '@/api'
 import { useParams } from 'next/navigation'
 import PhoneInputField from '@/components/PhoneInputField'
-import { useLeadSubmit } from '@/hooks/useLeadSubmit'
-import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import TrendingSidebar from '@/components/TrendingSidebar'
@@ -30,24 +29,22 @@ function FaqItem ({ q, a }) {
 export default function BlogClient ({ slug: slugProp }) {
   const params = useParams()
   const slug = slugProp || params?.slug
-  const [loading, setLoading] = useState(false)
   const [post, setPost] = useState(null)
-  const submitLead = useLeadSubmit()
-  const courseOptions = useCourseOptions()
   const [toc, setToc] = useState([])
   const [faqData, setFaqData] = useState([])
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openItem, setOpenItem] = useState(null)
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    state: '',
-    remarks: '',
-    consent: false
-  })
+  const {
+    formData,
+    loading,
+    courseOptions,
+    handleChange,
+    setPhone,
+    handleSubmit
+  } = useLeadForm({ source: 'Blog Page' })
+
   useEffect(() => {
     if (slug) {
       fetchBlog()
@@ -157,49 +154,6 @@ export default function BlogClient ({ slug: slugProp }) {
     return <h3 className='text-center py-5'>Loading...</h3>
   }
 
-  const handleChange = e => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
-
-  const buildLeadPayload = values => ({
-    name: values.name,
-    email: values.email,
-    phone: values.phone,
-    state: values.state,
-    remarks: values.remarks || '',
-    source: 'Blog Page',
-    page_url: window.location.href
-  })
-
-  const handleSubmit = async e => {
-    e.preventDefault()
-    if (!formData.consent) {
-      alert('Please provide your consent.')
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      const payload = buildLeadPayload(formData)
-
-      await submitLead(payload, { onSuccess: resetForm })
-    } finally {
-      setLoading(false)
-    }
-  }
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      state: '',
-      remarks: '',
-      consent: false
-    })
-  }
-
   const closeMobile = () => {
     setMobileOpen(false)
     setOpenItem(null)
@@ -278,7 +232,6 @@ export default function BlogClient ({ slug: slugProp }) {
                     onChange={handleChange}
                     required
                   />
-
                   <input
                     type='email'
                     name='email'
@@ -288,12 +241,7 @@ export default function BlogClient ({ slug: slugProp }) {
                     required
                   />
 
-                  <PhoneInputField
-                    value={formData.phone}
-                    onChange={phone =>
-                      setFormData(prev => ({ ...prev, phone }))
-                    }
-                  />
+                  <PhoneInputField value={formData.phone} onChange={setPhone} />
 
                   <select
                     name='course'

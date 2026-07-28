@@ -22,7 +22,6 @@ export default function AdmissionProcedure({ homeData }) {
   return (
     <section
       className='w-full overflow-hidden'
-      style={{ backgroundColor: secondaryTint6 }}
     >
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='mb-10 text-center lg:text-left'>

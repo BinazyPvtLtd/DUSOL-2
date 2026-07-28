@@ -1,5 +1,16 @@
 // lib/studentZone.js
 
+import {
+  getAdmissionAPI,
+  getCoursesFeesAPI,
+  getHallTicketAPI,
+  getStudyMaterialAPI,
+  getResultAPI,
+  getLibraryPortalAPI,
+  getAssignmentStatusAPI,
+  getAlternativeUniversitiesAPI
+} from '@/api'
+
 export const STUDENT_ZONE_PAGES = [
   { label: 'Admission', key: 'admission' },
   { label: 'Courses & Fees', key: 'courses-fees' },
@@ -10,6 +21,20 @@ export const STUDENT_ZONE_PAGES = [
   { label: 'Assignment Status', key: 'assignment-status' },
   { label: 'Alternative Universities', key: 'alternative-universities' }
 ]
+
+// Function references only — callers invoke the one matching the
+// resolved page key. Tenant scoping happens inside each function via
+// getBaseUrl(), the same mechanism Course/Specialization/Blog rely on.
+export const STUDENT_ZONE_API_MAP = {
+  admission: getAdmissionAPI,
+  'courses-fees': getCoursesFeesAPI,
+  'hall-ticket': getHallTicketAPI,
+  'study-material': getStudyMaterialAPI,
+  result: getResultAPI,
+  'library-portal': getLibraryPortalAPI,
+  'assignment-status': getAssignmentStatusAPI,
+  'alternative-universities': getAlternativeUniversitiesAPI
+}
 
 const LOCAL_HOSTNAMES = ['localhost', '127.0.0.1', '0.0.0.0']
 

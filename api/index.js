@@ -74,34 +74,34 @@ export const AddLeadAPI = async data => {
   })
 }
 
-export const getAdmissionAPI = async () => {
-  return await axios.get(`${getBaseUrl()}/admission`)
+export const getAdmissionAPI = async (config = {}) => {
+  return await axios.get(`${getBaseUrl()}/admission`, config)
 }
 
-export const getCoursesFeesAPI = async () => {
-  return await axios.get(`${getBaseUrl()}/courses-fees`)
+export const getCoursesFeesAPI = async (config = {}) => {
+  return await axios.get(`${getBaseUrl()}/courses-fees`, config)
 }
 
-export const getHallTicketAPI = async () => {
-  return await axios.get(`${getBaseUrl()}/hall-ticket`)
+export const getHallTicketAPI = async (config = {}) => {
+  return await axios.get(`${getBaseUrl()}/hall-ticket`, config)
 }
 
-export const getStudyMaterialAPI = async () => {
-  return await axios.get(`${getBaseUrl()}/study-material`)
+export const getStudyMaterialAPI = async (config = {}) => {
+  return await axios.get(`${getBaseUrl()}/study-material`, config)
 }
 
-export const getResultAPI = async () => {
-  return await axios.get(`${getBaseUrl()}/result`)
+export const getResultAPI = async (config = {}) => {
+  return await axios.get(`${getBaseUrl()}/result`, config)
 }
 
-export const getLibraryPortalAPI = async () => {
-  return await axios.get(`${getBaseUrl()}/library-portal`)
+export const getLibraryPortalAPI = async (config = {}) => {
+  return await axios.get(`${getBaseUrl()}/library-portal`, config)
 }
 
-export const getAssignmentStatusAPI = async () => {
-  return await axios.get(`${getBaseUrl()}/assignment-status`)
+export const getAssignmentStatusAPI = async (config = {}) => {
+  return await axios.get(`${getBaseUrl()}/assignment-status`, config)
 }
 
-export const getAlternativeUniversitiesAPI = async () => {
-  return await axios.get(`${getBaseUrl()}/alternative-universities`)
+export const getAlternativeUniversitiesAPI = async (config = {}) => {
+  return await axios.get(`${getBaseUrl()}/alternative-universities`, config)
 }

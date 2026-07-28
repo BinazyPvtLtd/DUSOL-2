@@ -1,26 +1,25 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import PhoneInputField from '@/components/PhoneInputField'
-import { useLeadSubmit } from '@/hooks/useLeadSubmit'
-import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
 
-export default function LeadModal({ open, setOpen }) {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    course: '',
-    state: '',
-    remarks: '',
-    consent: false
+export default function LeadModal({ open, setOpen, pageType, pageId }) {
+  const {
+    formData,
+    loading,
+    courseOptions,
+    handleChange,
+    setPhone,
+    handleSubmit
+  } = useLeadForm({
+    source: 'Homepage',
+    redirectTo: '/thank-you?source=lead',
+    onSuccess: () => setOpen(false),
+    pageType,
+    pageId
   })
-
-  const [loading, setLoading] = useState(false)
-
-  const submitLead = useLeadSubmit()
-  const courseOptions = useCourseOptions()
 
   useEffect(() => {
     if (typeof document === 'undefined') return
@@ -47,59 +46,6 @@ export default function LeadModal({ open, setOpen }) {
   }, [open])
 
   if (!open) return null
-
-  const handleChange = e => {
-    const { name, value, type, checked } = e.target
-
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-  }
-
-  const buildLeadPayload = values => ({
-    name: values.name,
-    email: values.email,
-    phone: values.phone,
-    state: values.state,
-    remarks: values.remarks,
-    source: 'Homepage',
-    page_url: window.location.href
-  })
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      course: '',
-      state: '',
-      remarks: '',
-      consent: false
-    })
-  }
-
-  const handleSubmit = async e => {
-    e.preventDefault()
-
-    if (loading) return
-
-    setLoading(true)
-
-    try {
-      const payload = buildLeadPayload(formData)
-
-      await submitLead(payload, {
-        onSuccess: () => {
-          resetForm()
-          setOpen(false)
-        },
-        redirectTo: '/thank-you?source=lead'
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   return (
     <div className='lead-modal open'>
@@ -131,10 +77,7 @@ export default function LeadModal({ open, setOpen }) {
             required
           />
 
-          <PhoneInputField
-            value={formData.phone}
-            onChange={phone => setFormData(prev => ({ ...prev, phone }))}
-          />
+          <PhoneInputField value={formData.phone} onChange={setPhone} />
 
           <select
             name='course'

@@ -13,8 +13,9 @@ import img5 from '../../public/assets/accreditationsImg/NIRF.png'
 import Image from 'next/image'
 import { getCourseDataAPI } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
-import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
+import LeadModal from '@/components/LeadModal'
 
 const DEF_SYLLABUS = [
   {
@@ -341,8 +342,17 @@ function FaqItem ({ q, a }) {
 function CoursesContent () {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(null)
-  const [counselPhone, setCounselPhone] = useState('')
-  const courseOptions = useCourseOptions()
+  const {
+    formData,
+    loading,
+    courseOptions,
+    handleChange,
+    setPhone,
+    handleSubmit
+  } = useLeadForm({ source: 'Courses Page' })
+  const [leadModalOpen, setLeadModalOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [openItem, setOpenItem] = useState(null)
   // const searchParams = useSearchParams()
   const { slug } = useParams()
   // const slug = searchParams.get('c') || 'online-bba'
@@ -372,6 +382,11 @@ function CoursesContent () {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const closeMobile = () => {
+    setMobileOpen(false)
+    setOpenItem(null)
   }
 
   return (
@@ -449,40 +464,74 @@ function CoursesContent () {
               <h3>Book 100% Free Counseling</h3>
               <p>Get 1 to 1 Expert Guidance from DU SOL</p>
             </div>
-            <div className='counsel-body'>
-              <input type='text' placeholder='Enter Your Name' />
-              <input type='email' placeholder='Enter Your Email' />
-              <PhoneInputField
-                value={counselPhone}
-                onChange={phone => setCounselPhone(phone)}
+            <form className='counsel-body' onSubmit={handleSubmit}>
+              <input
+                type='text'
+                name='name'
+                placeholder='Enter Your Name'
+                value={formData.name}
+                onChange={handleChange}
+                required
               />
-              <select>
-                <option>Select Course</option>
+
+              <input
+                type='email'
+                name='email'
+                placeholder='Enter Your Email'
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+
+              <PhoneInputField value={formData.phone} onChange={setPhone} />
+
+              <select
+                name='course'
+                value={formData.course}
+                onChange={handleChange}
+              >
+                <option value=''>Select Course</option>
                 {courseOptions.map(c => (
                   <option key={c.id} value={c.short_name || c.name}>
                     {c.name}
                   </option>
                 ))}
               </select>
-              <select>
-                <option>Select State</option>
+
+              <select
+                name='state'
+                value={formData.state}
+                onChange={handleChange}
+                required
+              >
+                <option value=''>Select State</option>
                 {INDIAN_STATES.map(state => (
                   <option key={state}>{state}</option>
                 ))}
               </select>
-              <div className='consent'>
-                I authorise DU SOL to contact me with updates via
-                SMS/Email/WhatsApp.
-              </div>
+
+              <label className='consent'>
+                <input
+                  type='checkbox'
+                  name='consent'
+                  checked={formData.consent}
+                  onChange={handleChange}
+                  required
+                />
+                <span>
+                  I authorise DU SOL to contact me with updates via
+                  SMS/Email/WhatsApp.
+                </span>
+              </label>
+
               <button
+                type='submit'
                 className='btn btn-purple btn-block'
-                onClick={() =>
-                  alert('Thank you! Our counsellor will contact you soon.')
-                }
+                disabled={loading}
               >
-                SUBMIT
+                {loading ? 'Submitting...' : 'SUBMIT'}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </section>
@@ -649,10 +698,11 @@ function CoursesContent () {
                   </div>
                 </div>
                 <button
-                   onClick={() => {
-                  closeMobile()
-                  setLeadModalOpen(true)
-                }}
+                  type='button'
+                  onClick={() => {
+                    closeMobile()
+                    setLeadModalOpen(true)
+                  }}
                   className='btn btn-gold btn-block'
                   style={{ marginTop: '16px' }}
                 >
@@ -781,6 +831,8 @@ function CoursesContent () {
           </div>
         </div>
       </section>
+
+      <LeadModal open={leadModalOpen} setOpen={setLeadModalOpen} />
     </>
   )
 }

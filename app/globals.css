@@ -1104,7 +1104,8 @@ section {
 /* --------- WHY CHOOSE --------- */
 .why {
   background: #fff;
-  padding: 40px 0;
+  padding: 60px 0;
+
 }
 
 .why .grid {
@@ -1161,7 +1162,7 @@ section {
 
 .admission-content p {
     margin-bottom: 1rem;
-    text-align: justify !important;
+  
 }
 
 .admission-content strong {
@@ -1211,7 +1212,6 @@ section {
    otherwise leaves lists/headings/quotes unstyled. */
 .rich-content p {
     margin-bottom: 0.75rem;
-    text-align:  justify !important;
     font-size: 14px;
 }
 
@@ -2111,7 +2111,7 @@ section {
 }
 
 .blog-thumb {
-  height: 150px;
+  
   background: linear-gradient(135deg,
       var(--primary-color),
       var(--primary-color));
@@ -2531,7 +2531,6 @@ section {
 :is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) {
   overflow-wrap: break-word;
   word-break: break-word;
-  text-align: justify;
 }
 
 :is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) img {

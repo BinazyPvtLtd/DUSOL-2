@@ -1,10 +1,8 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import PhoneInputField from '@/components/PhoneInputField'
-import { useLeadSubmit } from '@/hooks/useLeadSubmit'
-import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import {
   STUDENT_ZONE_PAGES,
@@ -12,69 +10,14 @@ import {
 } from '@/app/lib/studentZone'
 
 export default function StudentSidebar({ pageKey, tenantSlug }) {
-  const [loading, setLoading] = useState(false)
-  const submitLead = useLeadSubmit()
-  const courseOptions = useCourseOptions()
-
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    course: '',
-    state: '',
-    remarks: '',
-    consent: false
-  })
-
-  const handleChange = e => {
-    const { name, value, type, checked } = e.target
-
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-  }
-
-  const buildLeadPayload = values => ({
-    name: values.name,
-    email: values.email,
-    phone: values.phone,
-    state: values.state,
-    remarks: values.remarks || '',
-    source: 'Student Zone',
-    page_url:
-      typeof window !== 'undefined' ? window.location.href : ''
-  })
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      state: '',
-      remarks: '',
-      consent: false
-    })
-  }
-
-  const handleSubmit = async e => {
-    e.preventDefault()
-
-    if (!formData.consent) {
-      alert('Please provide your consent.')
-      return
-    }
-
-    try {
-      setLoading(true)
-
-      const payload = buildLeadPayload(formData)
-
-      await submitLead(payload, { onSuccess: resetForm })
-    } finally {
-      setLoading(false)
-    }
-  }
+  const {
+    formData,
+    loading,
+    courseOptions,
+    handleChange,
+    setPhone,
+    handleSubmit
+  } = useLeadForm({ source: 'Student Zone' })
 
   return (
     <aside>
@@ -103,15 +46,7 @@ export default function StudentSidebar({ pageKey, tenantSlug }) {
             required
           />
 
-          <PhoneInputField
-            value={formData.phone}
-            onChange={phone =>
-              setFormData(prev => ({
-                ...prev,
-                phone
-              }))
-            }
-          />
+          <PhoneInputField value={formData.phone} onChange={setPhone} />
 
           <select
             name='course'

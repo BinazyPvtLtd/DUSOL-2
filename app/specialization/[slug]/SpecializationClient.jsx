@@ -13,8 +13,7 @@ import Image from 'next/image'
 import { getOneSpecializationAPI } from '@/api'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import PhoneInputField from '@/components/PhoneInputField'
-import { useLeadSubmit } from '@/hooks/useLeadSubmit'
-import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
@@ -130,11 +129,16 @@ function applySeoToDocument (seo = {}) {
 function SpecializationContent ({ slug: slugProp }) {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(null)
-  const [loading, setLoading] = useState(false)
   const [showEligibility, setShowEligibility] = useState(false)
   const [showAllSemesters, setShowAllSemesters] = useState(false)
-  const submitLead = useLeadSubmit()
-  const courseOptions = useCourseOptions()
+  const {
+    formData,
+    loading,
+    courseOptions,
+    handleChange,
+    setPhone,
+    handleSubmit
+  } = useLeadForm({ source: 'Specialization Page' })
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openItem, setOpenItem] = useState(null)
@@ -226,59 +230,6 @@ function SpecializationContent ({ slug: slugProp }) {
       }
     })()
   }, [slug])
-
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    state: '',
-    remarks: '',
-    consent: false
-  })
-
-  const handleChange = e => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
-
-  const buildLeadPayload = values => ({
-    name: values.name,
-    email: values.email,
-    phone: values.phone,
-    state: values.state,
-    remarks: values.remarks || '',
-    source: 'Specialization Page',
-    page_url: window.location.href
-  })
-
-  const handleSubmit = async e => {
-    e.preventDefault()
-    if (!formData.consent) {
-      alert('Please provide your consent.')
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      const payload = buildLeadPayload(formData)
-
-      await submitLead(payload, { onSuccess: resetForm })
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      state: '',
-      remarks: '',
-      consent: false
-    })
-  }
 
   const syllabusData =
     courseData?.curricula?.[0]?.semesters?.map(semester => ({
@@ -405,10 +356,7 @@ function SpecializationContent ({ slug: slugProp }) {
                 required
               />
 
-              <PhoneInputField
-                value={formData.phone}
-                onChange={phone => setFormData(prev => ({ ...prev, phone }))}
-              />
+              <PhoneInputField value={formData.phone} onChange={setPhone} />
 
               <select
                 name='course'

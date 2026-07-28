@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { getBlogDataApi } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
-import { useCourseOptions } from '@/hooks/useCourseOptions'
+import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import TrendingSidebar from '@/components/TrendingSidebar'
@@ -17,7 +17,7 @@ function BlogCard ({ blog }) {
           <img
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${blog.featured_image}`}
             alt={blog.title}
-            className='w-full'
+            className='w-full h-full object-cover'
           />
         </div>
 
@@ -47,11 +47,18 @@ export default function BlogsPage () {
   const [blogs, setBlogs] = useState([])
   const [query, setQuery] = useState('')
   const [pagination, setPagination] = useState(null)
-  const [phone, setPhone] = useState('')
-  const courseOptions = useCourseOptions()
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openItem, setOpenItem] = useState(null)
+
+  const {
+    formData,
+    loading,
+    courseOptions,
+    handleChange,
+    setPhone,
+    handleSubmit
+  } = useLeadForm({ source: 'Blogs Listing Page' })
 
   const filtered = blogs.filter(
     blog =>
@@ -166,37 +173,74 @@ export default function BlogsPage () {
                   <h3>Book 100% Free Counseling</h3>
                   <p>Get 1 to 1 Expert Guidance from DU SOL</p>
                 </div>
-                <div className='counsel-body'>
-                  <input type='text' placeholder='Enter Your Name' />
-                  <input type='email' placeholder='Enter Your Email' />
-                  <PhoneInputField value={phone} onChange={setPhone} />
-                  <select>
-                    <option>Select Course</option>
+                <form className='counsel-body' onSubmit={handleSubmit}>
+                  <input
+                    type='text'
+                    name='name'
+                    placeholder='Enter Your Name'
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+
+                  <input
+                    type='email'
+                    name='email'
+                    placeholder='Enter Your Email'
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+
+                  <PhoneInputField value={formData.phone} onChange={setPhone} />
+
+                  <select
+                    name='course'
+                    value={formData.course}
+                    onChange={handleChange}
+                  >
+                    <option value=''>Select Course</option>
                     {courseOptions.map(c => (
                       <option key={c.id} value={c.short_name || c.name}>
                         {c.name}
                       </option>
                     ))}
                   </select>
-                  <select>
-                    <option>Select State</option>
+
+                  <select
+                    name='state'
+                    value={formData.state}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value=''>Select State</option>
                     {INDIAN_STATES.map(state => (
                       <option key={state}>{state}</option>
                     ))}
                   </select>
-                  <div className='consent'>
-                    I authorise DU SOL to contact me with updates via
-                    SMS/Email/WhatsApp.
-                  </div>
+
+                  <label className='consent'>
+                    <input
+                      type='checkbox'
+                      name='consent'
+                      checked={formData.consent}
+                      onChange={handleChange}
+                      required
+                    />
+                    <span>
+                      I authorise DU SOL to contact me with updates via
+                      SMS/Email/WhatsApp.
+                    </span>
+                  </label>
+
                   <button
+                    type='submit'
                     className='btn btn-purple btn-block'
-                    onClick={() =>
-                      alert('Thank you! Our counsellor will contact you soon.')
-                    }
+                    disabled={loading}
                   >
-                    SUBMIT
+                    {loading ? 'Submitting...' : 'SUBMIT'}
                   </button>
-                </div>
+                </form>
               </div>
             </aside>
           </div>
