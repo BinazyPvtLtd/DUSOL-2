@@ -470,13 +470,18 @@ const hasEligibility =
             <div className='breadcrumb'>
               <Link href='/'>Home</Link>
               <span className='sep'>›</span>
-              <Link href='/courses'>Courses</Link>
+              <span>Courses</span>
               <span className='sep'>›</span>
               <span>{courseData?.short_name}</span>{' '}
             </div>
             <span className='tag'> {courseData?.short_name}</span>
             <h1> {courseData?.name} </h1>
-            <p className='mb-8'>{courseData?.short_description}</p>{' '}
+            <div
+            className="mb-8"
+            dangerouslySetInnerHTML={{
+              __html: applyInfoTableStyling(courseData?.short_description || '')
+            }}
+          />
             <div className='meta-row'>
               <div className='cmeta'>
                 {/* <svg viewBox='0 0 24 24'>

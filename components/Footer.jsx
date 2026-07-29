@@ -8,6 +8,10 @@
     getSpecializationsAPI
   } from '@/api'
   import LeadModal from './LeadModal'
+  import LegalModal from './legal/LegalModal'
+  import DisclaimerContent from './legal/DisclaimerContent'
+  import PrivacyPolicyContent from './legal/PrivacyPolicyContent'
+  import TermsConditionsContent from './legal/TermsConditionsContent'
   import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa'
 
   export default function Footer () {
@@ -15,6 +19,7 @@
     const [mobileOpen, setMobileOpen] = useState(false)
     const [openItem, setOpenItem] = useState(null)
     const [leadModalOpen, setLeadModalOpen] = useState(false)
+    const [activeLegal, setActiveLegal] = useState(null)
     const [homeData, setHomeData] = useState(null)
     const [courses, setCourses] = useState([])
     const [specializations, setSpecializations] = useState([])
@@ -143,11 +148,17 @@
 
           <div className='footer-bottom'>
             <div className='fb-links'>
-              <Link href='/'>Disclaimer</Link>
+              <button type='button' onClick={() => setActiveLegal('disclaimer')}>
+                Disclaimer
+              </button>
               <span>|</span>
-              <Link href='/'>Privacy Policy</Link>
+              <button type='button' onClick={() => setActiveLegal('privacy')}>
+                Privacy Policy
+              </button>
               <span>|</span>
-              <Link href='/'>Terms & Conditions</Link>
+              <button type='button' onClick={() => setActiveLegal('terms')}>
+                Terms & Conditions
+              </button>
             </div>
 
             <div className='p-4'>
@@ -179,6 +190,33 @@
           pageType='home'
           pageId={homeData?.id}
         />
+
+        <LegalModal
+          open={activeLegal === 'disclaimer'}
+          onClose={() => setActiveLegal(null)}
+          title='Disclaimer'
+          viewFullPageHref='/disclaimer'
+        >
+          <DisclaimerContent />
+        </LegalModal>
+
+        <LegalModal
+          open={activeLegal === 'privacy'}
+          onClose={() => setActiveLegal(null)}
+          title='Privacy Policy'
+          viewFullPageHref='/privacy-policy'
+        >
+          <PrivacyPolicyContent />
+        </LegalModal>
+
+        <LegalModal
+          open={activeLegal === 'terms'}
+          onClose={() => setActiveLegal(null)}
+          title='Terms & Conditions'
+          viewFullPageHref='/terms-and-conditions'
+        >
+          <TermsConditionsContent />
+        </LegalModal>
       </>
     )
   }

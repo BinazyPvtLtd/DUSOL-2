@@ -274,7 +274,7 @@ function SpecializationContent ({ slug: slugProp }) {
             <div className='breadcrumb'>
               <Link href='/'>Home</Link>
               <span className='sep'>›</span>
-              <Link href='/courses'>Courses</Link>
+              <span>Courses</span>
               <span className='sep'>›</span>
               <span>{courseData?.name}</span>{' '}
             </div>
@@ -284,7 +284,12 @@ function SpecializationContent ({ slug: slugProp }) {
               {courseData?.name}{' '}
               {courseData?.short_name && `(${courseData.short_name})`}
             </h1>
-            <p className='mb-8'>{courseData?.short_description}</p>{' '}
+            <div
+              className="mb-8"
+              dangerouslySetInnerHTML={{
+                __html: applyInfoTableStyling(courseData?.short_description || '')
+              }}
+            />
             <div className='hero-badges mt-5'>
               <div className='acc-logo'>
                 <Image
