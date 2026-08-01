@@ -1,10 +1,25 @@
 import './globals.css'
+import { Poppins, Mulish } from 'next/font/google'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import LeadModal from '@/components/LeadModal'
 import { TenantProvider } from '@/context/TenantContext'
 import { generateSEOMetadata } from './lib/seo'
 import Script from 'next/script'
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-poppins',
+  display: 'swap',
+})
+
+const mulish = Mulish({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-mulish',
+  display: 'swap',
+})
 
 // Next.js App Router SEO:
 // Provide server-rendered defaults that don't depend on client globals.
@@ -20,7 +35,7 @@ export const metadata = {
 
 export default function RootLayout ({ children }) {
   return (
-    <html lang='en'>
+    <html lang='en' className={`${poppins.variable} ${mulish.variable}`}>
       <body>
         <TenantProvider>
           <Header />

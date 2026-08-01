@@ -30,8 +30,8 @@ module.exports = {
         green: '#2fae6b',
       },
       fontFamily: {
-        head: ['Poppins', 'sans-serif'],
-        body: ['Mulish', 'sans-serif'],
+        head: ['var(--font-poppins)', 'sans-serif'],
+        body: ['var(--font-mulish)', 'sans-serif'],
       },
       borderRadius: {
         site: '14px',

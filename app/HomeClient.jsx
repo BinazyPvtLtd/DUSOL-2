@@ -72,7 +72,9 @@ function CourseCard({ c }) {
 
       <div className='full'>{c.name}</div>
 
-      <p>{c.short_description}</p>
+        <div className="line-clamp-4 text-sm  text-justify mb-4     text-gray-600">
+  {c.short_description?.replace(/<[^>]+>/g, '')}
+</div>
 
       <Link href={`/courses/${c.slug}`} className='btn btn-purple btn-block'>
         Know More
@@ -197,11 +199,7 @@ export default function HomeClient({ initialData }) {
                   width={60}
                   height={60}
                 />
-                <div className='acc-text'>
-                  NAAC Accredited
-                  <br />
-                  Grade A++
-                </div>
+               
               </div>
 
               <div className='acc-logo'>
@@ -211,20 +209,12 @@ export default function HomeClient({ initialData }) {
                   width={60}
                   height={60}
                 />
-                <div className='acc-text'>
-                  UGC + DEB
-                  <br />
-                  Approved
-                </div>
+              
               </div>
 
               <div className='acc-logo'>
                 <Image src={img3} alt='AICTE Approved' width={60} height={60} />
-                <div className='acc-text'>
-                  AICTE
-                  <br />
-                  Approved
-                </div>
+                
               </div>
             </div>
 
