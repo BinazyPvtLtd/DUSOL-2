@@ -326,14 +326,15 @@ function SemItem ({ sem }) {
 
 function FaqItem ({ q, a }) {
   const [open, setOpen] = useState(false)
+  const contentRef = useRef(null)
   return (
     <div className={`faq-item${open ? ' open' : ''}`}>
       <div className='faq-q' onClick={() => setOpen(!open)}>
         {q}
         <span className='ic'>+</span>
       </div>
-      <div className='faq-a' style={{ maxHeight: open ? '200px' : '0' }}>
-        <div>{a}</div>
+      <div className='faq-a' style={{ maxHeight: open ? `${contentRef.current?.scrollHeight || 0}px` : '0' }}>
+        <div ref={contentRef}>{a}</div>
       </div>
     </div>
   )

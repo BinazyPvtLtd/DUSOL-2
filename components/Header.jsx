@@ -127,6 +127,15 @@ export default function Header() {
     loadMenu()
   }, [])
 
+  useEffect(() => {
+    if (!mobileOpen) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [mobileOpen])
+
   const loadMenu = async () => {
     try {
       const [courseRes, specializationRes] = await Promise.all([

@@ -2,6 +2,7 @@
 
   import { useEffect, useState } from 'react'
   import Link from 'next/link'
+  import Image from 'next/image'
   import {
     getHomePageDataAPI,
     getCourseDataAPI,
@@ -13,6 +14,7 @@
   import PrivacyPolicyContent from './legal/PrivacyPolicyContent'
   import TermsConditionsContent from './legal/TermsConditionsContent'
   import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa'
+  import footerLogo from '../public/assets/images/footer-logo.png'
 
   export default function Footer () {
     const [footerCTA, setFooterCTA] = useState(null)
@@ -71,9 +73,12 @@
       <>
         <footer className='site-footer'>
           <div className='wrap'>
-            <div className='footer-grid'>
+            <div className='footer-grid '>
               {/* Dynamic CTA */}
               <div className='footer-cta'>
+                <div className='mb-4 bg-white p-4 rounded-lg shadow-md w-[220px] h-[100px] '>
+                  <Image src={footerLogo} alt="Footer Logo"  className='w-full h-full'/>
+                </div>
                 <h3>{footerCTA?.title}</h3>
 
                 {footerCTA?.subtitle && (
@@ -95,7 +100,7 @@
               </div>
 
               {/* UG & PG Programs */}
-              <div className='footer-col'>
+              <div className='footer-col md:mx-auto'>
                 <h4>UG Programs</h4>
 
                 <ul>
