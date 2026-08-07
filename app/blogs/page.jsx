@@ -116,6 +116,7 @@ export default function BlogsPage () {
                   type='text'
                   placeholder='Search here...'
                   value={query}
+
                   onChange={e => setQuery(e.target.value)}
                 />
                 <button aria-label='Search'>
@@ -248,7 +249,7 @@ export default function BlogsPage () {
       </section>
 
       {/* STILL CONFUSED */}
-      <section className='still sticky top-20'>
+      <section className='still'>
         <div className='wrap'>
           <div className='still-box'>
             <h2>Still Confused?</h2>

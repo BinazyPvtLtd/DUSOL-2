@@ -477,7 +477,7 @@ const hasEligibility =
             <span className='tag'> {courseData?.short_name}</span>
             <h1> {courseData?.name} </h1>
             <div
-            className="mb-8"
+            className="mb-8 rich-content"
             dangerouslySetInnerHTML={{
               __html: applyInfoTableStyling(courseData?.short_description || '')
             }}

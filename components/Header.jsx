@@ -328,7 +328,7 @@ export default function Header() {
         ))}
         <button
           type='button'
-          className='btn btn-gold'
+          className='btn btn-gold mt-4'
           onClick={() => {
             closeMobile()
             setLeadModalOpen(true)
