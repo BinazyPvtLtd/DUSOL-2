@@ -3,11 +3,12 @@
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import img1 from '../public/assets/accreditationsImg/NAAC.png'
-import img2 from '../public/assets/accreditationsImg/UGC.png'
-import img3 from '../public/assets/accreditationsImg/AICTE.png'
+import img1 from '../public/assets/accreditationsImg/NAAC.webp'
+import img2 from '../public/assets/accreditationsImg/UGC.webp'
+import img3 from '../public/assets/accreditationsImg/AICTE.webp'
+import img4 from '../public/assets/accreditationsImg/NIRF.webp'
 import PodcastUI from '../components/modal/PodcastUI'
-
+    
 import { getCoursesByLevelAPI } from '@/api'
 import LeadModal from '@/components/LeadModal'
 import { getYoutubeThumbnail } from '@/helperFunction/Helper'
@@ -219,6 +220,10 @@ export default function HomeClient({ initialData }) {
               <div className='acc-logo'>
                 <Image src={img3} alt='AICTE Approved' width={60} height={60} />
                 
+              </div>
+
+              <div className='acc-logo'>
+                <Image src={img4} alt='NIRF Ranked' width={60} height={60} />
               </div>
             </div>
 

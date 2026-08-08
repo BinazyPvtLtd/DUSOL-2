@@ -1,282 +1,23 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { useRef } from 'react'
-import img1 from '../../../public/assets/accreditationsImg/NAAC.png'
-import img2 from '../../../public/assets/accreditationsImg/UGC.png'
-import img3 from '../../../public/assets/accreditationsImg/AICTE.png'
-import img4 from '../../../public/assets/accreditationsImg/UGC DEB.png'
-import img5 from '../../../public/assets/accreditationsImg/NIRF.png'
+import img1 from '../../../public/assets/accreditationsImg/NAAC.webp'
+import img2 from '../../../public/assets/accreditationsImg/UGC.webp'
+import img3 from '../../../public/assets/accreditationsImg/AICTE.webp'
+import img4 from '../../../public/assets/accreditationsImg/NIRF.webp'
 import Image from 'next/image'
 
-import { getCourseDataAPI, getOneCourseDataAPI } from '@/api'
+import { getOneCourseDataAPI } from '@/api'
 import PhoneInputField from '@/components/PhoneInputField'
 import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
 import { applyInfoTableStyling, stripLinks } from '@/helperFunction/Helper'
-
-const DEF_FAQ = [
-  [
-    'What is DU SOL?',
-    'DU SOL (School of Open Learning) is a distance and online education institution under the University of Delhi that offers UG and PG programs.'
-  ],
-  [
-    'What are the eligibility criteria?',
-    "Eligibility depends on the program — generally 10+2 for UG courses and a bachelor's degree for PG courses from a recognized board or university."
-  ],
-  [
-    'How can I apply for DU SOL programs?',
-    'You can apply online by filling out the application form, uploading documents and completing the admission process through the official portal, with free guidance from Distance Education Learning.'
-  ]
-]
-
-const COURSES = {
-  'distance-ba': {
-    tag: 'BA',
-    title: 'Distance BA (DU SOL Bachelor of Arts)',
-    mode: 'Distance',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '27,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Distance BA program from DU SOL is designed for students who want a flexible humanities degree from the University of Delhi. The course covers subjects across literature, political science, history and economics, and is ideal for working professionals and students who cannot attend regular classes. Recognized and valid for higher education and government jobs as per UGC-DEB norms.'
-  },
-  'distance-bba': {
-    tag: 'BBA',
-    title: 'Distance BBA (DU SOL Bachelor of Business Administration)',
-    mode: 'Distance',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '49,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Distance BBA program builds a strong foundation in business, management and leadership. Perfect for aspiring managers and entrepreneurs who need a flexible study mode while gaining industry-relevant skills in marketing, HR, finance and operations.'
-  },
-  'distance-bms': {
-    tag: 'BMS',
-    title: 'Distance BMS (DU SOL Bachelor of Management Studies)',
-    mode: 'Distance',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '44,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Distance BMS program focuses on management studies, leadership and strategy — preparing students for management careers with a practical, career-oriented curriculum delivered through flexible distance learning.'
-  },
-  'distance-bcom': {
-    tag: 'BCom',
-    title: 'Distance BCom (DU SOL Bachelor of Commerce)',
-    mode: 'Distance',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '29,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Distance BCom program provides comprehensive knowledge in commerce, finance, accounting and business operations. A recognized commerce degree from the University of Delhi suited to students balancing study with work.'
-  },
-  'distance-ma': {
-    tag: 'MA',
-    title: 'Distance MA (DU SOL Master of Arts)',
-    mode: 'Distance',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '19,999', '2,000'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Distance MA program offers postgraduate study across humanities disciplines through DU SOL, enabling graduates to deepen their subject expertise with a flexible learning schedule.'
-  },
-  'distance-mba': {
-    tag: 'MBA',
-    title: 'Distance MBA (DU SOL Master of Business Administration)',
-    mode: 'Distance',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,500', '89,999', '2,500'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Distance MBA program delivers management education through distance learning, covering core management areas and electives. Designed for working professionals seeking career growth and leadership roles.'
-  },
-  'distance-mcom': {
-    tag: 'MCom',
-    title: 'Distance MCom (DU SOL Master of Commerce)',
-    mode: 'Distance',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '24,999', '2,000'],
-    elig: 'B.Com',
-    intro:
-      'The Distance MCom program provides advanced education in commerce and related fields through flexible distance learning — ideal for commerce graduates aiming for academic or professional advancement.'
-  },
-  'distance-mlis': {
-    tag: 'MLIS',
-    title: 'Distance MLIS (DU SOL Master of Library & Information Science)',
-    mode: 'Distance',
-    level: 'Postgraduate',
-    dur: '1 Year',
-    sems: 2,
-    fees: ['1,000', '17,999', '2,000'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Distance MLIS program covers library and information science, preparing students for careers in modern libraries, information centres and digital archives through distance mode.'
-  },
-  'online-ba': {
-    tag: 'BA',
-    title: 'Online BA (DU SOL Bachelor of Arts)',
-    mode: 'Online / Offline',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '27,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Online BA program offers flexible, accessible humanities education from the University of Delhi School of Open Learning. Study at your own pace with online study material, recorded lectures and academic support. Recognized and valid for higher education and employment as per UGC-DEB norms.'
-  },
-  'online-bba': {
-    tag: 'BBA',
-    title: 'Online BBA (DU SOL Bachelor of Business Administration)',
-    mode: 'Online / Offline',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '49,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'It is the Online BBA program offered by the University of Delhi School of Open Learning (DU SOL), specifically designed for students looking to pursue a career in the field of management and business with a flexible learning approach. This is an excellent choice for professionals working as well as competitive exam candidates and students unable to take regular classes on campus. The curriculum is focused on important management and business topics such as Marketing, Finance, Accounting, Human Resource Management, and Business Communication.'
-  },
-  'online-bcom': {
-    tag: 'BCom',
-    title: 'Online BCom (DU SOL Bachelor of Commerce)',
-    mode: 'Online / Offline',
-    level: 'Undergraduate',
-    dur: '3 Years',
-    sems: 6,
-    fees: ['1,000', '29,999', '2,000'],
-    elig: '10+2 from recognized board',
-    intro:
-      'The Online BCom program from DU SOL is perfect for online learners seeking a quality commerce education at home — covering accounting, finance, taxation and business studies with full online learning support.'
-  },
-  'online-ma': {
-    tag: 'MA',
-    title: 'Online MA (DU SOL Master of Arts)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '19,999', '2,000'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Online MA program at DU SOL is offered in various disciplines through online education mode, helping graduates pursue advanced study flexibly while managing personal and professional commitments.'
-  },
-  'online-mba': {
-    tag: 'MBA',
-    title: 'Online MBA (DU SOL Master of Business Administration)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,500', '89,999', '2,500'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Online MBA program is designed to provide management education through online learning, with specializations and live sessions. Ideal for professionals seeking leadership roles without pausing their careers. DU SOL degrees are UGC-DEB recognized.'
-  },
-  'online-mca': {
-    tag: 'MCA',
-    title: 'Online MCA (DU SOL Master of Computer Applications)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,500', '79,999', '2,500'],
-    elig: 'BCA/BSc (CS)',
-    intro:
-      'The Online MCA program is designed for working professionals and graduates who want to build advanced skills in computer applications, programming and software development through flexible online learning.'
-  },
-  'online-mcom': {
-    tag: 'MCom',
-    title: 'Online MCom (DU SOL Master of Commerce)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '24,999', '2,000'],
-    elig: 'B.Com',
-    intro:
-      'The Online MCom program provides advanced commerce education through online mode, suited to commerce graduates aiming to strengthen their expertise for academic, banking and corporate careers.'
-  },
-  'online-msc': {
-    tag: 'MSc',
-    title: 'Online MSC (DU SOL Master of Science)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '34,999', '2,000'],
-    elig: 'BSc',
-    intro:
-      'The Online MSc program at DU SOL offers affordable postgraduate science education in distance/online mode across multiple specializations, with practical and theory-based learning.'
-  },
-  'online-mjmc': {
-    tag: 'MJMC',
-    title: 'Online MJMC (Master of Journalism & Mass Communication)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['1,000', '39,999', '2,000'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Online MJMC program covers journalism, mass communication and media studies, preparing students for careers in print, broadcast and digital media through flexible online learning.'
-  },
-  'online-mlis': {
-    tag: 'MLIS',
-    title: 'Online MLIS (Master of Library & Information Science)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '1 Year',
-    sems: 2,
-    fees: ['1,000', '17,999', '2,000'],
-    elig: "Bachelor's degree",
-    intro:
-      'The Online MLIS program includes subjects related to library and information science, digital libraries and information management, delivered fully online for working professionals.'
-  },
-  'online-mtech': {
-    tag: 'MTech',
-    title: 'Online MTech (DU SOL Master of Technology)',
-    mode: 'Online / Offline',
-    level: 'Postgraduate',
-    dur: '2 Years',
-    sems: 4,
-    fees: ['2,000', '99,999', '3,000'],
-    elig: 'B.Tech/BE',
-    intro:
-      'The Online MTech program offers affordable advanced technology education in online mode for engineering graduates seeking specialization and career progression.'
-  }
-}
-
-const MBA_SPECS = [
-  { name: 'Information Technology', ico: '💻' },
-  { name: 'Business Analytics', ico: '📊' },
-  { name: 'Hospital Administration', ico: '🏥' },
-  { name: 'International Trade', ico: '🌐' },
-  { name: 'Rural Management', ico: '🌾' },
-  { name: 'Retail Management', ico: '🛒' },
-  { name: 'Business Management', ico: '💼' },
-  { name: 'Project Management', ico: '🚀' },
-  { name: 'Marketing Management', ico: '📈' }
-]
 
 const SemItem = ({ sem }) => {
   const [open, setOpen] = useState(false)
@@ -354,16 +95,13 @@ function CoursesContent () {
     handleSubmit
   } = useLeadForm({ source: 'Course Page' })
   const [leadModalOpen, setLeadModalOpen] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [openItem, setOpenItem] = useState(null)  // const searchParams = useSearchParams()
+  const [, setMobileOpen] = useState(false)
+  const [, setOpenItem] = useState(null)
   const { slug } = useParams()
-  // const slug = searchParams.get('c') || 'online-bba'
-  const course = COURSES[slug] || COURSES['online-bba']
   // refs for each panel
   const overviewRef = useRef(null)
   const curriculumRef = useRef(null)
   const specRef = useRef(null)
-  const instructorRef = useRef(null)
   const faqRef = useRef(null)
 
   // manualScrollRef suppresses the scroll-spy observer while a tab-click
@@ -548,6 +286,15 @@ const hasEligibility =
                   AICTE
                   <br />
                   Approved
+                </div>
+              </div>
+
+              <div className='acc-logo'>
+                <Image src={img4} alt='NIRF Ranked' width={60} height={60} />
+                <div className='acc-text'>
+                  NIRF
+                  <br />
+                  Ranked
                 </div>
               </div>
             </div>
@@ -854,7 +601,7 @@ const hasEligibility =
             <div className='accred-row'>
               <div className='acc-item'>
                 <div className='a-logo'>
-                  <Image src={img1} alt='UGC Logo' width={50} height={50} />
+                  <Image src={img2} alt='UGC Logo' width={50} height={50} />
                 </div>
                 <div>
                   <strong>UGC</strong>
@@ -866,7 +613,7 @@ const hasEligibility =
 
               <div className='acc-item'>
                 <div className='a-logo'>
-                  <Image src={img2} alt='AICTE Logo' width={50} height={50} />
+                  <Image src={img3} alt='AICTE Logo' width={50} height={50} />
                 </div>
                 <div>
                   <strong>AICTE</strong>
@@ -878,7 +625,7 @@ const hasEligibility =
 
               <div className='acc-item'>
                 <div className='a-logo'>
-                  <Image src={img3} alt='DEB Logo' width={50} height={50} />
+                  <Image src={img2} alt='DEB Logo' width={50} height={50} />
                 </div>
                 <div>
                   <strong>DEB</strong>
@@ -888,7 +635,7 @@ const hasEligibility =
 
               <div className='acc-item'>
                 <div className='a-logo'>
-                  <Image src={img4} alt='NAAC Logo' width={50} height={50} />
+                  <Image src={img1} alt='NAAC Logo' width={50} height={50} />
                 </div>
                 <div>
                   <strong>NAAC</strong>
@@ -900,7 +647,7 @@ const hasEligibility =
 
               <div className='acc-item'>
                 <div className='a-logo'>
-                  <Image src={img5} alt='NIRF Logo' width={50} height={50} />
+                  <Image src={img4} alt='NIRF Logo' width={50} height={50} />
                 </div>
                 <div>
                   <strong>NIRF</strong>
