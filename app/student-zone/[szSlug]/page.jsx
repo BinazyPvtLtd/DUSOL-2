@@ -35,12 +35,7 @@ export async function generateMetadata({ params }) {
 
     const seo = response?.data?.data?.seo || {}
 
-    return {
-      ...generateSEOMetadata(seo),
-      alternates: {
-        canonical: `https://${host}${buildStudentZoneUrl(tenantSlug, page.key)}`
-      }
-    }
+    return generateSEOMetadata(seo)
   } catch (err) {
     return generateSEOMetadata({})
   }
