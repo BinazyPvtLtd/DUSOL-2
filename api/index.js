@@ -9,18 +9,7 @@ export const getHeaders = () => {
 }
 
 export const getHomePageDataAPI = async () => {
-  try {
-    return await axios.get(`${getBaseUrl()}/home`)
-  } catch (err) {
-    // Workaround for TLS cert alt-name mismatch in some environments.
-    // Only applies when baseUrl is absolute (SSR generateMetadata/build).
-    if (err?.code === 'ERR_TLS_CERT_ALTNAME_INVALID') {
-      return await axios.get(`${getBaseUrl()}/home`, {
-        httpsAgent: new (require('https').Agent)({ rejectUnauthorized: false })
-      })
-    }
-    throw err
-  }
+  return await axios.get(`${getBaseUrl()}/home`)
 }
 
 export const getUniversityDataAPI = async () => {
