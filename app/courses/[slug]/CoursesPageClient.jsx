@@ -5,11 +5,12 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import Image from 'next/image'
-import img1 from '../../../public/assets/accreditationsImg/NAAC.png'
-import img2 from '../../../public/assets/accreditationsImg/UGC.png'
-import img3 from '../../../public/assets/accreditationsImg/AICTE.png'
-import img4 from '../../../public/assets/accreditationsImg/UGC DEB.png'
-import img5 from '../../../public/assets/accreditationsImg/NIRF.png'
+// public/assets/accreditationsImg only has NAAC/UGC/AICTE/NIRF as .webp —
+// there is no dedicated "UGC DEB" asset, so that badge reuses the UGC logo
+// (img2) below, same as CourseDetailClient/SpecializationClient.
+import img1 from '../../../public/assets/accreditationsImg/NAAC.webp'
+import img2 from '../../../public/assets/accreditationsImg/UGC.webp'
+import img3 from '../../../public/assets/accreditationsImg/AICTE.webp'
 import { AddLeadAPI, getOneCourseDataAPI } from '@/api'
 import { useTenant } from '@/context/TenantContext'
 import { generateSEOMetadata } from '@/app/lib/seo'
