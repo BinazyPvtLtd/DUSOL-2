@@ -1,3 +1,66 @@
+import DOMPurify from "isomorphic-dompurify";
+
+// Embeds are only ever legitimate video players in this app's CMS content
+// (course/blog rich text). Restricting iframe src to these hosts stops a
+// compromised/malicious CMS edit from injecting an arbitrary phishing or
+// clickjacking iframe via sanitizeCmsHtml.
+const ALLOWED_IFRAME_HOSTS = [
+  "www.youtube.com",
+  "youtube.com",
+  "www.youtube-nocookie.com",
+  "youtube-nocookie.com",
+  "player.vimeo.com",
+];
+
+const isAllowedIframeSrc = (src) => {
+  try {
+    const url = new URL(src, "https://invalid.example");
+    return url.protocol === "https:" && ALLOWED_IFRAME_HOSTS.includes(url.hostname);
+  } catch {
+    return false;
+  }
+};
+
+DOMPurify.addHook("uponSanitizeElement", (node, data) => {
+  if (data.tagName === "iframe") {
+    const src = node.getAttribute && node.getAttribute("src");
+    if (!src || !isAllowedIframeSrc(src)) {
+      node.remove();
+    }
+  }
+});
+
+const SANITIZE_CONFIG = {
+  ALLOWED_TAGS: [
+    "p", "br", "span", "div",
+    "strong", "b", "em", "i", "u", "s", "strike",
+    "h1", "h2", "h3", "h4",
+    "ul", "ol", "li",
+    "blockquote", "pre", "code",
+    "a",
+    "table", "thead", "tbody", "tr", "th", "td",
+    "img",
+    "iframe",
+  ],
+  ALLOWED_ATTR: [
+    "href", "target", "rel",
+    "src", "alt", "width", "height",
+    "scope", "class",
+    "allow", "allowfullscreen", "frameborder", "title",
+  ],
+};
+
+// Sanitizes CMS/RichEditor-authored HTML (course, blog, specialization,
+// homepage, student-zone, FAQ fields, ...) before it is ever passed to
+// dangerouslySetInnerHTML. Allowlist-based: only tags/attributes this app's
+// rich-text CSS (globals.css .rich-content/.admission-content/etc.) and
+// table-styling actually render are permitted — strips <script>, on*
+// handlers, javascript:/data: URLs, and any tag outside that list.
+// SSR-safe: isomorphic-dompurify runs on both server and client.
+export const sanitizeCmsHtml = (html) => {
+  if (!html) return "";
+  return DOMPurify.sanitize(html, SANITIZE_CONFIG);
+};
 
 //this funtion will return the youtube thumbnail from the youtube url
 export const getYoutubeThumbnail = (url) => {

@@ -2,6 +2,7 @@
 'use client'
 
 import IconMapper from './IconMapper'
+import { sanitizeCmsHtml } from '@/helperFunction/Helper'
 const secondaryTint6 = 'color-mix(in srgb, var(--secondary-color) 6%, white)'
 const primaryTint25 = 'color-mix(in srgb, var(--primary-color) 25%, white)'
 const primaryColorStyle = { color: 'var(--primary-color)' }
@@ -30,7 +31,7 @@ export default function AdmissionProcedure({ homeData }) {
             <div
               className="mt-3 text-gray-600 admission-content"
               dangerouslySetInnerHTML={{
-                __html: admissionProcedure.description
+                __html: sanitizeCmsHtml(admissionProcedure.description)
               }}
             />
           )}         
@@ -64,7 +65,7 @@ export default function AdmissionProcedure({ homeData }) {
                 {isHtmlContent(step.description) ? (
                   <div
                     className='mt-2 text-xs text-gray-500 leading-5 rich-content'
-                    dangerouslySetInnerHTML={{ __html: step.description }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeCmsHtml(step.description) }}
                   />
                 ) : (
                   <p className='mt-2 text-xs text-gray-500 leading-5'>

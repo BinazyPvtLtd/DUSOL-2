@@ -17,7 +17,7 @@ import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
-import { applyInfoTableStyling, stripLinks } from '@/helperFunction/Helper'
+import { applyInfoTableStyling, stripLinks, sanitizeCmsHtml } from '@/helperFunction/Helper'
 
 const SemItem = ({ sem }) => {
   const [open, setOpen] = useState(false)
@@ -217,7 +217,7 @@ const hasEligibility =
             <div
             className="mb-8 rich-content"
             dangerouslySetInnerHTML={{
-              __html: stripLinks(applyInfoTableStyling(courseData?.short_description || ''))
+              __html: stripLinks(applyInfoTableStyling(sanitizeCmsHtml(courseData?.short_description || '')))
             }}
           />
             <div className='meta-row'>
@@ -446,7 +446,7 @@ const hasEligibility =
                 <p>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: applyInfoTableStyling(courseData?.overview || '')
+                      __html: applyInfoTableStyling(sanitizeCmsHtml(courseData?.overview || ''))
                     }}
                   />
                 </p>
@@ -505,7 +505,7 @@ const hasEligibility =
                 <div style={{ marginTop: '14px' }}>
                   <div className='faq-list'>
                     {courseData?.faqs?.map(faq => (
-                      <FaqItem key={faq.id} q={faq.question} a={faq.answer} />
+                      <FaqItem key={faq.id} q={faq.question} a={sanitizeCmsHtml(faq.answer)} />
                     ))}
                   </div>
                 </div>
@@ -573,7 +573,7 @@ const hasEligibility =
                           showEligibility ? '' : 'eligibility-clamp'
                         }`}
                         dangerouslySetInnerHTML={{
-                          __html: applyInfoTableStyling(courseData.eligibility)
+                          __html: applyInfoTableStyling(sanitizeCmsHtml(courseData.eligibility))
                         }}
                       />
 

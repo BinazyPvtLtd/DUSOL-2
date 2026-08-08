@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import StudentHero from '@/components/student-zone/StudentHero'
 import StudentSidebar from '@/components/student-zone/StudentSidebar'
-import { applyInfoTableStyling } from '@/helperFunction/Helper'
+import { applyInfoTableStyling, sanitizeCmsHtml } from '@/helperFunction/Helper'
 
 export default function StudentContentPage({
   page,
@@ -11,7 +11,7 @@ export default function StudentContentPage({
   tenantSlug,
 }) {
   const content = useMemo(
-    () => applyInfoTableStyling(page?.content),
+    () => applyInfoTableStyling(sanitizeCmsHtml(page?.content)),
     [page?.content]
   )
 

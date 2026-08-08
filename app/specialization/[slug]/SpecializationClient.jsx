@@ -20,7 +20,7 @@ import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
-import { applyInfoTableStyling } from '@/helperFunction/Helper'
+import { applyInfoTableStyling, sanitizeCmsHtml } from '@/helperFunction/Helper'
 
 
 
@@ -290,7 +290,7 @@ function SpecializationContent ({ slug: slugProp }) {
             <div
               className="mb-8 rich-content"
               dangerouslySetInnerHTML={{
-                __html: applyInfoTableStyling(courseData?.short_description || '')
+                __html: applyInfoTableStyling(sanitizeCmsHtml(courseData?.short_description || ''))
               }}
             />
             <div className='hero-badges mt-5'>
@@ -484,7 +484,7 @@ function SpecializationContent ({ slug: slugProp }) {
                 <div>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: applyInfoTableStyling(courseData?.overview || '')
+                      __html: applyInfoTableStyling(sanitizeCmsHtml(courseData?.overview || ''))
                     }}
                   />
                 </div>
@@ -544,7 +544,7 @@ function SpecializationContent ({ slug: slugProp }) {
                 <div style={{ marginTop: '14px' }}>
                   <div className='faq-list'>
                     {(courseData?.faqs || []).map(faq => (
-                      <FaqItem key={faq.id} q={faq.question} a={faq.answer} />
+                      <FaqItem key={faq.id} q={faq.question} a={sanitizeCmsHtml(faq.answer)} />
                     ))}
                   </div>
                 </div>
@@ -615,7 +615,7 @@ function SpecializationContent ({ slug: slugProp }) {
                           showEligibility ? '' : 'eligibility-clamp'
                         }`}
                         dangerouslySetInnerHTML={{
-                          __html: courseData.eligibility
+                          __html: sanitizeCmsHtml(courseData.eligibility)
                         }}
                       />
 

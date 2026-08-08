@@ -1,3 +1,5 @@
+import { sanitizeCmsHtml } from '@/helperFunction/Helper'
+
 const isHtmlContent = value => /<\/?[a-z][\s\S]*>/i.test(value || '')
 
 export default function FeatureCard({ icon, title, description, style }) {
@@ -10,7 +12,7 @@ export default function FeatureCard({ icon, title, description, style }) {
       <div>
         <h3>{title}</h3>
         {isHtmlContent(description) ? (
-          <div className='rich-content' dangerouslySetInnerHTML={{ __html: description }} />
+          <div className='rich-content' dangerouslySetInnerHTML={{ __html: sanitizeCmsHtml(description) }} />
         ) : (
           <p>{description}</p>
         )}

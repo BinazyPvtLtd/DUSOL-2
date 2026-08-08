@@ -11,7 +11,7 @@ import PodcastUI from '../components/modal/PodcastUI'
     
 import { getCoursesByLevelAPI } from '@/api'
 import LeadModal from '@/components/LeadModal'
-import { getYoutubeThumbnail } from '@/helperFunction/Helper'
+import { getYoutubeThumbnail, sanitizeCmsHtml } from '@/helperFunction/Helper'
 import HowToApply from '@/components/HowToApply'
 import KeyHighlights from '@/components/KeyHighlights'
 import AdmissionProcedure from '@/components/AdmissionProcedure'
@@ -76,7 +76,7 @@ function CourseCard({ c }) {
         <div
         className="line-clamp-4 text-sm text-justify mb-4 text-gray-600"
         dangerouslySetInnerHTML={{
-          __html: c.short_description || "",
+          __html: sanitizeCmsHtml(c.short_description || ""),
         }}
       />
 
@@ -355,7 +355,7 @@ export default function HomeClient({ initialData }) {
               {AboutUs?.description && (
                 <div
                   className='about-description'
-                  dangerouslySetInnerHTML={{ __html: AboutUs.description }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeCmsHtml(AboutUs.description) }}
                 />
               )}
 
@@ -385,7 +385,7 @@ export default function HomeClient({ initialData }) {
             <div
               className='eligibility-content'
               dangerouslySetInnerHTML={{
-                __html: Program?.description || ''
+                __html: sanitizeCmsHtml(Program?.description || '')
               }}
             />
           </div>
@@ -435,7 +435,7 @@ export default function HomeClient({ initialData }) {
               <div
                 className='eligibility-content'
                 dangerouslySetInnerHTML={{
-                  __html: Eligibility?.description || ''
+                  __html: sanitizeCmsHtml(Eligibility?.description || '')
                 }}
               />
             </div>
@@ -481,7 +481,7 @@ export default function HomeClient({ initialData }) {
               <div
                 className='rich-content'
                 dangerouslySetInnerHTML={{
-                  __html: WhyChooseData?.description || ''
+                  __html: sanitizeCmsHtml(WhyChooseData?.description || '')
                 }}
               />
 

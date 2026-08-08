@@ -9,7 +9,7 @@ import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import TrendingSidebar from '@/components/TrendingSidebar'
-import { applyInfoTableStyling } from '@/helperFunction/Helper'
+import { applyInfoTableStyling, sanitizeCmsHtml } from '@/helperFunction/Helper'
 
 function FaqItem ({ q, a }) {
   const [open, setOpen] = useState(false)
@@ -74,6 +74,11 @@ export default function BlogClient ({ slug: slugProp }) {
       if (!blog) {
         return
       }
+
+      // Sanitize once, up front, so both this immediate render and the
+      // TOC/table-restyling pass below (which re-parses blog.content)
+      // only ever operate on already-safe HTML.
+      blog = { ...blog, content: sanitizeCmsHtml(blog.content) }
 
       setPost(blog)
     } catch (error) {
@@ -317,7 +322,7 @@ export default function BlogClient ({ slug: slugProp }) {
                   a={
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: item.answer
+                        __html: sanitizeCmsHtml(item.answer)
                       }}
                     />
                   }
