@@ -1013,6 +1013,18 @@ section {
   text-align: justify;
 }
 
+.course-card .line-clamp-4 p {
+    display: inline;
+    margin: 0;
+}
+
+.course-card .line-clamp-4 a {
+    color: #2563eb;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+
 /* --------- ELIGIBILITY --------- */
 .eligibility {
   background: linear-gradient(135deg,
@@ -2447,9 +2459,10 @@ section {
    otherwise leaves CMS-authored <a> tags visually identical to plain text
    in every rich-text container except .post-body, which had its own rule. */
 :is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) a {
-  color: blue !important;
+  color: #2563eb;
+    font-weight: 500;
   text-decoration: underline !important;
-  font-weight: 500;
+
 }
 
 :is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) img {

@@ -72,9 +72,12 @@ function CourseCard({ c }) {
 
       <div className='full'>{c.name}</div>
 
-        <div className="line-clamp-4 text-sm  text-justify mb-4     text-gray-600">
-  {c.short_description?.replace(/<[^>]+>/g, '')}
-</div>
+        <div
+        className="line-clamp-4 text-sm text-justify mb-4 text-gray-600"
+        dangerouslySetInnerHTML={{
+          __html: c.short_description || "",
+        }}
+      />
 
       <Link href={`/courses/${c.slug}`} className='btn btn-purple btn-block'>
         Know More
