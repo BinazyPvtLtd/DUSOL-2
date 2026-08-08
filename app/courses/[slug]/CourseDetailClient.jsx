@@ -18,7 +18,7 @@ import { useLeadForm } from '@/hooks/useLeadForm'
 import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
-import { applyInfoTableStyling } from '@/helperFunction/Helper'
+import { applyInfoTableStyling, stripLinks } from '@/helperFunction/Helper'
 
 const DEF_FAQ = [
   [
@@ -479,7 +479,7 @@ const hasEligibility =
             <div
             className="mb-8 rich-content"
             dangerouslySetInnerHTML={{
-              __html: applyInfoTableStyling(courseData?.short_description || '')
+              __html: stripLinks(applyInfoTableStyling(courseData?.short_description || ''))
             }}
           />
             <div className='meta-row'>

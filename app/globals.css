@@ -2460,7 +2460,7 @@ section {
    in every rich-text container except .post-body, which had its own rule. */
 :is(.about-description, .eligibility-content, .admission-content, .rich-content, .post-body, .cpanel, .content-main, .faq-a) a {
   color: #2563eb;
-    font-weight: 500;
+  font-weight: 500;
   text-decoration: underline !important;
 
 }

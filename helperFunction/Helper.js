@@ -63,3 +63,24 @@ export const applyInfoTableStyling = (html) => {
 
   return doc.body.innerHTML;
 };
+
+// Unwraps <a> tags in CMS-authored HTML, keeping their text/inner markup but
+// dropping the href/link behavior — so the content renders as plain text
+// instead of a clickable link. All other formatting (p, strong, em, br, ...)
+// is preserved. Browser-only (DOMParser); returns the input unchanged during SSR.
+export const stripLinks = (html) => {
+  if (!html || typeof document === "undefined") return html;
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  doc.querySelectorAll("a").forEach((anchor) => {
+    const parent = anchor.parentNode;
+    while (anchor.firstChild) {
+      parent.insertBefore(anchor.firstChild, anchor);
+    }
+    parent.removeChild(anchor);
+  });
+
+  return doc.body.innerHTML;
+};
