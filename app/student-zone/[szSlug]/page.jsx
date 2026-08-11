@@ -1,12 +1,12 @@
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import {
-  STUDENT_ZONE_API_MAP,
   buildStudentZoneUrl,
   getTenantSlugFromHost,
   resolveStudentZonePage
 } from '@/app/lib/studentZone'
 import { generateSEOMetadata } from '@/app/lib/seo'
+import { fetchApi } from '@/app/lib/serverApi'
 import JsonLd from '@/components/JsonLd'
 import StudentZoneClient from './StudentZoneClient'
 
@@ -24,16 +24,22 @@ const resolveFromRequest = szSlug => {
   return { host, tenantSlug, page }
 }
 
+// Student Zone page keys ('admission', 'courses-fees', ...) are the exact
+// API path segments (see STUDENT_ZONE_API_MAP in lib/studentZone.js), so
+// the request can be built directly. Wrapped in fetchApi's native fetch()
+// so Next.js dedupes the identical call made by generateMetadata() and
+// the page component below into a single network request.
+const getStudentZoneData = (pageKey, tenantSlug) =>
+  fetchApi(`/${pageKey}`, { headers: { 'X-Tenant': tenantSlug } })
+
 export async function generateMetadata({ params }) {
   const { host, tenantSlug, page } = resolveFromRequest(params.szSlug)
 
   if (!page) return {}
 
   try {
-    const api = STUDENT_ZONE_API_MAP[page.key]
-    const response = await api({ headers: { 'X-Tenant': tenantSlug } })
-
-    const seo = response?.data?.data?.seo || {}
+    const body = await getStudentZoneData(page.key, tenantSlug)
+    const seo = body?.data?.seo || {}
 
     return generateSEOMetadata(seo)
   } catch (err) {
@@ -47,14 +53,15 @@ export default async function StudentZoneSlugPage({ params }) {
   if (!page) notFound()
 
   let schema = null
+  let initialData = null
 
   try {
-    const api = STUDENT_ZONE_API_MAP[page.key]
-    const response = await api({ headers: { 'X-Tenant': tenantSlug } })
-
-    schema = response?.data?.data?.seo?.schema || null
+    const body = await getStudentZoneData(page.key, tenantSlug)
+    schema = body?.data?.seo?.schema || null
+    initialData = body || null
   } catch (err) {
     schema = null
+    initialData = null
   }
 
   return (
@@ -63,6 +70,7 @@ export default async function StudentZoneSlugPage({ params }) {
       <StudentZoneClient
         pageKey={page.key}
         tenantSlug={tenantSlug}
+        initialData={initialData}
       />
     </>
   )

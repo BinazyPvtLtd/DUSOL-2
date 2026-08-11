@@ -27,12 +27,22 @@ function FaqItem ({ q, a }) {
   )
 }
 
-export default function BlogClient ({ slug: slugProp }) {
+// Sanitize once, up front, so both the immediate render and the
+// TOC/table-restyling pass below (which re-parses blog.content) only
+// ever operate on already-safe HTML. Shared by the SSR-provided blog
+// (initialData) and the client-fetched fallback so both go through the
+// exact same sanitization step.
+const sanitizeBlog = blog => ({ ...blog, content: sanitizeCmsHtml(blog.content) })
+
+export default function BlogClient ({ slug: slugProp, initialData, initialFaqs }) {
   const params = useParams()
   const slug = slugProp || params?.slug
-  const [post, setPost] = useState(null)
+  const [post, setPost] = useState(() => {
+    const blog = initialData?.data?.blog
+    return blog ? sanitizeBlog(blog) : null
+  })
   const [toc, setToc] = useState([])
-  const [faqData, setFaqData] = useState([])
+  const [faqData, setFaqData] = useState(() => initialFaqs?.data || [])
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openItem, setOpenItem] = useState(null)
@@ -47,11 +57,22 @@ export default function BlogClient ({ slug: slugProp }) {
   } = useLeadForm({ source: 'Blog Page' })
 
   useEffect(() => {
+    if (initialData) {
+      const blog = initialData?.data?.blog
+      if (blog) {
+        // FAQs already arrived via initialFaqs (server-fetched) — skip the
+        // client-side FAQ request. If the server fetch failed, fall back
+        // to fetching FAQs on the client so the section can still populate.
+        processBlog(blog, { skipFaqFetch: Boolean(initialFaqs) })
+      }
+      return
+    }
+
     if (slug) {
       fetchBlog()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug])
+  }, [slug, initialData])
 
   const fetchBlogFaqs = async blogId => {
     try {
@@ -63,34 +84,21 @@ export default function BlogClient ({ slug: slugProp }) {
     }
   }
 
-  const fetchBlog = async () => {
-    let blog = null
+  // Shared by both the SSR-provided blog and the client-fetched fallback:
+  // sanitizes, sets the post, fetches FAQs, then generates the TOC/table
+  // styling pass. Only the "how did we get the raw blog object" step
+  // differs between the two callers.
+  const processBlog = async (rawBlog, { skipFaqFetch = false } = {}) => {
+    const blog = sanitizeBlog(rawBlog)
 
-    // Fetch blog
-    try {
-      const response = await getOneBlogDataApi(slug)
-      blog = response?.data?.data?.blog
+    setPost(blog)
 
-      if (!blog) {
-        return
+    if (!skipFaqFetch) {
+      try {
+        await fetchBlogFaqs(blog.id)
+      } catch (error) {
+        console.error('Error while fetching FAQs:', error)
       }
-
-      // Sanitize once, up front, so both this immediate render and the
-      // TOC/table-restyling pass below (which re-parses blog.content)
-      // only ever operate on already-safe HTML.
-      blog = { ...blog, content: sanitizeCmsHtml(blog.content) }
-
-      setPost(blog)
-    } catch (error) {
-      console.error('Failed to fetch blog:', error)
-      return
-    }
-
-    // Fetch FAQs
-    try {
-      await fetchBlogFaqs(blog.id)
-    } catch (error) {
-      console.error('Error while fetching FAQs:', error)
     }
 
     // Generate TOC
@@ -154,6 +162,24 @@ export default function BlogClient ({ slug: slugProp }) {
     } catch (error) {
       console.error('Failed to generate table of contents:', error)
     }
+  }
+
+  const fetchBlog = async () => {
+    let blog = null
+
+    try {
+      const response = await getOneBlogDataApi(slug)
+      blog = response?.data?.data?.blog
+
+      if (!blog) {
+        return
+      }
+    } catch (error) {
+      console.error('Failed to fetch blog:', error)
+      return
+    }
+
+    await processBlog(blog)
   }
 
   if (!post) {

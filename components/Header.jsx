@@ -4,12 +4,9 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import LeadModal from './LeadModal'
 import { useTenant } from '@/context/TenantContext'
+import { useMenuData } from '@/context/MenuDataContext'
 import { getStorageBaseUrl } from '@/constant/constant'
 import Image from 'next/image'
-import {
-  getCourseDataAPI,
-  getSpecializationsAPI
-} from '@/api'
 import {
   STUDENT_ZONE_PAGES,
   buildStudentZoneUrl,
@@ -119,13 +116,8 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openItem, setOpenItem] = useState(null)
   const [leadModalOpen, setLeadModalOpen] = useState(false)
-  const [courses, setCourses] = useState([])
-  const [specializations, setSpecializations] = useState([])
+  const { courses, specializations } = useMenuData()
   const { tenant, loading } = useTenant()
-
-  useEffect(() => {
-    loadMenu()
-  }, [])
 
   useEffect(() => {
     if (!mobileOpen) return
@@ -135,22 +127,6 @@ export default function Header() {
       document.body.style.overflow = previousOverflow
     }
   }, [mobileOpen])
-
-  const loadMenu = async () => {
-    try {
-      const [courseRes, specializationRes] = await Promise.all([
-        getCourseDataAPI(),
-        getSpecializationsAPI()
-      ])
-
-      setCourses(courseRes.data.data)
-      setSpecializations(specializationRes.data.data)
-    } catch (error) {
-      console.error('Header Menu Error', error)
-    }
-  }
-
- 
 
   if (loading) return null
 

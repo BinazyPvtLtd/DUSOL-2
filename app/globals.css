@@ -604,6 +604,7 @@ section {
   border-radius: 8px;
   overflow: hidden;
   background: #fff;
+  
 }
 
 
@@ -612,8 +613,6 @@ section {
   object-fit: contain;
   display: block;
 }
-
-
 
 .hero-actions {
   display: flex;
@@ -3455,6 +3454,7 @@ section {
     justify-content: center;
     padding: 8px 12px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    
   }
 
   .course-layout {

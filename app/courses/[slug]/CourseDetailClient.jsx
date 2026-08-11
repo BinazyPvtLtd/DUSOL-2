@@ -18,6 +18,7 @@ import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
 import { applyInfoTableStyling, stripLinks, sanitizeCmsHtml } from '@/helperFunction/Helper'
+import { useClientHtml } from '@/hooks/useClientHtml'
 
 const SemItem = ({ sem }) => {
   const [open, setOpen] = useState(false)
@@ -81,9 +82,9 @@ function FaqItem ({ q, a }) {
   )
 }
 
-function CoursesContent () {
+function CoursesContent ({ initialData }) {
   const [activeTab, setActiveTab] = useState('overview')
-  const [courseData, setCoursedata] = useState(null)
+  const [courseData, setCoursedata] = useState(initialData?.data?.course ?? null)
   const [showEligibility, setShowEligibility] = useState(false)
   const [showAllSemesters, setShowAllSemesters] = useState(false)
   const {
@@ -157,10 +158,15 @@ function CoursesContent () {
   }, [courseData])
 
   useEffect(() => {
+    if (initialData) {
+      setCoursedata(initialData?.data?.course)
+      return
+    }
+
     if (slug) {
       fetchCourseData(slug)
     }
-  }, [slug])
+  }, [slug, initialData])
 
   const fetchCourseData = async slug => {
     try {
@@ -171,6 +177,27 @@ function CoursesContent () {
       console.log(error)
     }
   }
+
+  // applyInfoTableStyling/stripLinks are browser-only (DOMParser) and no-op
+  // during SSR, so calling them inline in render would make the server's
+  // markup diverge from the client's first-render markup and trip a
+  // hydration mismatch. useClientHtml renders the sanitized-only HTML on
+  // the first render (identical server/client) and swaps in the
+  // transformed version right after mount.
+  const shortDescriptionHtml = useClientHtml(
+    sanitizeCmsHtml(courseData?.short_description || ''),
+    html => stripLinks(applyInfoTableStyling(html))
+  )
+
+  const overviewHtml = useClientHtml(
+    sanitizeCmsHtml(courseData?.overview || ''),
+    applyInfoTableStyling
+  )
+
+  const eligibilityHtml = useClientHtml(
+    sanitizeCmsHtml(courseData?.eligibility || ''),
+    applyInfoTableStyling
+  )
 
   const syllabusData =
     courseData?.curricula?.[0]?.semesters?.map(semester => ({
@@ -216,41 +243,8 @@ const hasEligibility =
             <h1> {courseData?.name} </h1>
             <div
             className="mb-8 rich-content"
-            dangerouslySetInnerHTML={{
-              __html: stripLinks(applyInfoTableStyling(sanitizeCmsHtml(courseData?.short_description || '')))
-            }}
+            dangerouslySetInnerHTML={{ __html: shortDescriptionHtml }}
           />
-            <div className='meta-row'>
-              <div className='cmeta'>
-                {/* <svg viewBox='0 0 24 24'>
-                  <path d='M12 2a10 10 0 1010 10A10 10 0 0012 2zm1 14.5h-2V11h2zm0-8.5h-2V6h2z' />
-                </svg> */}
-                {/* <div>
-                  <small>Duration</small>
-                  <strong>
-                    {courseData?.duration} {courseData?.duration_type}
-                  </strong>
-                </div>
-              </div>
-              <div className='cmeta'>
-                <svg viewBox='0 0 24 24'>
-                  <path d='M12 3L1 9l11 6 9-4.9V17h2V9zm0 13.2L4.5 12 12 7.8l7.5 4.2z' />
-                </svg>
-                <div>
-                  <small>Level</small>
-                  <strong>{courseData?.course_level}</strong>
-                </div>
-              </div>
-              <div className='cmeta'>
-                <svg viewBox='0 0 24 24'>
-                  <path d='M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2z' />
-                </svg>
-                <div>
-                  <small>Mode</small>
-                  <strong>{courseData?.study_mode}</strong>
-                </div> */}
-              </div>
-            </div>
             <div className='hero-badges mt-5'>
               <div className='acc-logo'>
                 <Image
@@ -259,11 +253,7 @@ const hasEligibility =
                   width={60}
                   height={60}
                 />
-                <div className='acc-text'>
-                  NAAC Accredited
-                  <br />
-                  Grade A++
-                </div>
+               
               </div>
 
               <div className='acc-logo'>
@@ -273,29 +263,17 @@ const hasEligibility =
                   width={60}
                   height={60}
                 />
-                <div className='acc-text'>
-                  UGC + DEB
-                  <br />
-                  Approved
-                </div>
+               
               </div>
 
               <div className='acc-logo'>
                 <Image src={img3} alt='AICTE Approved' width={60} height={60} />
-                <div className='acc-text'>
-                  AICTE
-                  <br />
-                  Approved
-                </div>
+               
               </div>
 
               <div className='acc-logo'>
                 <Image src={img4} alt='NIRF Ranked' width={60} height={60} />
-                <div className='acc-text'>
-                  NIRF
-                  <br />
-                  Ranked
-                </div>
+               
               </div>
             </div>
             <div className='hero-actions'>
@@ -443,13 +421,9 @@ const hasEligibility =
               </div>
               <div className='cpanel' id='p-overview' ref={overviewRef}>
                 <h2>Course Overview</h2>
-                <p>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: applyInfoTableStyling(sanitizeCmsHtml(courseData?.overview || ''))
-                    }}
-                  />
-                </p>
+                <div
+                  dangerouslySetInnerHTML={{ __html: overviewHtml }}
+                />
               </div>
               <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
                 <div className='syllabus-head'>
@@ -572,9 +546,7 @@ const hasEligibility =
                         className={`eligibility-text ${
                           showEligibility ? '' : 'eligibility-clamp'
                         }`}
-                        dangerouslySetInnerHTML={{
-                          __html: applyInfoTableStyling(sanitizeCmsHtml(courseData.eligibility))
-                        }}
+                        dangerouslySetInnerHTML={{ __html: eligibilityHtml }}
                       />
 
                       <button
@@ -693,14 +665,14 @@ const hasEligibility =
   )
 }
 
-export default function CoursesPage () {
+export default function CoursesPage ({ initialData }) {
   return (
     <Suspense
       fallback={
         <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
       }
     >
-      <CoursesContent />
+      <CoursesContent initialData={initialData} />
     </Suspense>
   )
 }

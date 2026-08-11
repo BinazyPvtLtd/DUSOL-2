@@ -1,17 +1,22 @@
 import { generateSEOMetadata } from '@/app/lib/seo'
-import { getOneSpecializationAPI } from '@/api'
+import { fetchApi } from '@/app/lib/serverApi'
 import SpecializationClient from './SpecializationClient'
 import JsonLd from '@/components/JsonLd'
+
+// Request-scoped: Next.js dedupes identical fetch() calls made during the
+// same render pass, so generateMetadata() and Page() below share one
+// network call instead of firing two.
+const getSpecialization = slug => fetchApi(`/specializations/${slug}`)
 
 export async function generateMetadata ({ params }) {
   try {
     const slug = params?.slug
-    const response = await getOneSpecializationAPI(slug)
+    const body = await getSpecialization(slug)
 
     const seo =
-      response?.data?.seo ||
-      response?.data?.data?.seo ||
-      response?.data?.data?.university?.seo ||
+      body?.seo ||
+      body?.data?.seo ||
+      body?.data?.university?.seo ||
       {}
 
     return generateSEOMetadata(seo)
@@ -21,25 +26,29 @@ export async function generateMetadata ({ params }) {
 }
 
 export default async function Page ({ params }) {
+  const slug = params?.slug
   let schema = null
+  let initialData = null
 
   try {
-    const slug = params?.slug
-    const response = await getOneSpecializationAPI(slug)
+    const body = await getSpecialization(slug)
 
     schema =
-      response?.data?.seo?.schema ||
-      response?.data?.data?.seo?.schema ||
-      response?.data?.data?.university?.seo?.schema ||
+      body?.seo?.schema ||
+      body?.data?.seo?.schema ||
+      body?.data?.university?.seo?.schema ||
       null
+
+    initialData = body || null
   } catch (err) {
     schema = null
+    initialData = null
   }
 
   return (
     <>
       <JsonLd schema={schema} />
-      <SpecializationClient slug={params?.slug} />
+      <SpecializationClient slug={slug} initialData={initialData} />
     </>
   )
 }

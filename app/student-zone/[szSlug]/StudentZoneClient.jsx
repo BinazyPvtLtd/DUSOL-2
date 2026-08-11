@@ -47,11 +47,18 @@ const normalizeResponse = (pageKey, response) => {
   }
 }
 
-export default function StudentZoneClient({ pageKey, tenantSlug }) {
-  const [page, setPage] = useState(null)
+export default function StudentZoneClient({ pageKey, tenantSlug, initialData }) {
+  const [page, setPage] = useState(() =>
+    initialData ? normalizeResponse(pageKey, { data: initialData }) : null
+  )
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    if (initialData) {
+      setPage(normalizeResponse(pageKey, { data: initialData }))
+      return
+    }
+
     const fetchData = async () => {
       const api = STUDENT_ZONE_API_MAP[pageKey]
 
@@ -76,7 +83,7 @@ export default function StudentZoneClient({ pageKey, tenantSlug }) {
     }
 
     fetchData()
-  }, [pageKey])
+  }, [pageKey, initialData])
 
   if (loading && !page) {
     return (

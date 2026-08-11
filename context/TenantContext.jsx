@@ -8,6 +8,12 @@ const TenantContext = createContext(null)
 
 export const TenantProvider = ({ children }) => {
   const [tenant, setTenant] = useState(null)
+  // Single source of truth for the /home response, shared by Footer (and
+  // any other consumer that needs it). TenantContext already fetches /home
+  // (with the tenant-resolving X-Tenant header) to derive `tenant` below —
+  // Footer used to fetch /home again on its own, so this reuses that same
+  // response instead of firing a second request.
+  const [homeData, setHomeData] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -18,7 +24,10 @@ export const TenantProvider = ({ children }) => {
     try {
       const res = await getTenantAPI()
 
-      const currentTenant = res.data?.data?.university
+      const data = res.data?.data
+      const currentTenant = data?.university
+
+      setHomeData(data || null)
 
       if (currentTenant) {
         setTenant(currentTenant)
@@ -99,7 +108,8 @@ export const TenantProvider = ({ children }) => {
         tenant,
         loading,
         reloadTenant: loadTenant,
-        tenantId: tenant?.id
+        tenantId: tenant?.id,
+        homeData
       }}
     >
       {children}

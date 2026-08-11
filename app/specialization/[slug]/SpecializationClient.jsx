@@ -21,6 +21,7 @@ import { INDIAN_STATES } from '@/constant/indianStates'
 import LeadModal from '@/components/LeadModal'
 import BrochureButton from '@/components/BrochureButton'
 import { applyInfoTableStyling, sanitizeCmsHtml } from '@/helperFunction/Helper'
+import { useClientHtml } from '@/hooks/useClientHtml'
 
 
 
@@ -129,9 +130,11 @@ function applySeoToDocument (seo = {}) {
   }
 }
 
-function SpecializationContent ({ slug: slugProp }) {
+function SpecializationContent ({ slug: slugProp, initialData }) {
   const [activeTab, setActiveTab] = useState('overview')
-  const [courseData, setCoursedata] = useState(null)
+  const [courseData, setCoursedata] = useState(
+    initialData?.data?.specialization ?? null
+  )
   const [showEligibility, setShowEligibility] = useState(false)
   const [showAllSemesters, setShowAllSemesters] = useState(false)
   const {
@@ -209,6 +212,21 @@ function SpecializationContent ({ slug: slugProp }) {
   }, [courseData])
 
   useEffect(() => {
+    if (initialData) {
+      const payloadCourse = initialData?.data?.specialization
+      setCoursedata(payloadCourse)
+
+      const seoSource =
+        payloadCourse?.seo ||
+        initialData?.seo ||
+        initialData?.data?.seo ||
+        initialData?.data?.university?.seo ||
+        {}
+
+      applySeoToDocument(generateSEOMetadata(seoSource))
+      return
+    }
+
     if (!slug) return
     ;(async () => {
       try {
@@ -232,7 +250,24 @@ function SpecializationContent ({ slug: slugProp }) {
         console.log(e)
       }
     })()
-  }, [slug])
+  }, [slug, initialData])
+
+  // applyInfoTableStyling is browser-only (DOMParser) and no-ops during
+  // SSR, so calling it inline in render would make the server's markup
+  // diverge from the client's first-render markup and trip a hydration
+  // mismatch. useClientHtml renders the sanitized-only HTML on the first
+  // render (identical server/client) and swaps in the table-styled
+  // version right after mount. Must run unconditionally, before the
+  // `!courseData` early return below, per the rules of hooks.
+  const shortDescriptionHtml = useClientHtml(
+    sanitizeCmsHtml(courseData?.short_description || ''),
+    applyInfoTableStyling
+  )
+
+  const overviewHtml = useClientHtml(
+    sanitizeCmsHtml(courseData?.overview || ''),
+    applyInfoTableStyling
+  )
 
   const syllabusData =
     courseData?.curricula?.[0]?.semesters?.map(semester => ({
@@ -289,9 +324,7 @@ function SpecializationContent ({ slug: slugProp }) {
             </h1>
             <div
               className="mb-8 rich-content"
-              dangerouslySetInnerHTML={{
-                __html: applyInfoTableStyling(sanitizeCmsHtml(courseData?.short_description || ''))
-              }}
+              dangerouslySetInnerHTML={{ __html: shortDescriptionHtml }}
             />
             <div className='hero-badges mt-5'>
               <div className='acc-logo'>
@@ -483,9 +516,7 @@ function SpecializationContent ({ slug: slugProp }) {
                 <h2>Course Overview</h2>
                 <div>
                   <div
-                    dangerouslySetInnerHTML={{
-                      __html: applyInfoTableStyling(sanitizeCmsHtml(courseData?.overview || ''))
-                    }}
+                    dangerouslySetInnerHTML={{ __html: overviewHtml }}
                   />
                 </div>
               </div>
@@ -740,14 +771,14 @@ function SpecializationContent ({ slug: slugProp }) {
   )
 }
 
-export default function SpecializationClient ({ slug }) {
+export default function SpecializationClient ({ slug, initialData }) {
   return (
     <Suspense
       fallback={
         <div style={{ padding: '80px', textAlign: 'center' }}>Loading...</div>
       }
     >
-      <SpecializationContent slug={slug} />
+      <SpecializationContent slug={slug} initialData={initialData} />
     </Suspense>
   )
 }

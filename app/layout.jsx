@@ -4,6 +4,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import LeadModal from '@/components/LeadModal'
 import { TenantProvider } from '@/context/TenantContext'
+import { MenuDataProvider } from '@/context/MenuDataContext'
 import { generateSEOMetadata } from './lib/seo'
 import Script from 'next/script'
 
@@ -43,10 +44,12 @@ export default function RootLayout ({ children }) {
     <html lang='en' className={`${poppins.variable} ${mulish.variable}`}>
       <body>
         <TenantProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <LeadModal />
+          <MenuDataProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <LeadModal />
+          </MenuDataProvider>
         </TenantProvider>
 
         <Script

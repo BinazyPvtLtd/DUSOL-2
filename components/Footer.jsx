@@ -1,13 +1,10 @@
   'use client'
 
-  import { useEffect, useState } from 'react'
+  import { useState } from 'react'
   import Link from 'next/link'
   import Image from 'next/image'
-  import {
-    getHomePageDataAPI,
-    getCourseDataAPI,
-    getSpecializationsAPI
-  } from '@/api'
+  import { useMenuData } from '@/context/MenuDataContext'
+  import { useTenant } from '@/context/TenantContext'
   import LeadModal from './LeadModal'
   import LegalModal from './legal/LegalModal'
   import DisclaimerContent from './legal/DisclaimerContent'
@@ -17,36 +14,15 @@
   import footerLogo from '../public/assets/images/footer-logo.png'
 
   export default function Footer () {
-    const [footerCTA, setFooterCTA] = useState(null)
     const [mobileOpen, setMobileOpen] = useState(false)
     const [openItem, setOpenItem] = useState(null)
     const [leadModalOpen, setLeadModalOpen] = useState(false)
     const [activeLegal, setActiveLegal] = useState(null)
-    const [homeData, setHomeData] = useState(null)
-    const [courses, setCourses] = useState([])
-    const [specializations, setSpecializations] = useState([])
-
-    useEffect(() => {
-      fetchHomeData()
-    }, [])
-
-    const fetchHomeData = async () => {
-      try {
-        const [homeRes, courseRes, specializationRes] = await Promise.all([
-          getHomePageDataAPI(),
-          getCourseDataAPI(),
-          getSpecializationsAPI()
-        ])
-
-        // Adjust this path if your API response is different
-        setHomeData(homeRes?.data?.data)
-        setFooterCTA(homeRes?.data?.data?.footer_cta)
-        setCourses(courseRes?.data?.data || [])
-        setSpecializations(specializationRes?.data?.data || [])
-      } catch (error) {
-        console.error(error)
-      }
-    }
+    const { courses, specializations } = useMenuData()
+    // /home is fetched once by TenantContext (shared source of truth) —
+    // Footer used to fetch it again independently.
+    const { homeData } = useTenant()
+    const footerCTA = homeData?.footer_cta
 
     console.log(homeData, 'homeData')
 

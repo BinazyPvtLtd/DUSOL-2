@@ -1,14 +1,19 @@
 import { generateSEOMetadata } from '@/app/lib/seo'
-import { getOneCourseDataAPI } from '@/api'
+import { fetchApi } from '@/app/lib/serverApi'
 import CourseDetailClient from './CourseDetailClient'
 import JsonLd from '@/components/JsonLd'
 
+// Request-scoped: Next.js dedupes identical fetch() calls made during the
+// same render pass, so generateMetadata() and Page() below share one
+// network call instead of firing two.
+const getCourse = slug => fetchApi(`/courses/${slug}`)
+
 export async function generateMetadata ({ params }) {
   try {
-    const response = await getOneCourseDataAPI(params?.slug)
+    const body = await getCourse(params?.slug)
 
-    // axios response -> { data: { success, data: { seo, course } } }
-    const seo = response?.data?.data?.seo || {}
+    // API body shape -> { success, data: { seo, course } }
+    const seo = body?.data?.seo || {}
 
     return generateSEOMetadata(seo)
   } catch (err) {
@@ -18,18 +23,21 @@ export async function generateMetadata ({ params }) {
 
 export default async function Page ({ params }) {
   let schema = null
+  let initialData = null
 
   try {
-    const response = await getOneCourseDataAPI(params?.slug)
-    schema = response?.data?.data?.seo?.schema || null
+    const body = await getCourse(params?.slug)
+    schema = body?.data?.seo?.schema || null
+    initialData = body || null
   } catch (err) {
     schema = null
+    initialData = null
   }
 
   return (
     <>
       <JsonLd schema={schema} />
-      <CourseDetailClient slug={params?.slug} />
+      <CourseDetailClient slug={params?.slug} initialData={initialData} />
     </>
   )
 }
