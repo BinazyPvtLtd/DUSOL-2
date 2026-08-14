@@ -18,6 +18,7 @@ const API_BASE = process.env.NEXT_PUBLIC_DEFAULT_API
 export async function fetchApi (path, init = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
+    cache: 'no-store',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
