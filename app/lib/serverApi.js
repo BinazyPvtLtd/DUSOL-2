@@ -67,7 +67,13 @@ export async function fetchApi (path, init = {}) {
   })
 
   if (!res.ok) {
-    throw new Error(`API request failed (${res.status}): ${path}`)
+    // Callers that need to tell a real 404 (e.g. a nonexistent slug) apart
+    // from a transient failure (network error, 5xx) can check `err.status`.
+    // Purely additive — existing callers that only read `err.message` are
+    // unaffected.
+    const err = new Error(`API request failed (${res.status}): ${path}`)
+    err.status = res.status
+    throw err
   }
 
   return res.json()
