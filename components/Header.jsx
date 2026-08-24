@@ -145,6 +145,9 @@ export default function Header() {
       item.course?.name === 'Distance MBA'
   )
 
+  console.log(mbaSpecializations);
+  
+
   const tenantSlug =
     typeof window !== 'undefined'
       ? getTenantSlugFromHost(window.location.hostname)

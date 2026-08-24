@@ -24,7 +24,6 @@
     const { homeData } = useTenant()
     const footerCTA = homeData?.footer_cta
 
-    console.log(homeData, 'homeData')
 
     const closeMobile = () => {
       setMobileOpen(false)
