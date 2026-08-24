@@ -1,4 +1,5 @@
 import './globals.css'
+import { headers } from 'next/headers'
 import { Poppins, Mulish } from 'next/font/google'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -6,6 +7,8 @@ import LeadModal from '@/components/LeadModal'
 import { TenantProvider } from '@/context/TenantContext'
 import { MenuDataProvider } from '@/context/MenuDataContext'
 import { generateSEOMetadata } from './lib/seo'
+import { fetchApi } from './lib/serverApi'
+import { getTenantSlugFromHost } from './lib/studentZone'
 import Script from 'next/script'
 
 const poppins = Poppins({
@@ -39,13 +42,42 @@ export const viewport = {
   initialScale: 1,
 }
 
-export default function RootLayout ({ children }) {
+// Server-fetched once per request (RootLayout wraps every route) so Header
+// has real course/specialization links in the initial server HTML instead
+// of waiting on MenuDataContext's client-only fetch. fetchApi() already
+// resolves and forwards the correct X-Tenant header for the incoming
+// request's own host — see app/lib/serverApi.js. `null` on failure (rather
+// than `[]`) tells MenuDataProvider its own client-side fetch still needs
+// to run, same convention used for initialData elsewhere in this codebase.
+async function loadMenuData () {
+  try {
+    const [coursesBody, specializationsBody] = await Promise.all([
+      fetchApi('/courses'),
+      fetchApi('/specializations')
+    ])
+
+    return {
+      courses: coursesBody?.data || [],
+      specializations: specializationsBody?.data || []
+    }
+  } catch (err) {
+    return { courses: null, specializations: null }
+  }
+}
+
+export default async function RootLayout ({ children }) {
+  const { courses, specializations } = await loadMenuData()
+  const tenantSlug = getTenantSlugFromHost(headers().get('host') || '')
+
   return (
     <html lang='en' className={`${poppins.variable} ${mulish.variable}`}>
       <body>
         <TenantProvider>
-          <MenuDataProvider>
-            <Header />
+          <MenuDataProvider
+            initialCourses={courses}
+            initialSpecializations={specializations}
+          >
+            <Header tenantSlug={tenantSlug} />
             <main>{children}</main>
             <Footer />
             <LeadModal />

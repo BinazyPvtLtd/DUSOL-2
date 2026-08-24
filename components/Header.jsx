@@ -9,8 +9,7 @@ import { getStorageBaseUrl } from '@/constant/constant'
 import Image from 'next/image'
 import {
   STUDENT_ZONE_PAGES,
-  buildStudentZoneUrl,
-  getTenantSlugFromHost
+  buildStudentZoneUrl
 } from '@/app/lib/studentZone'
 
 
@@ -112,12 +111,12 @@ function MobileSubMenu({ item, onClose }) {
   )
 }
 
-export default function Header() {
+export default function Header({ tenantSlug = null }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openItem, setOpenItem] = useState(null)
   const [leadModalOpen, setLeadModalOpen] = useState(false)
   const { courses, specializations } = useMenuData()
-  const { tenant, loading } = useTenant()
+  const { tenant } = useTenant()
 
   useEffect(() => {
     if (!mobileOpen) return
@@ -127,8 +126,6 @@ export default function Header() {
       document.body.style.overflow = previousOverflow
     }
   }, [mobileOpen])
-
-  if (loading) return null
 
   const closeMobile = () => {
     setMobileOpen(false)
@@ -146,12 +143,7 @@ export default function Header() {
   )
 
   console.log(mbaSpecializations);
-  
 
-  const tenantSlug =
-    typeof window !== 'undefined'
-      ? getTenantSlugFromHost(window.location.hostname)
-      : null
 
   const MENU = [
     {
