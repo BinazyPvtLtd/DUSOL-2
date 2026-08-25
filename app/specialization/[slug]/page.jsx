@@ -1,4 +1,5 @@
 import { headers } from 'next/headers'
+import { notFound } from 'next/navigation'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import { fetchApi } from '@/app/lib/serverApi'
 import SpecializationClient from './SpecializationClient'
@@ -49,6 +50,16 @@ export default async function Page ({ params }) {
 
     initialData = body || null
   } catch (err) {
+    // A confirmed 404 from the API means no specialization exists at this
+    // slug — return a real 404 instead of rendering an empty shell at
+    // HTTP 200. Any other failure (network error, 5xx) falls through to
+    // the existing behavior (render with no data) rather than risk showing
+    // a false 404 for a real specialization during a transient upstream
+    // issue.
+    if (err?.status === 404) {
+      notFound()
+    }
+
     schema = null
     initialData = null
   }
