@@ -2,6 +2,7 @@ import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import { fetchApi } from '@/app/lib/serverApi'
+import { getTrustedHost } from '@/app/lib/studentZone'
 import CourseDetailClient from './CourseDetailClient'
 import JsonLd from '@/components/JsonLd'
 
@@ -13,7 +14,9 @@ const getCourse = slug => fetchApi(`/courses/${slug}`)
 // This route's own real public URL — used only as a fallback when the CMS
 // canonical_url field is empty (see generateSEOMetadata in app/lib/seo.js).
 const getCanonicalFallback = slug => {
-  const host = headers().get('x-forwarded-host') || headers().get('host') || ''
+  const host = getTrustedHost(
+    headers().get('x-forwarded-host') || headers().get('host') || ''
+  )
   return host ? `https://${host}/courses/${slug}` : undefined
 }
 

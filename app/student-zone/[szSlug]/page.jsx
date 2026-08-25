@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import {
   buildStudentZoneUrl,
   getTenantSlugFromHost,
+  getTrustedHost,
   resolveStudentZonePage
 } from '@/app/lib/studentZone'
 import { generateSEOMetadata } from '@/app/lib/seo'
@@ -17,8 +18,8 @@ import StudentZoneClient from './StudentZoneClient'
 // created in the admin panel is served automatically.
 
 const resolveFromRequest = szSlug => {
-  const host = headers().get('host') || ''
-  const tenantSlug = getTenantSlugFromHost(host)
+  const host = getTrustedHost(headers().get('host') || '')
+  const tenantSlug = getTenantSlugFromHost(host || '')
   const page = resolveStudentZonePage(szSlug, tenantSlug)
 
   return { host, tenantSlug, page }

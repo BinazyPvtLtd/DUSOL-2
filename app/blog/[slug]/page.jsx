@@ -2,6 +2,7 @@ import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import { fetchApi } from '@/app/lib/serverApi'
+import { getTrustedHost } from '@/app/lib/studentZone'
 import BlogClient from './BlogClient'
 import JsonLd from '@/components/JsonLd'
 
@@ -16,7 +17,9 @@ const getBlogFaqs = blogId => fetchApi(`/blogs/${blogId}/faqs`)
 // Note: the real route is singular /blog/{slug} (this file's own path),
 // not /blogs/{slug} — the latter 404s.
 const getCanonicalFallback = slug => {
-  const host = headers().get('x-forwarded-host') || headers().get('host') || ''
+  const host = getTrustedHost(
+    headers().get('x-forwarded-host') || headers().get('host') || ''
+  )
   return host ? `https://${host}/blog/${slug}` : undefined
 }
 
