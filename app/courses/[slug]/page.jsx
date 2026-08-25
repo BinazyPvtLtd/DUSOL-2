@@ -1,3 +1,4 @@
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import { fetchApi } from '@/app/lib/serverApi'
@@ -9,6 +10,13 @@ import JsonLd from '@/components/JsonLd'
 // network call instead of firing two.
 const getCourse = slug => fetchApi(`/courses/${slug}`)
 
+// This route's own real public URL — used only as a fallback when the CMS
+// canonical_url field is empty (see generateSEOMetadata in app/lib/seo.js).
+const getCanonicalFallback = slug => {
+  const host = headers().get('x-forwarded-host') || headers().get('host') || ''
+  return host ? `https://${host}/courses/${slug}` : undefined
+}
+
 export async function generateMetadata ({ params }) {
   try {
     const body = await getCourse(params?.slug)
@@ -16,7 +24,7 @@ export async function generateMetadata ({ params }) {
     // API body shape -> { success, data: { seo, course } }
     const seo = body?.data?.seo || {}
 
-    return generateSEOMetadata(seo)
+    return generateSEOMetadata(seo, getCanonicalFallback(params?.slug))
   } catch (err) {
     return generateSEOMetadata({})
   }

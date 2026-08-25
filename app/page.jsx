@@ -29,6 +29,22 @@ async function fetchHomePageData() {
   return axios.get(`${baseUrl}/home`)
 }
 
+// The homepage's own real public URL — used only as a fallback when the
+// CMS canonical_url field is empty (see generateSEOMetadata in
+// app/lib/seo.js).
+async function getCanonicalFallback() {
+  try {
+    const headerList = await headers()
+    const host = (
+      headerList.get('x-forwarded-host') || headerList.get('host') || ''
+    ).split(':')[0]
+
+    return host ? `https://${host}` : undefined
+  } catch {
+    return undefined
+  }
+}
+
 export async function generateMetadata() {
   try {
     const response = await fetchHomePageData()
@@ -36,7 +52,7 @@ export async function generateMetadata() {
     const payload = response?.data
     const seo = payload?.seo || payload?.data?.seo || {}
 
-    return generateSEOMetadata(seo)
+    return generateSEOMetadata(seo, await getCanonicalFallback())
   } catch (err) {
     console.error('Metadata API Error:', err)
 

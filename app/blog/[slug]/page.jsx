@@ -1,3 +1,4 @@
+import { headers } from 'next/headers'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import { fetchApi } from '@/app/lib/serverApi'
 import BlogClient from './BlogClient'
@@ -9,6 +10,15 @@ import JsonLd from '@/components/JsonLd'
 const getBlog = slug => fetchApi(`/blogs/${slug}`)
 const getBlogFaqs = blogId => fetchApi(`/blogs/${blogId}/faqs`)
 
+// This route's own real public URL — used only as a fallback when the CMS
+// canonical_url field is empty (see generateSEOMetadata in app/lib/seo.js).
+// Note: the real route is singular /blog/{slug} (this file's own path),
+// not /blogs/{slug} — the latter 404s.
+const getCanonicalFallback = slug => {
+  const host = headers().get('x-forwarded-host') || headers().get('host') || ''
+  return host ? `https://${host}/blog/${slug}` : undefined
+}
+
 export async function generateMetadata ({ params }) {
   try {
     const slug = params?.slug
@@ -17,7 +27,7 @@ export async function generateMetadata ({ params }) {
     // API body shape -> { success, message, data: { seo, blog } }
     const seo = blogData?.data?.seo || {}
 
-    return generateSEOMetadata(seo)
+    return generateSEOMetadata(seo, getCanonicalFallback(slug))
   } catch (err) {
     return generateSEOMetadata({})
   }

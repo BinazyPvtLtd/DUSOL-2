@@ -38,11 +38,17 @@
       c => c.course_level === 'PG'
     )
 
-    const mbaSpecializations = specializations.filter(
-      s =>
-        s.course?.slug === 'distance-mba' ||
-        s.course?.name === 'Distance MBA'
-    )
+    // Matches by course content ("mba" + "distance" in the course's own
+    // name/slug) rather than a specific tenant's course slug/name, so
+    // this works for any tenant's own Distance MBA course. study_mode
+    // isn't available on the course object nested under /specializations,
+    // so this relies on the same "distance"/"online" naming convention
+    // course slugs/names already use everywhere else in this app.
+    const mbaSpecializations = specializations.filter(s => {
+      const courseText = `${s.course?.name ?? ''} ${s.course?.slug ?? ''}`.toLowerCase()
+
+      return courseText.includes('mba') && courseText.includes('distance')
+    })
 
     return (
       <>

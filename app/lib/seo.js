@@ -8,7 +8,17 @@ const toAbsoluteImageUrl = url => {
   return `${process.env.NEXT_PUBLIC_IMAGE_URL}/${url}`
 }
 
-export const generateSEOMetadata = (seo = {}) => {
+// fallbackCanonicalUrl: the page's own real, self-referencing absolute URL
+// (e.g. "https://dusol.example.com/courses/du-sol-distance-ba-course"),
+// passed in by each route's generateMetadata() since only the route itself
+// knows its own URL pattern. Used only when the CMS canonical_url field is
+// empty — a populated CMS value always wins. Deliberately not a generic
+// "default to the homepage" fallback: that would make every page with a
+// blank canonical_url claim the homepage as its canonical, which is worse
+// than omitting the tag (Next.js already omits it when both are absent).
+export const generateSEOMetadata = (seo = {}, fallbackCanonicalUrl) => {
+  const canonicalUrl = seo.canonical_url || fallbackCanonicalUrl
+
   return {
     title: seo.meta_title,
     description: seo.meta_description,
@@ -19,7 +29,7 @@ export const generateSEOMetadata = (seo = {}) => {
       .filter(Boolean),
 
     alternates: {
-      canonical: seo.canonical_url,
+      canonical: canonicalUrl,
     },
 
     robots: seo.robots,
@@ -27,7 +37,7 @@ export const generateSEOMetadata = (seo = {}) => {
     openGraph: {
       title: seo.og_title || seo.meta_title,
       description: seo.og_description || seo.meta_description,
-      url: seo.canonical_url,
+      url: canonicalUrl,
       images: seo.og_image
         ? [
             {

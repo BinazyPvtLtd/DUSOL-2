@@ -1,3 +1,4 @@
+import { headers } from 'next/headers'
 import { generateSEOMetadata } from '@/app/lib/seo'
 import { fetchApi } from '@/app/lib/serverApi'
 import SpecializationClient from './SpecializationClient'
@@ -7,6 +8,13 @@ import JsonLd from '@/components/JsonLd'
 // same render pass, so generateMetadata() and Page() below share one
 // network call instead of firing two.
 const getSpecialization = slug => fetchApi(`/specializations/${slug}`)
+
+// This route's own real public URL — used only as a fallback when the CMS
+// canonical_url field is empty (see generateSEOMetadata in app/lib/seo.js).
+const getCanonicalFallback = slug => {
+  const host = headers().get('x-forwarded-host') || headers().get('host') || ''
+  return host ? `https://${host}/specialization/${slug}` : undefined
+}
 
 export async function generateMetadata ({ params }) {
   try {
@@ -19,7 +27,7 @@ export async function generateMetadata ({ params }) {
       body?.data?.university?.seo ||
       {}
 
-    return generateSEOMetadata(seo)
+    return generateSEOMetadata(seo, getCanonicalFallback(slug))
   } catch (err) {
     return generateSEOMetadata({})
   }

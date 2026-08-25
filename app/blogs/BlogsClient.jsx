@@ -69,12 +69,19 @@ export default function BlogsClient ({ initialData, initialPage = 1 }) {
   )
 
   useEffect(() => {
-    // Server already provided the listing for this page — only fall back
-    // to a client fetch if the server-side fetch failed.
-    if (initialData) return
+    // Pagination links are now real `/blogs?page=N` URLs (<Link>), so
+    // clicking one re-renders this same route with a fresh initialData
+    // prop rather than remounting the component — sync state from it
+    // whenever it changes. If the server-side fetch failed (initialData
+    // is null), fall back to a client fetch for the requested page.
+    if (initialData) {
+      setBlogs(initialData.data || [])
+      setPagination(initialData.pagination || null)
+      return
+    }
     fetchBlogs(initialPage)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [initialData, initialPage])
 
   const fetchBlogs = async (page = 1) => {
     try {
@@ -84,12 +91,6 @@ export default function BlogsClient ({ initialData, initialPage = 1 }) {
     } catch (error) {
       console.log(error)
     }
-  }
-
-  const handlePageChange = (e, page) => {
-    e.preventDefault()
-    if (!pagination || page === pagination.current_page) return
-    fetchBlogs(page)
   }
 
   const closeMobile = () => {
@@ -158,16 +159,15 @@ export default function BlogsClient ({ initialData, initialPage = 1 }) {
                     { length: pagination.last_page },
                     (_, i) => i + 1
                   ).map(page => (
-                    <a
+                    <Link
                       key={page}
-                      href='#'
+                      href={`/blogs?page=${page}`}
                       className={
                         page === pagination.current_page ? 'active' : ''
                       }
-                      onClick={e => handlePageChange(e, page)}
                     >
                       {page}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               )}

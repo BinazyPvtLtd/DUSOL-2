@@ -37,11 +37,19 @@ export async function generateMetadata({ params }) {
 
   if (!page) return {}
 
+  // This route's own real public URL — used only as a fallback when the
+  // CMS canonical_url field is empty (see generateSEOMetadata in
+  // app/lib/seo.js). A populated CMS value always wins and is never
+  // overridden — this only fills the gap when one isn't set.
+  const canonicalFallback = host
+    ? `https://${host}${buildStudentZoneUrl(tenantSlug, page.key)}`
+    : undefined
+
   try {
     const body = await getStudentZoneData(page.key, tenantSlug)
     const seo = body?.data?.seo || {}
 
-    return generateSEOMetadata(seo)
+    return generateSEOMetadata(seo, canonicalFallback)
   } catch (err) {
     return generateSEOMetadata({})
   }
