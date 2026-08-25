@@ -38,11 +38,64 @@ export const STUDENT_ZONE_API_MAP = {
 
 const LOCAL_HOSTNAMES = ['localhost', '127.0.0.1', '0.0.0.0']
 
+// The base domain this app's own configured API lives under (e.g.
+// "distanceeducationlearning.com"), derived from NEXT_PUBLIC_DEFAULT_API's
+// own hostname by dropping its leading "api." label. This is the one piece
+// of domain identity the app already trusts about itself — reused here as
+// an allowlist suffix rather than inventing a new domain config. Computed
+// once at module load, same as LOCAL_HOSTNAMES above.
+const TRUSTED_BASE_DOMAIN = (() => {
+  try {
+    const apiHostname = new URL(process.env.NEXT_PUBLIC_DEFAULT_API).hostname
+    const labels = apiHostname.split('.')
+
+    return labels.length > 2 ? labels.slice(1).join('.') : apiHostname
+  } catch {
+    return null
+  }
+})()
+
+// Request-supplied Host/X-Forwarded-Host headers are not trustworthy by
+// default — a caller can set either to an arbitrary value. This validates
+// a raw header value against the two hostnames this app actually expects
+// to be addressed by: a local dev hostname, or anything under
+// TRUSTED_BASE_DOMAIN (any real tenant subdomain matches this; an external
+// domain or an unrelated host does not). Returns the original value
+// (port included, if present) when trusted, so existing callers that
+// expect the raw host string see no change for legitimate requests; returns
+// null otherwise, signaling "don't use this for tenant resolution or a
+// canonical URL."
+export const getTrustedHost = rawHost => {
+  const raw = rawHost || ''
+  const hostname = raw.split(':')[0]
+
+  if (!hostname) return null
+  if (LOCAL_HOSTNAMES.includes(hostname)) return raw
+
+  if (
+    TRUSTED_BASE_DOMAIN &&
+    (hostname === TRUSTED_BASE_DOMAIN ||
+      hostname.endsWith(`.${TRUSTED_BASE_DOMAIN}`))
+  ) {
+    return raw
+  }
+
+  return null
+}
+
 // in constant/constant.jsx.
 export const getTenantSlugFromHost = host => {
-  const hostname = (host || '').split(':')[0]
+  const trustedHost = getTrustedHost(host)
 
-  if (!hostname || LOCAL_HOSTNAMES.includes(hostname)) {
+  // Untrusted host (doesn't match a local dev hostname or this app's own
+  // base domain) — resolve no tenant rather than deriving a slug from an
+  // attacker-controlled value. Callers already treat null as "send no
+  // X-Tenant header", which is the existing, unchanged fallback behavior.
+  if (!trustedHost) return null
+
+  const hostname = trustedHost.split(':')[0]
+
+  if (LOCAL_HOSTNAMES.includes(hostname)) {
     try {
       return (
         new URL(process.env.NEXT_PUBLIC_DEFAULT_API).hostname.split(

@@ -1,33 +1,19 @@
 import HomeClient from './HomeClient'
 import { generateSEOMetadata } from './lib/seo'
 import { headers } from 'next/headers'
-import axios from 'axios'
 import JsonLd from '@/components/JsonLd'
+import { getTrustedHost } from '@/app/lib/studentZone'
+import { fetchApi } from '@/app/lib/serverApi'
 
-async function fetchHomePageData() {
-  let baseUrl = process.env.NEXT_PUBLIC_DEFAULT_API
-
-  try {
-    const headerList = await headers()
-
-    const host = (
-      headerList.get('x-forwarded-host') ||
-      headerList.get('host') ||
-      ''
-    ).split(':')[0]
-
-    const isLocal = ['localhost', '127.0.0.1', '0.0.0.0'].includes(host)
-
-    if (!isLocal && host) {
-      baseUrl = `https://${host}/api/v1`
-    }
-  } catch {
-    // During static build or if headers() isn't available,
-    // fallback to NEXT_PUBLIC_DEFAULT_API
-  }
-
-  return axios.get(`${baseUrl}/home`)
-}
+// Was previously a hand-rolled axios call whose destination was built from
+// the request's own Host/X-Forwarded-Host header — a host-header-injection
+// / SSRF vector (a spoofed header could make the server issue an outbound
+// request to an attacker-chosen origin). fetchApi() is the same
+// tenant-aware helper every other route (course/specialization/blog/
+// student-zone/layout menu fetch) already uses: a fixed API origin
+// (NEXT_PUBLIC_DEFAULT_API) plus a validated X-Tenant header derived via
+// getTrustedHost(), never a dynamic request destination.
+const fetchHomePageData = () => fetchApi('/home')
 
 // The homepage's own real public URL — used only as a fallback when the
 // CMS canonical_url field is empty (see generateSEOMetadata in
@@ -35,9 +21,10 @@ async function fetchHomePageData() {
 async function getCanonicalFallback() {
   try {
     const headerList = await headers()
-    const host = (
+    const trustedHost = getTrustedHost(
       headerList.get('x-forwarded-host') || headerList.get('host') || ''
-    ).split(':')[0]
+    )
+    const host = trustedHost?.split(':')[0]
 
     return host ? `https://${host}` : undefined
   } catch {
@@ -47,9 +34,14 @@ async function getCanonicalFallback() {
 
 export async function generateMetadata() {
   try {
-    const response = await fetchHomePageData()
-
-    const payload = response?.data
+    // fetchApi() already returns the parsed JSON body — unlike the previous
+    // axios call, there is no outer { data: ... } response wrapper to
+    // unwrap here. The API's own envelope ({ success, data: { seo, ... } })
+    // is unchanged, so payload?.data?.seo still resolves the same value it
+    // always did; payload?.seo is kept as the same defensive fallback used
+    // elsewhere in this codebase, though the live /home response doesn't
+    // currently use that shape.
+    const payload = await fetchHomePageData()
     const seo = payload?.seo || payload?.data?.seo || {}
 
     return generateSEOMetadata(seo, await getCanonicalFallback())
@@ -62,15 +54,13 @@ export async function generateMetadata() {
 
 export default async function HomePage() {
   try {
-    const response = await fetchHomePageData()
-
-    const payload = response?.data
+    const payload = await fetchHomePageData()
     const schema = payload?.seo?.schema || payload?.data?.seo?.schema || null
 
     return (
       <>
         <JsonLd schema={schema} />
-        <HomeClient initialData={response?.data || null} />
+        <HomeClient initialData={payload || null} />
       </>
     )
   } catch (err) {

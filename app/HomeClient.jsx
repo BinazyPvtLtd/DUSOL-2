@@ -16,48 +16,6 @@ import HowToApply from '@/components/HowToApply'
 import KeyHighlights from '@/components/KeyHighlights'
 import AdmissionProcedure from '@/components/AdmissionProcedure'
 
-async function fetchHomeData() {
-  let baseUrl = process.env.NEXT_PUBLIC_DEFAULT_API
-
-  try {
-    // Next.js 15
-    const headerList = await headers()
-
-    const host =
-      headerList.get('x-forwarded-host') || headerList.get('host') || ''
-
-    const hostname = host.split(':')[0]
-
-    const isLocal = ['localhost', '127.0.0.1', '0.0.0.0'].includes(hostname)
-
-    if (!isLocal && hostname) {
-      baseUrl = `https://${hostname}/api/v1`
-    }
-  } catch (err) {
-    console.log('Using default API:', baseUrl)
-  }
-
-  const response = await axios.get(`${baseUrl}/home`)
-
-  return response.data
-}
-
-export async function generateMetadata() {
-  try {
-    const homeData = await fetchHomeData()
-
-    const seo =
-      homeData?.seo ||
-      homeData?.data?.seo ||
-      homeData?.data?.university?.seo ||
-      {}
-
-    return generateSEOMetadata(seo)
-  } catch (err) {
-    return generateSEOMetadata({})
-  }
-}
-
 function CourseCard({ c }) {
   const [leadModalOpen, setLeadModalOpen] = useState(false)
 
