@@ -69,8 +69,14 @@ export default async function StudentZoneSlugPage({ params }) {
     schema = body?.data?.seo?.schema || null
     initialData = body || null
   } catch (err) {
-    schema = null
-    initialData = null
+    // Align with the other dynamic routes: a confirmed 404 from the API is
+    // a real 404; any other failure (5xx, timeout, network) re-throws
+    // rather than rendering an empty shell at HTTP 200 (soft 404).
+    if (err?.status === 404) {
+      notFound()
+    }
+
+    throw err
   }
 
   return (

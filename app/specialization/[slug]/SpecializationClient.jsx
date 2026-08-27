@@ -312,7 +312,7 @@ function SpecializationContent ({ slug: slugProp, initialData }) {
             <div className='breadcrumb'>
               <Link href='/'>Home</Link>
               <span className='sep'>›</span>
-              <span>Courses</span>
+              <Link href='/courses'>Courses</Link>
               <span className='sep'>›</span>
               <span>{courseData?.name}</span>{' '}
             </div>

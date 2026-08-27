@@ -19,6 +19,12 @@ const toAbsoluteImageUrl = url => {
 export const generateSEOMetadata = (seo = {}, fallbackCanonicalUrl) => {
   const canonicalUrl = seo.canonical_url || fallbackCanonicalUrl
 
+  // If only one social image is set, reuse it for the other network rather
+  // than shipping a preview with no image. og_image is now also
+  // backfilled server-side from the tenant's default_og_image.
+  const ogImage = seo.og_image || seo.twitter_image
+  const twitterImage = seo.twitter_image || seo.og_image
+
   return {
     title: seo.meta_title,
     description: seo.meta_description,
@@ -38,10 +44,10 @@ export const generateSEOMetadata = (seo = {}, fallbackCanonicalUrl) => {
       title: seo.og_title || seo.meta_title,
       description: seo.og_description || seo.meta_description,
       url: canonicalUrl,
-      images: seo.og_image
+      images: ogImage
         ? [
             {
-              url: toAbsoluteImageUrl(seo.og_image),
+              url: toAbsoluteImageUrl(ogImage),
               width: 1200,
               height: 630,
             },
@@ -51,12 +57,14 @@ export const generateSEOMetadata = (seo = {}, fallbackCanonicalUrl) => {
     },
 
     twitter: {
-      card: "summary_large_image",
+      // summary_large_image requires an image; fall back to summary when
+      // none is available (per Twitter's own card spec).
+      card: twitterImage ? "summary_large_image" : "summary",
       title: seo.twitter_title || seo.meta_title,
       description:
         seo.twitter_description || seo.meta_description,
-      images: seo.twitter_image
-        ? [toAbsoluteImageUrl(seo.twitter_image)]
+      images: twitterImage
+        ? [toAbsoluteImageUrl(twitterImage)]
         : [],
     },
   };

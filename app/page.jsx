@@ -13,7 +13,10 @@ import { fetchApi } from '@/app/lib/serverApi'
 // student-zone/layout menu fetch) already uses: a fixed API origin
 // (NEXT_PUBLIC_DEFAULT_API) plus a validated X-Tenant header derived via
 // getTrustedHost(), never a dynamic request destination.
-const fetchHomePageData = () => fetchApi('/home')
+// Homepage content changes infrequently — cache the API call in Next's
+// tenant-scoped Data Cache (see fetchApi). generateMetadata() and the page
+// component share this one cached call. The route itself stays dynamic.
+const fetchHomePageData = () => fetchApi('/home', { revalidate: 300, tags: ['home'] })
 
 // The homepage's own real public URL — used only as a fallback when the
 // CMS canonical_url field is empty (see generateSEOMetadata in

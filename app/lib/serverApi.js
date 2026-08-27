@@ -50,12 +50,42 @@ function resolveTenantSlug () {
   }
 }
 
-export async function fetchApi (path, init = {}) {
+// Caching model:
+//   - `no-store` stays the DEFAULT for every existing caller (no behavior
+//     change unless a call opts in).
+//   - A caller opts into Next's Data Cache by passing `revalidate` (seconds).
+//     It is safe across tenants: Next 14's fetch cache key hashes the request
+//     `headers` (next/dist/server/lib/incremental-cache -> fetchCacheKey), and
+//     this helper always sends a per-tenant `X-Tenant` header, so `dusol` and
+//     `cu` never share a cached entry.
+//   - Caching is additionally gated on a tenant actually resolving, so a
+//     request whose tenant can't be resolved always falls back to `no-store`
+//     and can never read a tenant-specific entry.
+//   - `tags` are namespaced under the tenant, so a CMS publish webhook can
+//     call revalidateTag(`tenant:${slug}:menu`) without touching other tenants.
+//   - This only caches the API round-trip. Every route still calls headers()
+//     for tenant resolution, so the HTML response stays dynamic / uncached.
+export async function fetchApi (path, { revalidate, tags, ...init } = {}) {
   const tenantSlug = resolveTenantSlug()
+
+  const cacheable =
+    typeof revalidate === 'number' && revalidate > 0 && Boolean(tenantSlug)
+
+  const cacheInit = cacheable
+    ? {
+        next: {
+          revalidate,
+          tags: [
+            `tenant:${tenantSlug}`,
+            ...(tags || []).map(tag => `tenant:${tenantSlug}:${tag}`)
+          ]
+        }
+      }
+    : { cache: 'no-store' }
 
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
-    cache: 'no-store',
+    ...cacheInit,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

@@ -54,17 +54,15 @@ export default async function Page ({ params }) {
     initialData = body || null
   } catch (err) {
     // A confirmed 404 from the API means no specialization exists at this
-    // slug — return a real 404 instead of rendering an empty shell at
-    // HTTP 200. Any other failure (network error, 5xx) falls through to
-    // the existing behavior (render with no data) rather than risk showing
-    // a false 404 for a real specialization during a transient upstream
-    // issue.
+    // slug — return a real 404.
     if (err?.status === 404) {
       notFound()
     }
 
-    schema = null
-    initialData = null
+    // Any other failure (network error, 5xx, timeout) must not render a
+    // contentless page at HTTP 200 — that is a soft 404 and risks the URL
+    // being deindexed. Re-throw so Next.js returns a 5xx instead.
+    throw err
   }
 
   return (

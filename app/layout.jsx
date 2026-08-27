@@ -51,9 +51,13 @@ export const viewport = {
 // to run, same convention used for initialData elsewhere in this codebase.
 async function loadMenuData () {
   try {
+    // Menu data changes rarely and is fetched on EVERY route (RootLayout).
+    // Cache it in Next's Data Cache, tenant-scoped (see fetchApi). The HTML
+    // still renders dynamically per request; this only removes two API
+    // round-trips per page load.
     const [coursesBody, specializationsBody] = await Promise.all([
-      fetchApi('/courses'),
-      fetchApi('/specializations')
+      fetchApi('/courses', { revalidate: 300, tags: ['menu'] }),
+      fetchApi('/specializations', { revalidate: 300, tags: ['menu'] })
     ])
 
     return {

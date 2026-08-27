@@ -9,8 +9,13 @@ import JsonLd from '@/components/JsonLd'
 // Request-scoped: Next.js dedupes identical fetch() calls made during the
 // same render pass, so generateMetadata() and Page() below share one
 // network call instead of firing two.
-const getBlog = slug => fetchApi(`/blogs/${slug}`)
-const getBlogFaqs = blogId => fetchApi(`/blogs/${blogId}/faqs`)
+// Blog content changes infrequently — cache in Next's tenant-scoped Data
+// Cache (see fetchApi). generateMetadata() and the page component must pass
+// identical options so Next dedupes them into one request. Route stays dynamic.
+const getBlog = slug =>
+  fetchApi(`/blogs/${slug}`, { revalidate: 600, tags: ['blog'] })
+const getBlogFaqs = blogId =>
+  fetchApi(`/blogs/${blogId}/faqs`, { revalidate: 600, tags: ['blog'] })
 
 // This route's own real public URL — used only as a fallback when the CMS
 // canonical_url field is empty (see generateSEOMetadata in app/lib/seo.js).
@@ -60,16 +65,15 @@ export default async function Page ({ params }) {
     }
   } catch (err) {
     // A confirmed 404 from the API means no blog post exists at this slug —
-    // return a real 404 instead of rendering an empty shell at HTTP 200.
-    // Any other failure (network error, 5xx) falls through to the existing
-    // behavior (render with no data) rather than risk showing a false 404
-    // for a real post during a transient upstream issue.
+    // return a real 404.
     if (err?.status === 404) {
       notFound()
     }
 
-    schema = null
-    initialData = null
+    // Any other failure (network error, 5xx, timeout) must not render a
+    // contentless page at HTTP 200 — that is a soft 404 and risks the URL
+    // being deindexed. Re-throw so Next.js returns a 5xx instead.
+    throw err
   }
 
   return (
