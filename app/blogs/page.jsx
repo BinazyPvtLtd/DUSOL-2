@@ -31,12 +31,14 @@ export async function generateMetadata ({ searchParams }) {
 
   return generateSEOMetadata(
     {
-      meta_title: page > 1 ? `Blog - Page ${page}` : 'Blog',
+      meta_title:
+        page > 1
+          ? `DU SOL Blogs 2026: Admission, Courses, Fees & Latest Updates`
+          : 'DU SOL Blogs 2026: Admission, Courses, Fees & Latest Updates',
+
       meta_description:
-        'Latest articles and guidance on admissions, exams, eligibility, fees and online courses.'
+        'Explore the latest DU SOL blogs on admission, courses, fees, eligibility, exams, results, study material and distance education updates for 2026.'
     },
-    // Each paginated page has genuinely different content, so it gets a
-    // self-referencing canonical rather than all pointing at /blogs.
     getCanonicalFallback(page)
   )
 }
