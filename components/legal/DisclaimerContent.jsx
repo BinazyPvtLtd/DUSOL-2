@@ -6,156 +6,141 @@ export default function DisclaimerContent() {
       </h1>
 
       <p className="mt-2 text-sm text-muted">
-        Last updated: July 29, 2026
+        Last updated: September 12, 2026
       </p>
 
       <p className="mt-6 leading-relaxed">
-        Welcome to <strong>Distance Education Learning</strong>.
-      </p>
-
-      <p className="mt-4 leading-relaxed">
-        The information available on this website is published for educational,
-        informational, and career guidance purposes. This website helps students
-        explore distance education programs approved by the University Grants
-        Commission (UGC) and Distance Education Bureau (DEB) and offered by
-        recognised universities in India. We provide information about
-        admissions, courses, eligibility, and educational support to help
-        students make informed decisions regarding their academic and career
-        goals.
-      </p>
-
-      <p className="mt-4 leading-relaxed">
-        Distance Education Learning is an independent educational guidance
-        platform. We are not a university, examination body, degree-awarding
-        institution, or government authority. Unless specifically mentioned, we
-        do not represent any university through an official partnership or
-        authorisation.
+        Please read this Disclaimer carefully before using{" "}
+        <strong>DistanceEducationLearning.com</strong> ("Platform," "we,"
+        "us"). Distance Education Learning is an independent educational
+        counselling platform operating under College Drishti. Distance
+        Education Learning is a separate entity and does not have any
+        tie-up, affiliation, partnership, or association with any university
+        or institution. By using this website, you agree to be bound by it.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        University Names, Logos & Trademarks
+        1. General Information Only
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        All university names, logos, trademarks, and brand identities displayed
-        on this website belong to their respective owners. They are used solely
-        for identification, educational, and informational purposes. Their
-        appearance on this website does not imply any endorsement, sponsorship,
-        affiliation, or partnership unless explicitly stated.
+        We are an independent educational counselling platform, operating as
+        a separate entity under College Drishti — not a university, admission
+        authority, or regulatory body. We do not issue degrees, diplomas,
+        mark sheets, or admission letters on behalf of any institution, and
+        we do not have any tie-up with any university or institution. All
+        course details, fees, eligibility, duration, and accreditation
+        status on this website are compiled from public sources, for general
+        informational purposes only.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        Information & Counselling Services
+        2. No Guarantee of Accuracy
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        The information regarding distance education programs, online degree
-        courses, UGC-DEB approved universities, admission procedures,
-        eligibility criteria, fee structures, curriculum, and career
-        opportunities is compiled from publicly available sources and official
-        university websites.
-      </p>
-
-      <p className="mt-3 leading-relaxed">
-        Our counselling services are intended to help students identify the
-        most suitable university and course based on their academic background,
-        career objectives, and personal preferences.
+        University policies, fees, eligibility criteria, and approval status
+        (UGC-DEB/AICTE/NAAC) can change without notice. We strongly
+        recommend verifying all details directly on the official university
+        website or the UGC-DEB portal (deb.ugc.ac.in) before making any
+        admission or payment decision.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        What We Do Not Do
-      </h2>
-
-      <ul className="mt-3 list-disc space-y-2 pl-6 leading-relaxed">
-        <li>Issue degrees, diplomas, certificates, mark sheets, or transcripts.</li>
-        <li>Act as an examination authority or degree-awarding institution.</li>
-        <li>Represent ourselves as an official admission office of any university unless expressly authorised.</li>
-        <li>Claim ownership of any university's intellectual property, branding, or proprietary content.</li>
-      </ul>
-
-      <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        Accuracy of Information
+        3. No Guarantee of Admission, Placement, or Outcomes
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        While we make every effort to ensure that the information published on
-        this website is accurate, current, and reliable, university admission
-        procedures, eligibility requirements, fee structures, academic
-        regulations, course offerings, and accreditation status may change
-        without prior notice.
-      </p>
-
-      <p className="mt-3 leading-relaxed">
-        Students are strongly advised to verify all information directly from
-        the official website of the respective university before submitting an
-        application or making any payment. Distance Education Learning shall
-        not be responsible for any discrepancies arising from changes made by
-        universities.
+        We do not guarantee admission to any course. Salary figures,
+        placement percentages, or hiring-partner names are indicative and
+        sourced from third parties — they do not guarantee employment or
+        career outcomes. Results depend on the student's own effort and the
+        university's own processes.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        Content Accuracy
+        4. Third-Party Trademarks
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        We strive to keep all content relevant, updated, and factually correct.
-        However, unintentional errors, omissions, or outdated information may
-        occasionally occur. We do not guarantee the completeness or absolute
-        accuracy of the information and shall not be liable for any loss or
-        damage resulting from reliance on the content published on this website.
+        All university names, logos, and trademarks belong to their
+        respective owners and are used only for informational purposes.
+        Their use does not imply an official partnership, tie-up, or
+        endorsement, as Distance Education Learning does not have any such
+        arrangement with any university or institution.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        Third-Party Links
+        5. No Financial or Legal Advice
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        This website may include links to official university websites and
-        other third-party resources for user convenience. We do not control,
-        endorse, or guarantee the content, policies, availability, or accuracy
-        of any external website. Accessing third-party websites is entirely at
-        the user's own discretion and risk.
+        Information about fees, EMIs, or scholarships is general guidance
+        only, not financial or legal advice. Consult the university or a
+        qualified professional before making financial commitments.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        Intellectual Property
+        6. External Links
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        All original content published on Distance Education Learning,
-        including website design, graphics, written content, educational
-        material, and other proprietary assets, is protected under applicable
-        intellectual property laws. No original content may be copied,
-        reproduced, distributed, or republished without prior written
-        permission from Distance Education Learning.
+        We are not responsible for the content, accuracy, or privacy
+        practices of any third-party website linked from this Platform.
+        Access is at your own risk.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        Limitation of Liability
+        7. No Fee for Counselling
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        Under no circumstances shall Distance Education Learning be liable for
-        any direct, indirect, incidental, consequential, or special loss or
-        damage arising from the use of this website or reliance upon the
-        information provided herein.
+        We do not charge students for counselling and do not collect
+        university fees directly. All payments must go through the
+        university's official channels. We are not responsible for payments
+        made to unauthorised parties.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        Contact Us
+        8. Limitation of Liability
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        If you believe that any information published on this website is
-        inaccurate, outdated, or infringes upon your intellectual property
-        rights, please contact us. We will review the matter promptly and take
-        appropriate action wherever necessary.
+        To the fullest extent permitted by law, we are not liable for any
+        damages arising from reliance on this website's information,
+        counselling provided, or errors/omissions in content.
       </p>
 
-      <p className="mt-6 leading-relaxed font-medium">
-        By accessing and using this website, you acknowledge that you have
-        read, understood, and agreed to this Disclaimer and our Terms of
-        Service.
+      <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
+        9. Errors & Omissions Excepted (E&OE)
+      </h2>
+
+      <p className="mt-3 leading-relaxed">
+        This website may contain typographical errors or outdated details.
+        We reserve the right to correct these at any time without liability.
+      </p>
+
+      <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
+        10. Changes
+      </h2>
+
+      <p className="mt-3 leading-relaxed">
+        We may update this Disclaimer at any time. Continued use of the
+        website constitutes acceptance of the revised version.
+      </p>
+
+      <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
+        11. Contact Us
+      </h2>
+
+      <p className="mt-3 leading-relaxed">
+        Email:{" "}
+        <a
+          href="mailto:info@distanceeducationlearning.com"
+          className="text-purple underline underline-offset-2"
+        >
+          info@distanceeducationlearning.com
+        </a>
       </p>
     </article>
   )

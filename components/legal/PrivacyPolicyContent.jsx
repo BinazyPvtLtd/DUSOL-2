@@ -6,170 +6,134 @@ export default function PrivacyPolicyContent() {
       </h1>
 
       <p className="mt-2 text-sm text-muted">
-        Last updated: July 29, 2026
+        Last updated: September 12, 2026
       </p>
 
       <p className="mt-6 leading-relaxed">
-        Welcome to <strong>Distance Education Learning</strong>. We are
-        committed to protecting your privacy and ensuring that your personal
-        information is handled responsibly. This Privacy Policy explains how we
-        collect, use, store, and protect the information you share with us when
-        using our website and educational counselling services.
+        Distance Education Learning is an independent educational
+        counselling platform operating under College Drishti. Distance
+        Education Learning is a separate entity and does not have any
+        tie-up, affiliation, partnership, or association with any university
+        or institution. We ("we," "us," "our") help students and working
+        professionals find UGC-DEB approved online and distance UG/PG degree
+        programs. This Privacy Policy explains how we collect, use, and
+        protect your personal data, in accordance with the Information
+        Technology Act, 2000, the IT (Reasonable Security Practices) Rules,
+        2011, and the Digital Personal Data Protection Act, 2023.
       </p>
 
       <p className="mt-4 leading-relaxed">
-        Distance Education Learning is an independent educational guidance
-        platform that assists students with information related to distance
-        education, online degree programmes, and admissions offered by
-        recognised universities. By using this website, you acknowledge that
-        you have read and agreed to this Privacy Policy.
+        By using this website, you agree to this Privacy Policy. If you do
+        not agree, please discontinue use of the Platform.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        1. Information We Collect
+        1. Who We Are
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        You may browse our website without providing any personally identifiable
-        information. We collect personal information only when you voluntarily
-        submit it through enquiry forms, contact forms, WhatsApp, phone calls,
-        email, or other direct communication with our counselling team.
-      </p>
-
-      <p className="mt-3 leading-relaxed">
-        Information we may collect includes:
-      </p>
-
-      <ul className="mt-3 list-disc space-y-2 pl-6 leading-relaxed">
-        <li>Full Name</li>
-        <li>Mobile Number</li>
-        <li>Email Address</li>
-        <li>City and State</li>
-        <li>Preferred University</li>
-        <li>Desired Course or Programme</li>
-        <li>Educational Qualification</li>
-        <li>Any additional information voluntarily shared during counselling.</li>
-      </ul>
-
-      <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        2. How We Use Your Information
-      </h2>
-
-      <p className="mt-3 leading-relaxed">
-        The information you provide helps us deliver educational guidance and
-        admission support. We may use your information to:
-      </p>
-
-      <ul className="mt-3 list-disc space-y-2 pl-6 leading-relaxed">
-        <li>Provide career and admission counselling.</li>
-        <li>Recommend suitable universities and academic programmes.</li>
-        <li>Respond to your admission-related questions.</li>
-        <li>
-          Share updates regarding admissions, eligibility, fees, scholarships,
-          important dates, and university notifications.
-        </li>
-        <li>
-          Contact you through phone calls, email, SMS, or WhatsApp regarding
-          your enquiry.
-        </li>
-        <li>Improve our website and counselling services.</li>
-      </ul>
-
-      <p className="mt-3 leading-relaxed">
-        You may opt out of promotional communications at any time.
+        We are an independent counselling and information platform,
+        operating as a separate entity under College Drishti — not a
+        university, degree-granting body, or admission authority. We do not
+        issue degrees, mark sheets, or certificates, and we do not have any
+        tie-up with any university or institution.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        3. Purpose of Data Collection
+        2. Information We Collect
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        We collect personal information solely for educational guidance,
-        counselling, admission assistance, and student support. Your
-        information enables us to help you compare universities, understand
-        admission procedures, and make informed decisions regarding higher
-        education. We do not collect personal information for unrelated
-        commercial purposes.
+        <strong>Provided by you:</strong> Name, email, phone/WhatsApp number,
+        educational qualification, city, and course preference shared via
+        enquiry forms or with our counsellors.
+      </p>
+
+      <p className="mt-3 leading-relaxed">
+        <strong>Collected automatically:</strong> IP address, browser/device
+        type, pages visited, approximate location, and cookies.
+      </p>
+
+      <p className="mt-3 leading-relaxed">
+        We do not knowingly collect sensitive data such as financial
+        credentials, biometric data, or health information.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        4. Information Sharing
+        3. How We Use Your Information
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        We value your privacy and do not sell, rent, or trade your personal
-        information. Information may be shared only in the following
-        circumstances:
+        To respond to enquiries, provide counselling, share admission
+        updates via call/SMS/WhatsApp/email, improve the website, and meet
+        legal requirements. We do not use your data for automated
+        decision-making.
+      </p>
+
+      <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
+        4. Legal Basis
+      </h2>
+
+      <p className="mt-3 leading-relaxed">
+        We process your data based on your consent, given when you submit a
+        form or contact us. You may withdraw consent anytime by writing to
+        us.
+      </p>
+
+      <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
+        5. How We Share Your Information
+      </h2>
+
+      <p className="mt-3 leading-relaxed">
+        We never sell your data. We may share it only:
       </p>
 
       <ul className="mt-3 list-disc space-y-2 pl-6 leading-relaxed">
         <li>
-          With relevant university admission teams or authorised education
-          consultants for processing your enquiry or counselling request.
+          With university partners, solely to process your enquiry, and
+          only with your consent.
         </li>
-        <li>When required by applicable law or a lawful government request.</li>
         <li>
-          With trusted third-party service providers who assist in operating our
-          website or counselling services under strict confidentiality
-          obligations.
+          With service providers (telephony, WhatsApp, email, CRM) under
+          confidentiality obligations.
+        </li>
+        <li>When legally required by a court or government authority.</li>
+        <li>
+          As part of a business transfer, with equivalent privacy
+          protections.
         </li>
       </ul>
 
-      <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        5. Cookies & Analytics
-      </h2>
-
       <p className="mt-3 leading-relaxed">
-        Our website uses cookies and analytics tools to improve website
-        performance and user experience. These technologies help us understand:
-      </p>
-
-      <ul className="mt-3 list-disc space-y-2 pl-6 leading-relaxed">
-        <li>How visitors use our website.</li>
-        <li>Which pages receive the most traffic.</li>
-        <li>Time spent on different pages.</li>
-        <li>Browser, device, and operating system information.</li>
-        <li>Overall website traffic trends.</li>
-      </ul>
-
-      <p className="mt-3 leading-relaxed">
-        The information collected is aggregated and does not personally identify
-        individual users. You may disable cookies through your browser settings,
-        although some website features may not function properly.
+        We do not share data with advertisers or data brokers.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        6. Third-Party Websites
+        6. Cookies
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        Our website may contain links to official university websites and other
-        external resources. Once you leave our website, the privacy practices of
-        those websites are governed by their own privacy policies. We encourage
-        you to review their policies before sharing personal information.
+        We use cookies to remember preferences and understand site usage.
+        They do not identify you personally. You can disable cookies in your
+        browser, though some features may not work as intended.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        7. Data Security
+        7. Data Retention
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        We implement appropriate administrative, technical, and organisational
-        measures to protect your personal information against unauthorised
-        access, misuse, disclosure, alteration, or loss. While we strive to
-        maintain strong security standards, no internet transmission or storage
-        system can be guaranteed to be completely secure.
+        We retain your data only as long as necessary for the purposes
+        above, then securely delete or anonymise it.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        8. Data Retention
+        8. Data Security
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        We retain your personal information only for as long as necessary to
-        provide counselling services, respond to your enquiries, comply with
-        legal obligations, and improve our services. Once the information is no
-        longer required, it is securely deleted or anonymised.
+        We use reasonable technical and organisational safeguards to protect
+        your data, though no method of transmission is 100% secure.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
@@ -177,20 +141,8 @@ export default function PrivacyPolicyContent() {
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        Subject to applicable law, you have the right to:
-      </p>
-
-      <ul className="mt-3 list-disc space-y-2 pl-6 leading-relaxed">
-        <li>Request access to your personal information.</li>
-        <li>Request correction of inaccurate or incomplete information.</li>
-        <li>Request deletion of your personal information where applicable.</li>
-        <li>Withdraw consent for future communications.</li>
-        <li>Opt out of marketing or promotional communications.</li>
-      </ul>
-
-      <p className="mt-3 leading-relaxed">
-        To exercise any of these rights, please contact our support team using
-        the contact details available on this website.
+        You may access, correct, or request deletion of your data, withdraw
+        consent, or opt out of communication at any time by contacting us.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
@@ -198,39 +150,45 @@ export default function PrivacyPolicyContent() {
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        Our website is intended for students, parents, and working
-        professionals seeking higher education opportunities. We do not
-        knowingly collect personal information from children below the minimum
-        age permitted by applicable law without appropriate parental or
-        guardian consent.
+        Our services are meant for individuals 18+, or minors with
+        parent/guardian involvement. We do not knowingly collect data from
+        children without appropriate consent.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        11. Changes to This Privacy Policy
+        11. Third-Party Links
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        We may update this Privacy Policy from time to time to reflect changes
-        in our practices, legal obligations, or website functionality. Any
-        updates will be published on this page along with the revised "Last
-        Updated" date. Continued use of the website after such changes
-        constitutes your acceptance of the updated Privacy Policy.
+        This website may link to official university sites or payment
+        gateways. As we do not have any tie-up with these universities or
+        institutions, we are not responsible for their content or privacy
+        practices.
       </p>
 
       <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
-        12. Contact Us
+        12. Grievance Officer & Contact
       </h2>
 
       <p className="mt-3 leading-relaxed">
-        If you have any questions, concerns, or requests regarding this Privacy
-        Policy or the way your personal information is handled, please contact
-        the Distance Education Learning support team using the contact details
-        available on this website.
+        For privacy concerns or requests, write to us at{" "}
+        <a
+          href="mailto:info@distanceeducationlearning.com"
+          className="text-purple underline underline-offset-2"
+        >
+          info@distanceeducationlearning.com
+        </a>
+        . We aim to resolve valid grievances within 30 days.
       </p>
 
-      <p className="mt-6 leading-relaxed font-medium">
-        By using Distance Education Learning, you acknowledge that you have
-        read, understood, and agreed to the terms of this Privacy Policy.
+      <h2 className="mt-8 font-head text-lg font-semibold text-purple sm:text-xl">
+        13. Changes to This Policy
+      </h2>
+
+      <p className="mt-3 leading-relaxed">
+        We may update this Privacy Policy from time to time. Continued use
+        of the website after changes constitutes acceptance of the revised
+        policy.
       </p>
     </article>
   )
