@@ -67,20 +67,7 @@ export const getTenantHost = () => {
 // constant.js
 
 export const getBaseUrl = () => {
-  // Server Side
-  if (typeof window === 'undefined') {
-    return process.env.NEXT_PUBLIC_DEFAULT_API
-  }
-
-  const hostname = window.location.hostname
-
-  // Local Development
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return process.env.NEXT_PUBLIC_DEFAULT_API
-  }
-
-  // Live (Subdomain Based)
-  return `${window.location.protocol}//${hostname}/api/v1`
+  return process.env.NEXT_PUBLIC_DEFAULT_API
 }
 
 export const getStorageBaseUrl = () => {
