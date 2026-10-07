@@ -71,16 +71,5 @@ export const getBaseUrl = () => {
 }
 
 export const getStorageBaseUrl = () => {
-  // Server Side
-  if (typeof window === 'undefined') {
-    return process.env.NEXT_PUBLIC_IMAGE_URL
-  }
-
-  const hostname = window.location.hostname
-
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return process.env.NEXT_PUBLIC_IMAGE_URL
-  }
-
-  return `${window.location.protocol}//${hostname}/storage`
+  return process.env.NEXT_PUBLIC_DEFAULT_STORAGE || process.env.NEXT_PUBLIC_IMAGE_URL
 }
