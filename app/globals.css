@@ -382,7 +382,8 @@ section {
   position: relative;
 }
 
-.menu>li>a {
+.menu>li>a,
+.menu>li>button.menu-toggle {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -394,19 +395,25 @@ section {
   border-radius: 8px;
   transition: 0.2s;
   white-space: nowrap;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-.menu>li>a .caret {
+.menu>li>a .caret,
+.menu>li>button.menu-toggle .caret {
   font-size: 10px;
   transition: 0.2s;
 }
 
-.menu>li:hover>a {
+.menu>li:hover>a,
+.menu>li:hover>button.menu-toggle {
   color: var(--primary-color);
   background: color-mix(in srgb, var(--primary-color) 10%, white);
 }
 
-.menu>li:hover>a .caret {
+.menu>li:hover>a .caret,
+.menu>li:hover>button.menu-toggle .caret {
   transform: rotate(180deg);
 }
 
@@ -618,6 +625,15 @@ section {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
+}
+
+/* Wraps CTA buttons (Apply Now / Listen Podcast / FREE Guidance / ENQUIRY)
+   that must stay inside a <p> rather than a heading, without adding any
+   visual gap of its own — surrounding layout (flex gap / existing .btn
+   margins) is unchanged. */
+.cta-action {
+  margin: 0;
+  display: contents;
 }
 
 .hero-visual {
@@ -3175,11 +3191,15 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     padding: 14px 4px;
     font-family: var(--font-head);
     font-weight: 400;
     font-size: 15px;
     color: var(--ink);
+    background: none;
+    border: none;
+    text-align: left;
     cursor: pointer;
   }
 

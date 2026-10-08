@@ -13,7 +13,14 @@
   import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa'
   import footerLogo from '../public/assets/images/footer-logo.png'
 
-  export default function Footer () {
+  // currentYear is passed down from the server (app/layout.jsx) so this
+  // client component never computes `new Date()` itself during render —
+  // that value can legitimately differ between the server render and the
+  // client hydration render (right at a year boundary), which is a
+  // textbook hydration-mismatch source. The default here only covers a
+  // caller that forgets to pass it; the real root-cause fix is the caller
+  // always passing it.
+  export default function Footer ({ currentYear = new Date().getFullYear() } = {}) {
     const [mobileOpen, setMobileOpen] = useState(false)
     const [openItem, setOpenItem] = useState(null)
     const [leadModalOpen, setLeadModalOpen] = useState(false)
@@ -68,16 +75,18 @@
 
                 <p>{footerCTA?.description}</p>
 
-                <button
-                  type='button'
-                  className='btn btn-gold'
-                  onClick={() => {
-                    closeMobile()
-                    setLeadModalOpen(true)
-                  }}
-                >
-                  {footerCTA?.button_text || 'Apply Now'}
-                </button>
+                <p className='cta-action'>
+                  <button
+                    type='button'
+                    className='btn btn-gold'
+                    onClick={() => {
+                      closeMobile()
+                      setLeadModalOpen(true)
+                    }}
+                  >
+                    {footerCTA?.button_text || 'Apply Now'}
+                  </button>
+                </p>
               </div>
 
               {/* UG & PG Programs */}
@@ -148,7 +157,7 @@
             </div>
 
             <div className='p-4'>
-              © {new Date().getFullYear()} Powered by
+              © {currentYear} Powered by
               distanceeducationlearning.com. All Rights Reserved.
             </div>
           </div>

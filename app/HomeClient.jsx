@@ -186,30 +186,34 @@ export default function HomeClient({ initialData }) {
             </div>
 
             <div className='hero-actions'>
-              <button
-                type='button'
-                className='btn btn-gold'
-                onClick={() => {
-                  closeMobile()
-                  setLeadModalOpen(true)
-                }}
-              >
-                {BannerData?.primary_button_text || 'Apply Now'}
-              </button>
+              <p className='cta-action'>
+                <button
+                  type='button'
+                  className='btn btn-gold'
+                  onClick={() => {
+                    closeMobile()
+                    setLeadModalOpen(true)
+                  }}
+                >
+                  {BannerData?.primary_button_text || 'Apply Now'}
+                </button>
+              </p>
 
-              <button
-                type='button'
-                className='btn btn-outline-white hero-podcast'
-                onClick={() => setShowModal(true)}
-              >
-                <span className='mic'>
-                  <svg viewBox='0 0 24 24'>
-                    <path d='M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-3.1A7 7 0 0019 11z' />
-                  </svg>
-                </span>
+              <p className='cta-action'>
+                <button
+                  type='button'
+                  className='btn btn-outline-white hero-podcast'
+                  onClick={() => setShowModal(true)}
+                >
+                  <span className='mic'>
+                    <svg viewBox='0 0 24 24'>
+                      <path d='M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-3.1A7 7 0 0019 11z' />
+                    </svg>
+                  </span>
 
-                {BannerData?.secondary_button_text || 'Listen Podcast'}
-              </button>
+                  {BannerData?.secondary_button_text || 'Listen Podcast'}
+                </button>
+              </p>
             </div>
           </div>
 
@@ -229,6 +233,8 @@ export default function HomeClient({ initialData }) {
                     src={thumbnail}
                     alt='Video Thumbnail'
                     className='video-thumbnail'
+                    fetchPriority='high'
+                    decoding='async'
                   />
 
                   {getYoutubeEmbedId(BannerData?.video_url) && (
@@ -317,17 +323,19 @@ export default function HomeClient({ initialData }) {
                 />
               )}
 
-              <button
-                type='button'
-                className='btn btn-gold'
-                onClick={() => {
-                  closeMobile()
-                  setLeadModalOpen(true)
-                }}
-              >
-                {' '}
-                FREE Guidance
-              </button>
+              <p className='cta-action'>
+                <button
+                  type='button'
+                  className='btn btn-gold'
+                  onClick={() => {
+                    closeMobile()
+                    setLeadModalOpen(true)
+                  }}
+                >
+                  {' '}
+                  FREE Guidance
+                </button>
+              </p>
             </div>
           </div>
         </div>

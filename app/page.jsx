@@ -62,6 +62,11 @@ export default async function HomePage() {
 
     return (
       <>
+        {/* Hero video thumbnail (the homepage's LCP image) is cross-origin
+            to img.youtube.com — warm the connection before the browser
+            discovers the <img> tag. */}
+        <link rel='preconnect' href='https://img.youtube.com' />
+        <link rel='dns-prefetch' href='https://img.youtube.com' />
         <JsonLd schema={schema} />
         <HomeClient initialData={payload || null} />
       </>

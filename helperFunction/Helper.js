@@ -70,8 +70,12 @@ export const getYoutubeThumbnail = (url) => {
     /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&?/]+)/;
   const match = url.match(regExp);
 
+  // hqdefault is generated for every YouTube video; maxresdefault isn't (it
+  // 404s for a lot of older/lower-res uploads) and is ~10x the bytes
+  // (1280x720 vs 480x360) for a thumbnail displayed at a 700px-max hero
+  // card — this is the homepage's LCP image, so size matters here.
   return match
-    ? `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg`
+    ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg`
     : "";
 };
 
