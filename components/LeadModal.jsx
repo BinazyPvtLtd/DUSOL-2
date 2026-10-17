@@ -22,7 +22,7 @@ export default function LeadModal({ open, setOpen, pageType, pageId }) {
   })
 
   useEffect(() => {
-    if (typeof document === 'undefined') return
+    if (!open) return
 
     const handler = e => {
       if (e.key === 'Escape') {
@@ -35,13 +35,16 @@ export default function LeadModal({ open, setOpen, pageType, pageId }) {
     return () => {
       document.removeEventListener('keydown', handler)
     }
-  }, [setOpen])
+  }, [open, setOpen])
 
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : ''
+    if (!open) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
 
     return () => {
-      document.body.style.overflow = ''
+      document.body.style.overflow = previousOverflow
     }
   }, [open])
 

@@ -31,7 +31,8 @@ function BlogCard ({ blog }) {
               {new Date(blog.published_at).toLocaleDateString('en-IN', {
                 day: 'numeric',
                 month: 'long',
-                year: 'numeric'
+                year: 'numeric',
+                timeZone: 'Asia/Kolkata'
               })}
             </span>
 

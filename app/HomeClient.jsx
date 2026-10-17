@@ -270,17 +270,19 @@ export default function HomeClient({ initialData }) {
         <div className='wrap'>
           <div className='grid'>
             <div className='card news-card'>
-              <h3>Latest News</h3>
+              <p className='news-label'><span>Latest News</span></p>
 
               <div className='news-scroll'>
                 {NewsData.map(item => {
                   const date = new Date(item.publish_date)
 
                   const day = date.toLocaleDateString('en-IN', {
-                    day: '2-digit'
+                    day: '2-digit',
+                    timeZone: 'Asia/Kolkata'
                   })
                   const month = date.toLocaleDateString('en-IN', {
-                    month: 'short'
+                    month: 'short',
+                    timeZone: 'Asia/Kolkata'
                   })
 
                   return (
@@ -340,7 +342,7 @@ export default function HomeClient({ initialData }) {
           </div>
         </div>
       </section>
-      <section className='courses-sec'>
+      <section className='courses-sec home-programs'>
         <div className='wrap'>
           <div className='sec-head'>
             <h2 className='sec-title'>{Program?.heading || 'Our Programs'}</h2>
@@ -393,7 +395,7 @@ export default function HomeClient({ initialData }) {
         </div>
       </section>
 
-      <section className='eligibility'>
+      <section className='eligibility home-eligibility'>
         <div className='wrap'>
           <div className='grid'>
             <div>
@@ -419,15 +421,18 @@ export default function HomeClient({ initialData }) {
                 )}
               </div>
 
-              <button
-                onClick={() => {
-                  closeMobile()
-                  setLeadModalOpen(true)
-                }}
-                className='btn btn-gold'
-              >
-                {Eligibility?.button_text}
-              </button>
+              <p className='cta-action'>
+                <button
+                  type='button'
+                  onClick={() => {
+                    closeMobile()
+                    setLeadModalOpen(true)
+                  }}
+                  className='btn btn-gold'
+                >
+                  {Eligibility?.button_text}
+                </button>
+              </p>
             </div>
           </div>
         </div>

@@ -3,7 +3,6 @@ import { headers } from 'next/headers'
 import { Poppins, Mulish } from 'next/font/google'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import LeadModal from '@/components/LeadModal'
 import { TenantProvider } from '@/context/TenantContext'
 import { MenuDataProvider } from '@/context/MenuDataContext'
 import { generateSEOMetadata } from './lib/seo'
@@ -109,7 +108,6 @@ export default async function RootLayout ({ children }) {
             <Header tenantSlug={tenantSlug} />
             <main>{children}</main>
             <Footer currentYear={new Date().getFullYear()} />
-            <LeadModal />
           </MenuDataProvider>
         </TenantProvider>
 

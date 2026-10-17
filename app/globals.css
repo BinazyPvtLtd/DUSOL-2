@@ -738,11 +738,13 @@ section {
   color: #fff;
 }
 
-.news-card h3 {
+.news-card .news-label {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 18px;
+  font-family: var(--font-head);
+  font-weight: 600;
   color: #ffff;
   padding-bottom: 14px;
   border-bottom: 2px solid var(--secondary-color);
@@ -2522,6 +2524,12 @@ section {
   min-width: 0;
 }
 
+.footer-logo {
+  width: 220px;
+  height: 100px;
+  max-width: 100%;
+}
+
 .footer-cta h3 {
   color: #fff;
   font-family: var(--font-head);
@@ -3419,7 +3427,7 @@ section {
     font-size: 22px;
   }
 
-  /* css added by Ekta */
+/* css added by Ekta */
   .course-grid {
     grid-template-columns: repeat(1, 1fr);
   }
@@ -3983,6 +3991,101 @@ section {
 .lead-phone-container .country-list .country:hover,
 .lead-phone-container .country-list .country.highlight {
   background: color-mix(in srgb, var(--primary-color) 10%, white) !important;
+}
+
+/* Homepage mobile layout: keep paired programs readable on narrow screens. */
+@media (max-width: 768px) {
+  .home-programs .course-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .home-programs .course-card {
+    min-width: 0;
+    padding: 16px 10px;
+    overflow-wrap: anywhere;
+  }
+
+  .home-programs .course-card h3 {
+    font-size: 20px;
+    letter-spacing: 0;
+  }
+
+  .home-programs .course-card .full,
+  .home-programs .course-card .line-clamp-4 {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .home-programs .course-card .btn {
+    padding: 10px 6px;
+    font-size: 12px;
+    white-space: normal;
+  }
+
+  .why .kh-col {
+    gap: 14px;
+  }
+
+  .why .kh-card {
+    height: auto;
+    min-height: 0;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .why .kh-card > div {
+    min-width: 0;
+  }
+
+  .why .kh-ico {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+  }
+
+  .why .kh-ico svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .why .kh-card h3 {
+    font-size: 15px;
+    margin: 0 0 4px;
+  }
+
+  .why .kh-card :is(p, .rich-content) {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  .home-eligibility .eligibility-content {
+    text-align: left;
+    line-height: 1.6;
+  }
+
+  .home-eligibility .eligibility-content :is(p, li) {
+    text-align: left;
+    line-height: 1.6;
+  }
+
+  .home-eligibility .eligibility-content :is(ul, ol) {
+    padding-left: 1.25rem;
+    margin: 12px 0;
+    list-style-position: outside;
+  }
+
+  .home-eligibility .eligibility-content li {
+    margin: 0 0 8px;
+    padding-left: 4px;
+  }
+
+  .footer-logo {
+    width: 168px;
+    height: 76px;
+    padding: 12px;
+  }
 }
 
 /* ----------------------------------------------- */

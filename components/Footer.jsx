@@ -6,10 +6,6 @@
   import { useMenuData } from '@/context/MenuDataContext'
   import { useTenant } from '@/context/TenantContext'
   import LeadModal from './LeadModal'
-  import LegalModal from './legal/LegalModal'
-  import DisclaimerContent from './legal/DisclaimerContent'
-  import PrivacyPolicyContent from './legal/PrivacyPolicyContent'
-  import TermsConditionsContent from './legal/TermsConditionsContent'
   import { FaWhatsapp, FaPhoneAlt } from 'react-icons/fa'
   import footerLogo from '../public/assets/images/footer-logo.png'
 
@@ -24,7 +20,6 @@
     const [mobileOpen, setMobileOpen] = useState(false)
     const [openItem, setOpenItem] = useState(null)
     const [leadModalOpen, setLeadModalOpen] = useState(false)
-    const [activeLegal, setActiveLegal] = useState(null)
     const { courses, specializations } = useMenuData()
     // /home is fetched once by TenantContext (shared source of truth) —
     // Footer used to fetch it again independently.
@@ -64,8 +59,8 @@
             <div className='footer-grid '>
               {/* Dynamic CTA */}
               <div className='footer-cta'>
-                <div className='mb-4 bg-white p-4 rounded-lg shadow-md w-[220px] h-[100px] '>
-                  <Image src={footerLogo} alt="Footer Logo"  className='w-full h-full'/>
+                <div className='footer-logo mb-4 bg-white p-4 rounded-lg shadow-md'>
+                  <Image src={footerLogo} alt="Footer Logo" className='w-full h-full object-contain' sizes='(max-width: 768px) 144px, 188px'/>
                 </div>
                 <h3>{footerCTA?.title}</h3>
 
@@ -143,17 +138,17 @@
 
           <div className='footer-bottom'>
             <div className='fb-links'>
-              <button type='button' onClick={() => setActiveLegal('disclaimer')}>
+              <Link href='/disclaimer'>
                 Disclaimer
-              </button>
+              </Link>
               <span>|</span>
-              <button type='button' onClick={() => setActiveLegal('privacy')}>
+              <Link href='/privacy-policy'>
                 Privacy Policy
-              </button>
+              </Link>
               <span>|</span>
-              <button type='button' onClick={() => setActiveLegal('terms')}>
+              <Link href='/terms-and-conditions'>
                 Terms & Conditions
-              </button>
+              </Link>
             </div>
 
             <div className='p-4'>
@@ -186,32 +181,6 @@
           pageId={homeData?.id}
         />
 
-        <LegalModal
-          open={activeLegal === 'disclaimer'}
-          onClose={() => setActiveLegal(null)}
-          title='Disclaimer'
-          viewFullPageHref='/disclaimer'
-        >
-          <DisclaimerContent />
-        </LegalModal>
-
-        <LegalModal
-          open={activeLegal === 'privacy'}
-          onClose={() => setActiveLegal(null)}
-          title='Privacy Policy'
-          viewFullPageHref='/privacy-policy'
-        >
-          <PrivacyPolicyContent />
-        </LegalModal>
-
-        <LegalModal
-          open={activeLegal === 'terms'}
-          onClose={() => setActiveLegal(null)}
-          title='Terms & Conditions'
-          viewFullPageHref='/terms-and-conditions'
-        >
-          <TermsConditionsContent />
-        </LegalModal>
       </>
     )
   }

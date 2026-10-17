@@ -210,7 +210,8 @@ export default function BlogClient ({ slug: slugProp, initialData, initialFaqs }
                 {new Date(post.published_at).toLocaleDateString('en-IN', {
                   day: 'numeric',
                   month: 'long',
-                  year: 'numeric'
+                  year: 'numeric',
+                  timeZone: 'Asia/Kolkata'
                 })}
                 {' · '}
                 By {post.author_name}

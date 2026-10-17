@@ -85,6 +85,8 @@ function FaqItem ({ q, a }) {
 function CoursesContent ({ initialData }) {
   const [activeTab, setActiveTab] = useState('overview')
   const [courseData, setCoursedata] = useState(initialData?.data?.course ?? null)
+  const contentName = courseData?.name?.trim() || courseData?.short_name?.trim() || 'Course'
+  const specializationsName = contentName
   const [showEligibility, setShowEligibility] = useState(false)
   const [showAllSemesters, setShowAllSemesters] = useState(false)
   const {
@@ -420,14 +422,14 @@ const hasEligibility =
                 </div>
               </div>
               <div className='cpanel' id='p-overview' ref={overviewRef}>
-                <h2>Course Overview</h2>
+                <h2>{contentName}: Overview</h2>
                 <div
                   dangerouslySetInnerHTML={{ __html: overviewHtml }}
                 />
               </div>
               <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
                 <div className='syllabus-head'>
-                  <h2 style={{ margin: 0 }}>Curriculum / Syllabus</h2>
+                  <h2 style={{ margin: 0 }}>{contentName}: Curriculum and Syllabus</h2>
 
                   <span className='dur'>{syllabusData.length} Semesters</span>
                 </div>
@@ -450,7 +452,7 @@ const hasEligibility =
               </div>
 
               <div className='cpanel' id='p-spec' ref={specRef}>
-                <h2>Specializations</h2>
+                <h2>Specializations for {specializationsName}</h2>
                 <p>
                   Choose a specialization in your final year to build domain
                   expertise.
@@ -475,7 +477,7 @@ const hasEligibility =
               </div>
 
               <div className='cpanel' id='p-faq' ref={faqRef}>
-                <h2>Frequently Asked Questions</h2>
+                <h2>Frequently Asked Questions About {contentName}</h2>
                 <div style={{ marginTop: '14px' }}>
                   <div className='faq-list'>
                     {courseData?.faqs?.map(faq => (
@@ -489,7 +491,7 @@ const hasEligibility =
             {/* SIDEBAR */}
             <aside>
               <div className='side-card'>
-                <h3>Fee Structure</h3>
+                <h3>{contentName}: Fee Structure</h3>
                 {feeItems.length === 0 && (
                   <span>Fee details not available</span>
                 )}
@@ -519,7 +521,7 @@ const hasEligibility =
                 </button>
               </div>
               <div className='side-card'>
-                <h3>Course Details</h3>
+                <h3>{contentName}: Course Details</h3>
                 <div className='detail-row'>
                   <span>Duration</span>
                   <span>
@@ -569,7 +571,7 @@ const hasEligibility =
       <section className='accred'>
         <div className='wrap'>
           <div className='box'>
-            <h3>Accreditations &amp; Approvals</h3>
+            <h3>{contentName}: Accreditations and Approvals</h3>
             <div className='accred-row'>
               <div className='acc-item'>
                 <div className='a-logo'>

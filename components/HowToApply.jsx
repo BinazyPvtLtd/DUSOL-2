@@ -72,7 +72,7 @@ export default function HowToApply() {
                 {/* Heading */}
                 <div className='mb-10 text-center lg:/usagetext-left'>
                     <h2 className='text-2xl sm:text-3xl font-semibold text-center' style={primaryColorStyle}>
-                        How To Apply
+                        Applying for DU SOL Admission: What to Do
                     </h2>
                 </div>
 
@@ -147,13 +147,15 @@ export default function HowToApply() {
 
                 {/* Button */}
                 <div className='flex justify-center mt-10'>
-                    <button
-  type="button"
-  className="btn btn-purple"
-  onClick={() => setLeadModalOpen(true)}
->
-  APPLY NOW
-</button>
+                    <p className='cta-action'>
+                        <button
+                            type='button'
+                            className='btn btn-purple'
+                            onClick={() => setLeadModalOpen(true)}
+                        >
+                            APPLY NOW
+                        </button>
+                    </p>
                 </div>
             </div>
         </section>

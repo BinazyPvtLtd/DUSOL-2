@@ -135,6 +135,8 @@ function SpecializationContent ({ slug: slugProp, initialData }) {
   const [courseData, setCoursedata] = useState(
     initialData?.data?.specialization ?? null
   )
+  const contentName = courseData?.name?.trim() || courseData?.short_name?.trim() || 'Specialization'
+  const specializationsName = courseData?.course?.name?.trim() || contentName
   const [showEligibility, setShowEligibility] = useState(false)
   const [showAllSemesters, setShowAllSemesters] = useState(false)
   const {
@@ -513,7 +515,7 @@ function SpecializationContent ({ slug: slugProp, initialData }) {
               </div>
 
               <div className='cpanel' id='p-overview' ref={overviewRef}>
-                <h2>Course Overview</h2>
+                <h2>{contentName}: Overview</h2>
                 <div>
                   <div
                     dangerouslySetInnerHTML={{ __html: overviewHtml }}
@@ -523,7 +525,7 @@ function SpecializationContent ({ slug: slugProp, initialData }) {
 
               <div className='cpanel' id='p-curriculum' ref={curriculumRef}>
                 <div className='syllabus-head'>
-                  <h2 style={{ margin: 0 }}>Curriculum / Syllabus</h2>
+                  <h2 style={{ margin: 0 }}>{contentName}: Curriculum and Syllabus</h2>
 
                   <span className='dur'>{syllabusData.length} Semesters</span>
                 </div>
@@ -546,7 +548,7 @@ function SpecializationContent ({ slug: slugProp, initialData }) {
               </div>
 
               <div className='cpanel' id='p-spec' ref={specRef}>
-                <h2>Specializations</h2>
+                <h2>Specializations for {specializationsName}</h2>
                 <p>
                   Choose a specialization in your final year to build domain
                   expertise.
@@ -571,7 +573,7 @@ function SpecializationContent ({ slug: slugProp, initialData }) {
               </div>
 
               <div className='cpanel' id='p-faq' ref={faqRef}>
-                <h2>Frequently Asked Questions</h2>
+                <h2>Frequently Asked Questions About {contentName}</h2>
                 <div style={{ marginTop: '14px' }}>
                   <div className='faq-list'>
                     {(courseData?.faqs || []).map(faq => (
@@ -585,7 +587,7 @@ function SpecializationContent ({ slug: slugProp, initialData }) {
             {/* SIDEBAR */}
             <aside>
               <div className='side-card'>
-                <h3>Fee Structure</h3>
+                <h3>{contentName}: Fee Structure</h3>
 
                 {feeItems.length === 0 && (
                   <span>Fee details not available</span>
@@ -617,7 +619,7 @@ function SpecializationContent ({ slug: slugProp, initialData }) {
               </div>
 
               <div className='side-card'>
-                <h3>Course Details</h3>
+                <h3>{contentName}: Course Details</h3>
 
                 <div className='detail-row'>
                   <span>Duration</span>
@@ -670,7 +672,7 @@ function SpecializationContent ({ slug: slugProp, initialData }) {
       <section className='accred'>
         <div className='wrap'>
           <div className='box'>
-            <h3>Accreditations &amp; Approvals</h3>
+            <h3>{contentName}: Accreditations and Approvals</h3>
             <div className='accred-row'>
               <div className='acc-item'>
                 <div className='a-logo'>
