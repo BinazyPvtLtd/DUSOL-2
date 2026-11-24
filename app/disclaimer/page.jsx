@@ -5,7 +5,7 @@ export const metadata = {
   description:
     'Read the disclaimer for distanceeducationlearning.com regarding university names, trademarks and the accuracy of information published on this website.',
   alternates: {
-    canonical: '/disclaimer'
+    canonical: 'https://dusol.distanceeducationlearning.com/disclaimer'
   }
 }
 

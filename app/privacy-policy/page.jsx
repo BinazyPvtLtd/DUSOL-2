@@ -5,7 +5,7 @@ export const metadata = {
   description:
     'Learn how distanceeducationlearning.com collects, uses and protects your personal information when you use our website and counselling services.',
   alternates: {
-    canonical: '/privacy-policy'
+    canonical: 'https://dusol.distanceeducationlearning.com/privacy-policy',
   }
 }
 

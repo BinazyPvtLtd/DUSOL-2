@@ -104,7 +104,7 @@ export default function BlogsClient ({ initialData, initialPage = 1 }) {
       {/* HERO */}
       <section className='blog-hero'>
         <div className='wrap'>
-          <h1>Delhi University School OF Open Learning (DU SOL)</h1>
+          <h1>DU SOL Blogs: Admission, Courses, Exams & Latest Updates</h1>
           <h2>Blogs and Articles</h2>
           <p>
             Stay updated on DU SOL with our blog. Get the latest information on

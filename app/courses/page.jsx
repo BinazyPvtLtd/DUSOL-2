@@ -30,9 +30,9 @@ const getCanonicalFallback = () => {
 export async function generateMetadata () {
   return generateSEOMetadata(
     {
-      meta_title: 'Courses & Programs',
+      meta_title: ' DU SOL Courses 2026: UG & PG Courses, Fees & Eligibility',
       meta_description:
-        'Browse all distance and online undergraduate and postgraduate courses, with eligibility, fees and admission details for each programme.'
+        'Browse all DU SOL distance and online UG and PG courses for 2026, with eligibility, fees and admission details for each programme.'
     },
     getCanonicalFallback()
   )
